@@ -1,0 +1,27 @@
+<div id="search-app">
+<search-list get-current-page="{{ currentPage }}" get-category="{{ category }}"></search-list>
+</div>
+<script type="text/javascript">
+    window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
+    window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
+</script>
+<script type="text/x-template" id="search-list">
+    <div>
+        <h1>search list here</h1>
+        <div class="row" v-for="entry in items">
+            <div class="col3">
+                <h2>${ entry.title }</h2>
+                <div>===========</div>
+                <div class="content">
+                    ${ entry.contentText }
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+    let app = new Vue({
+        el: "#search-app"
+    });
+</script>

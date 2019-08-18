@@ -1,0 +1,43 @@
+{% set currentPageUrl = pageInfo.getPageUrl( craft.app.request.pageNum () ) %}
+
+{% if pageInfo.prevUrl is not empty or pageInfo.nextUrl is not empty %}
+    <nav aria-label="Page Navigation">
+        <ul class="pagination justify-content-center">
+            {% if pageInfo.firstUrl == currentPageUrl %}
+                <li class="page-item disabled"><span class="page-link">First</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="{{ pageInfo.firstUrl }}">First</a></li>
+            {% endif %}
+
+            {% if pageInfo.prevUrl is empty %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="{{ pageInfo.prevUrl }}">Previous</a></li>
+            {% endif %}
+
+            {% for page, url in pageInfo.getPrevUrls(3) %}
+                <li class="page-item"><a class="page-link" href="{{ url }}">{{ page }}</a></li>
+            {% endfor %}
+
+            <li class="page-item active">
+                <span class="page-link">{{ pageInfo.currentPage }} <span class="sr-only">(current)</span></span>
+            </li>
+
+            {% for page, url in pageInfo.getNextUrls(3) %}
+                <li class="page-item"><a class="page-link" href="{{ url }}">{{ page }}</a></li>
+            {% endfor %}
+
+            {% if pageInfo.nextUrl is empty %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="{{ pageInfo.nextUrl }}">Next</a></li>
+            {% endif %}
+
+            {% if pageInfo.lastUrl == currentPageUrl %}
+                <li class="page-item disabled"><span class="page-link">Last</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="{{ pageInfo.lastUrl }}">Last</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}

@@ -1,0 +1,13 @@
+body {
+  background: #efefef !important;
+}
+
+header,
+main div.container {
+  background: #ffffff !important;
+}
+
+header {
+  border-bottom: solid 20px #ffffff;
+}
+

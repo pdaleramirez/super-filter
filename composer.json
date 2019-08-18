@@ -1,0 +1,40 @@
+{
+    "name": "pdaleramirez/search-filter",
+    "description": "Search elements with filter using Vue JS",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "search filter"
+    ],
+    "support": {
+        "docs": "https://github.com/Dale Ramirez/search-filter/blob/master/README.md",
+        "issues": "https://github.com/Dale Ramirez/search-filter/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dale Ramirez",
+            "homepage": "https://github.com/pdaleramirez"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "pdaleramirez\\searchfilter\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Search Filter",
+        "handle": "search-filter",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/Dale Ramirez/search-filter/master/CHANGELOG.md",
+        "class": "pdaleramirez\\searchfilter\\SearchFilter"
+    }
+}
