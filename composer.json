@@ -30,7 +30,7 @@
         }
     },
     "extra": {
-        "name": "Search Filter",
+        "name": "Super Filter",
         "handle": "super-filter",
         "hasCpSettings": false,
         "hasCpSection": false,
