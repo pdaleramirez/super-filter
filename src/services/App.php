@@ -1,5 +1,5 @@
 <?php
-namespace pdaleramirez\searchfilter\services;
+namespace pdaleramirez\superfilter\services;
 
 use craft\base\Component;
 use Craft;

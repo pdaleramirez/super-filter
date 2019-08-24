@@ -15562,8 +15562,8 @@ module.exports = g;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\MAMP_\htdocs\craft3\localplugins\pdaleramirez\search-filter\resources\js\app.js */"./js/app.js");
-module.exports = __webpack_require__(/*! C:\MAMP_\htdocs\craft3\localplugins\pdaleramirez\search-filter\resources\css\app.scss */"./css/app.scss");
+__webpack_require__(/*! C:\MAMP_\htdocs\craft3\localplugins\pdaleramirez\super-filter\resources\js\app.js */"./js/app.js");
+module.exports = __webpack_require__(/*! C:\MAMP_\htdocs\craft3\localplugins\pdaleramirez\super-filter\resources\css\app.scss */"./css/app.scss");
 
 
 /***/ })

@@ -8,27 +8,28 @@
  * @copyright Copyright (c) 2019 Dale Ramirez
  */
 
-namespace pdaleramirez\searchfilter;
+namespace pdaleramirez\superfilter;
 
 
 use Craft;
 use craft\base\Plugin;
 use craft\web\twig\variables\CraftVariable;
-use pdaleramirez\searchfilter\services\App;
-use pdaleramirez\searchfilter\web\twig\variables\SearchFilterVariable;
+use pdaleramirez\superfilter\services\App;
+use pdaleramirez\superfilter\web\twig\variables\SearchFilterVariable;
+use pdaleramirez\superfilter\web\twig\variables\SuperFilterVariable;
 use yii\base\Event;
 use craft\web\UrlManager;
 use craft\events\RegisterUrlRulesEvent;
 
 /**
- * Class SearchFilter
+ * Class SuperFilter
  *
  * @author    Dale Ramirez
- * @package   SearchFilter
+ * @package   SuperFilter
  * @since     1.0.0
  *
  */
-class SearchFilter extends Plugin
+class SuperFilter extends Plugin
 {
     // Static Properties
     // =========================================================================
@@ -65,14 +66,14 @@ class SearchFilter extends Plugin
 
         self::$app = $this->get('app');
 
-        Craft::setAlias('@searchfilter', $this->getBasePath());
+        Craft::setAlias('@superfilter', $this->getBasePath());
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
-            $event->sender->set('searchFilter', SearchFilterVariable::class);
+            $event->sender->set('superFilter', SuperFilterVariable::class);
         });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function (RegisterUrlRulesEvent $event) {
-            $event->rules["show-list"] = 'search-filter/elements/get-elements';
+            $event->rules["show-list"] = 'super-filter/elements/get-elements';
         });
 
     }

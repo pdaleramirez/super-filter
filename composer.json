@@ -1,5 +1,5 @@
 {
-    "name": "pdaleramirez/search-filter",
+    "name": "pdaleramirez/super-filter",
     "description": "Search elements with filter using Vue JS",
     "type": "craft-plugin",
     "version": "1.0.0",
@@ -11,8 +11,8 @@
         "search filter"
     ],
     "support": {
-        "docs": "https://github.com/Dale Ramirez/search-filter/blob/master/README.md",
-        "issues": "https://github.com/Dale Ramirez/search-filter/issues"
+        "docs": "https://github.com/Dale Ramirez/super-filter/blob/master/README.md",
+        "issues": "https://github.com/Dale Ramirez/super-filter/issues"
     },
     "license": "MIT",
     "authors": [
@@ -26,15 +26,15 @@
     },
     "autoload": {
         "psr-4": {
-          "pdaleramirez\\searchfilter\\": "src/"
+          "pdaleramirez\\superfilter\\": "src/"
         }
     },
     "extra": {
         "name": "Search Filter",
-        "handle": "search-filter",
+        "handle": "super-filter",
         "hasCpSettings": false,
         "hasCpSection": false,
-        "changelogUrl": "https://raw.githubusercontent.com/Dale Ramirez/search-filter/master/CHANGELOG.md",
-        "class": "pdaleramirez\\searchfilter\\SearchFilter"
+        "changelogUrl": "https://raw.githubusercontent.com/Dale Ramirez/super-filter/master/CHANGELOG.md",
+        "class": "pdaleramirez\\superfilter\\SuperFilter"
     }
 }

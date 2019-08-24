@@ -1,12 +1,12 @@
 <?php
-namespace pdaleramirez\searchfilter\controllers;
+namespace pdaleramirez\superfilter\controllers;
 
 use craft\db\Paginator;
 use craft\elements\Entry;
 use craft\helpers\Json;
 use craft\web\Controller;
 use Craft;
-use pdaleramirez\searchfilter\SearchFilter;
+use pdaleramirez\superfilter\SuperFilter;
 
 class ElementsController extends Controller
 {
@@ -21,7 +21,7 @@ class ElementsController extends Controller
             'limit'       => Craft::$app->getRequest()->getBodyParam('limit')
         ];
 
-        $items = SearchFilter::$app->config($params)->items();
+        $items = SuperFilter::$app->config($params)->items();
 
         return Json::encode($items);
     }

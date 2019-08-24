@@ -1,19 +1,16 @@
 <?php
 
-namespace pdaleramirez\searchfilter\web\twig\variables;
+namespace pdaleramirez\superfilter\web\twig\variables;
 
 use Craft;
-use craft\db\Paginator;
 use craft\helpers\Template;
-use craft\web\twig\variables\Paginate;
-use pdaleramirez\searchfilter\SearchFilter;
-use pdaleramirez\searchfilter\web\assets\VueAsset;
-use yii\db\Query;
+use pdaleramirez\superfilter\SuperFilter;
+use pdaleramirez\superfilter\web\assets\VueAsset;
 
-class SearchFilterVariable
+class SuperFilterVariable
 {
     /**
-     * @return \Twig\Markup|\Twig_Markup
+     * @return \Twig\Markup
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
@@ -25,7 +22,7 @@ class SearchFilterVariable
 
         $category = Craft::$app->getRequest()->get('category');
 
-        $alias = Craft::getAlias('@searchfilter/templates');
+        $alias = Craft::getAlias('@superfilter/templates');
 
         Craft::$app->getView()->setTemplatesPath($alias);
 
@@ -46,7 +43,7 @@ class SearchFilterVariable
             'limit'       => Craft::$app->getRequest()->getBodyParam('limit')
         ];
 
-        $filter = SearchFilter::$app->config($params);
+        $filter = SuperFilter::$app->config($params);
 
 //
 //        $paginator = new Paginator($filter->query(), [
@@ -58,7 +55,7 @@ class SearchFilterVariable
 //            \Craft::dd($paginator->getPageResults());
 //        }
 
-        $alias = Craft::getAlias('@searchfilter/templates');
+        $alias = Craft::getAlias('@superfilter/templates');
 
         Craft::$app->getView()->setTemplatesPath($alias);
 

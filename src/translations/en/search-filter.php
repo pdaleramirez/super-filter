@@ -10,7 +10,7 @@
 
 /**
  * @author    Dale Ramirez
- * @package   SearchFilter
+ * @package   SuperFilter
  * @since     1.0.0
  */
 return [
