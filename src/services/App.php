@@ -10,7 +10,7 @@ use craft\web\twig\variables\Paginate;
 
 class App extends Component
 {
-    static $pageSize = 1;
+    static $pageSize = 5;
     protected $elements = [];
     protected $links;
     protected $elementQuery;

@@ -20,7 +20,7 @@
             {% endfor %}
 
             <li class="page-item active">
-                <span class="page-link">{{ pageInfo.currentPage }} <span class="sr-only">(current)</span></span>
+                <span class="page-link">{{ pageInfo.currentPage }}</span>
             </li>
 
             {% for page, url in pageInfo.getNextUrls(3) %}

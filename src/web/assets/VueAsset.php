@@ -15,6 +15,10 @@ class VueAsset extends AssetBundle
             'app.js'
         ];
 
+        $this->css = [
+            'app.css'
+        ];
+
         parent::init();
     }
 }
