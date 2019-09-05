@@ -3,6 +3,7 @@
 namespace pdaleramirez\superfilter\web\twig\variables;
 
 use Craft;
+use craft\helpers\Json;
 use craft\helpers\Template;
 use pdaleramirez\superfilter\SuperFilter;
 use pdaleramirez\superfilter\web\assets\VueAsset;
@@ -20,16 +21,21 @@ class SuperFilterVariable
     {
         Craft::$app->getView()->registerAssetBundle(VueAsset::class, 1);
 
-        $category = Craft::$app->getRequest()->get('category');
-
         $alias = Craft::getAlias('@superfilter/templates');
 
         Craft::$app->getView()->setTemplatesPath($alias);
+        $params = [
+            'handle'      => 'entry',
+            'section'     => 'blog',
+            'currentPage' => Craft::$app->getRequest()->getPageNum() ?? 1,
+            'category'    =>  Craft::$app->getRequest()->get('category'),
+            'limit'       => SuperFilter::$app::$pageSize
+        ];
 
-        $html = Craft::$app->getView()->renderTemplate('entries', [
-            'currentPage' => Craft::$app->getRequest()->getPageNum(),
-            'category'    => $category
-        ]);
+        SuperFilter::$app->config = $params;
+
+        $html = Craft::$app->getView()->renderTemplate('entries', ['config' => Json::encode($params)]);
+
 
         return Template::raw($html);
     }
@@ -37,13 +43,8 @@ class SuperFilterVariable
 
     public function getLinks()
     {
-        $params = [
-            'handle' => 'entry',
-            'categoryId'  => Craft::$app->getRequest()->getBodyParam('category'),
-            'limit'       => Craft::$app->getRequest()->getBodyParam('limit')
-        ];
 
-        $filter = SuperFilter::$app->config($params);
+        $filter = SuperFilter::$app->config(SuperFilter::$app->config);
 
 //
 //        $paginator = new Paginator($filter->query(), [

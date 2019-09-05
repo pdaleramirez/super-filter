@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\db\Paginator;
 use craft\elements\Category;
+use craft\elements\db\EntryQuery;
 use craft\web\twig\variables\Paginate;
 
 class App extends Component
@@ -14,12 +15,15 @@ class App extends Component
     protected $elements = [];
     protected $links;
     protected $elementQuery;
+    public $config;
 
-	public function config($params)
+    public function config($params)
 	{
+	    $this->config = $params;
+
         $handle = $params['handle'];
 
-        $categoryId   = $params['categoryId'];
+        $categoryId = $params['category'];
 
         $limit = $params['limit'] ?? static::$pageSize;
 
@@ -32,6 +36,17 @@ class App extends Component
 
         $category = null;
         $elementQuery = $elementClass::find();
+
+        $section = $params['section'] ?? null;
+
+        if ($handle == 'entry' && $section) {
+            /**
+             * @var $elementQuery EntryQuery
+             */
+            $elementQuery->section($section);
+        }
+
+        $elementQuery->orderBy(['id' => SORT_DESC]);
 
         if ($categoryId) {
             $category = Category::findOne($categoryId);
@@ -97,5 +112,10 @@ class App extends Component
     public function query()
     {
         return $this->elementQuery;
+    }
+
+    public function wamba()
+    {
+        return 'wamba';
     }
 }

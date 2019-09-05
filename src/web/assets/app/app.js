@@ -137,6 +137,12 @@ webpackContext.id = "./js sync recursive \\.vue$/";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
@@ -150,7 +156,7 @@ files.keys().map(function (key) {
 Vue.component('search-list', {
   name: "SearchList",
   template: "#search-list",
-  props: ['action', 'totalItems', 'getCurrentPage', 'getCategory', 'getLimit'],
+  props: ['config', 'action', 'totalItems', 'getCurrentPage', 'getCategory', 'getLimit'],
   delimiters: ['${', '}'],
   data: function data() {
     return {
@@ -182,19 +188,18 @@ Vue.component('search-list', {
         sort: sortValue
       };
 
-      if (this.limit != null) {
-        data.limit = this.limit;
+      if (this.limit != null) {// data.limit = this.limit;
       }
 
       if (this.searchQuery.trim() !== '') {
         data.searchName = this.searchQuery.trim();
       }
 
-      if (this.category != null) {
-        data.category = this.category;
+      if (this.category != null) {//  data.category = this.category;
       }
 
       data[csrfTokenName] = csrfTokenValue;
+      data = _objectSpread({}, data, {}, this.config);
       axios.post('/show-list', qs.stringify(data)).then(function (_ref) {
         var data = _ref.data;
         _this.loading = false;
@@ -252,12 +257,12 @@ Vue.component('search-list', {
     }
   },
   mounted: function mounted() {
-    if (this.getCurrentPage != null) {
-      this.currentPage = this.getCurrentPage;
+    if (this.config.currentPage != null) {
+      this.currentPage = this.config.currentPage;
     }
 
-    if (this.getCategory != null) {
-      this.category = this.getCategory;
+    if (this.config.category != null) {
+      this.category = this.config.category;
     }
 
     this.getItems();
@@ -267,7 +272,7 @@ Vue.component('search-list', {
       var limit = this.limit;
 
       if (limit == null) {
-        limit = this.getLimit;
+        limit = this["this"].config.limit;
       }
 
       return Math.ceil(this.totalItems / limit);

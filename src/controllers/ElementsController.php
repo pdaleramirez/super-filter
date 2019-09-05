@@ -14,12 +14,8 @@ class ElementsController extends Controller
 
     public function actionGetElements()
     {
-        $params = [
-            'handle' => 'entry',
-            'currentPage' => Craft::$app->getRequest()->getBodyParam('currentPage') ?? 1,
-            'categoryId'  => Craft::$app->getRequest()->getBodyParam('category'),
-            'limit'       => Craft::$app->getRequest()->getBodyParam('limit')
-        ];
+
+        $params = Craft::$app->getRequest()->getBodyParams();
 
         $items = SuperFilter::$app->config($params)->items();
 

@@ -1,5 +1,5 @@
 <div id="search-app">
-<search-list get-current-page="{{ currentPage }}" get-category="{{ category }}"></search-list>
+<search-list :config="{{ config }}"></search-list>
 </div>
 <script type="text/javascript">
     window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";

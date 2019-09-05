@@ -8,7 +8,7 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 Vue.component('search-list', {
     name: "SearchList",
     template: `#search-list`,
-    props: ['action', 'totalItems', 'getCurrentPage', 'getCategory',  'getLimit'],
+    props: ['config', 'action', 'totalItems', 'getCurrentPage', 'getCategory',  'getLimit'],
     delimiters: ['${', '}'],
     data() {
         return {
@@ -41,7 +41,7 @@ Vue.component('search-list', {
             };
 
             if (this.limit != null) {
-                data.limit = this.limit;
+               // data.limit = this.limit;
             }
 
             if (this.searchQuery.trim() !== '') {
@@ -49,11 +49,11 @@ Vue.component('search-list', {
             }
 
             if (this.category != null) {
-                data.category = this.category;
+              //  data.category = this.category;
             }
 
             data[csrfTokenName] = csrfTokenValue;
-
+            data = {...data, ...this.config};
             axios.post('/show-list', qs.stringify(data))
                 .then(({data}) => {
                     this.loading = false;
@@ -109,12 +109,12 @@ Vue.component('search-list', {
         }
     },
     mounted() {
-        if (this.getCurrentPage != null) {
-            this.currentPage = this.getCurrentPage;
+        if (this.config.currentPage != null) {
+            this.currentPage = this.config.currentPage;
         }
 
-        if (this.getCategory != null) {
-            this.category = this.getCategory;
+        if (this.config.category != null) {
+            this.category = this.config.category;
         }
 
         this.getItems();
@@ -124,7 +124,7 @@ Vue.component('search-list', {
             let limit = this.limit;
 
             if (limit == null) {
-                limit = this.getLimit;
+                limit = this.this.config.limit;
             }
 
             return Math.ceil(this.totalItems / limit);
