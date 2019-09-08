@@ -1,5 +1,9 @@
 <div id="search-app">
-<search-list :config="{{ config }}"></search-list>
+    <div>
+        <div>
+        <search-list :config="{{ config }}"></search-list>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
@@ -18,6 +22,15 @@
                 </div>
             </div>
         </div>
+
+        <b-pagination
+                v-if="config.total"
+                v-model="currentPage"
+                :total-rows="config.total"
+                :per-page="config.limit"
+                aria-controls="my-table"
+                @input="updateList(currentPage)"
+        ></b-pagination>
     </div>
 </script>
 

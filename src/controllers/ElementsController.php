@@ -19,6 +19,11 @@ class ElementsController extends Controller
 
         $items = SuperFilter::$app->config($params)->items();
 
-        return Json::encode($items);
+        $response = [
+            'items'  => $items,
+            'params' => SuperFilter::$app->getParams()
+        ];
+
+        return Json::encode($response);
     }
 }

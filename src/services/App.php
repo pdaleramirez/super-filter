@@ -11,15 +11,15 @@ use craft\web\twig\variables\Paginate;
 
 class App extends Component
 {
-    static $pageSize = 5;
+    static $pageSize = 1;
     protected $elements = [];
     protected $links;
     protected $elementQuery;
-    public $config;
+    public $params;
 
     public function config($params)
 	{
-	    $this->config = $params;
+	    $this->params = $params;
 
         $handle = $params['handle'];
 
@@ -82,6 +82,8 @@ class App extends Component
 
         $items = $paginator->getPageResults();
 
+        $this->params['total'] = $paginator->getTotalResults();
+
         if ($items) {
             /**
              * @var $item Element
@@ -114,8 +116,18 @@ class App extends Component
         return $this->elementQuery;
     }
 
-    public function wamba()
+    public function setParams($params)
     {
-        return 'wamba';
+        $this->params = $params;
+    }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    public function getPageSize()
+    {
+        return static::$pageSize;
     }
 }

@@ -1,10 +1,13 @@
+import BootstrapVue from 'bootstrap-vue'
 window.axios = require('axios');
 window.Vue = require('vue');
+
 let qs = require('qs');
 const files = require.context('./', true, /\.vue$/i)
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 
+Vue.use(BootstrapVue);
 Vue.component('search-list', {
     name: "SearchList",
     template: `#search-list`,
@@ -53,19 +56,23 @@ Vue.component('search-list', {
             }
 
             data[csrfTokenName] = csrfTokenValue;
-            data = {...data, ...this.config};
+
+            data = {...this.config, ...data};
+
             axios.post('/show-list', qs.stringify(data))
                 .then(({data}) => {
                     this.loading = false;
-                    this.items = data;
+                    this.items = data.items;
 
                     if (this.limit === '*') {
-                        this.itemTotal = data.length;
+                        this.itemTotal = data.params.total;
                     }
+                    this.config.total = data.params.total;
                 });
         },
-        updatePage(currentPage) {
+        updateList(currentPage) {
             this.currentPage = currentPage;
+
             this.getItems();
         },
         updateTotal() {

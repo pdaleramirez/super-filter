@@ -26,14 +26,14 @@ class SuperFilterVariable
         Craft::$app->getView()->setTemplatesPath($alias);
         $params = [
             'handle'      => 'entry',
-            'section'     => 'blog',
+            //'section'     => 'blog',
             'currentPage' => Craft::$app->getRequest()->getPageNum() ?? 1,
             'category'    =>  Craft::$app->getRequest()->get('category'),
-            'limit'       => SuperFilter::$app::$pageSize
+            'limit'       => SuperFilter::$app->getPageSize()
         ];
 
-        SuperFilter::$app->config = $params;
-
+        SuperFilter::$app->setParams($params);
+        //\Craft::dd(SuperFilter::$app->getParams());
         $html = Craft::$app->getView()->renderTemplate('entries', ['config' => Json::encode($params)]);
 
 
@@ -43,8 +43,7 @@ class SuperFilterVariable
 
     public function getLinks()
     {
-
-        $filter = SuperFilter::$app->config(SuperFilter::$app->config);
+        $filter = SuperFilter::$app->config(SuperFilter::$app->getParams());
 
 //
 //        $paginator = new Paginator($filter->query(), [
