@@ -4,18 +4,18 @@ namespace pdaleramirez\superfilter\web\assets;
 
 use craft\web\AssetBundle;
 
-class VueAsset extends AssetBundle
+class VueCpAsset extends AssetBundle
 {
     public function init()
     {
-        $this->sourcePath = '@superfilter/web/assets/app';
+        $this->sourcePath = '@superfilter/web/assets/cp';
 
         $this->js = [
-            'app.js'
+            'cp.js'
         ];
 
         $this->css = [
-            'app.css'
+            'cp.css'
         ];
 
         parent::init();

@@ -24,6 +24,11 @@ class SuperFilterVariable
         $alias = Craft::getAlias('@superfilter/templates');
 
         Craft::$app->getView()->setTemplatesPath($alias);
+
+       // $siteTemplatePath = Craft::$app->path->getSiteTemplatesPath();
+
+        //Craft::$app->getView()->setTemplatesPath($siteTemplatePath);
+
         $params = [
             'handle'      => 'entry',
             //'section'     => 'blog',

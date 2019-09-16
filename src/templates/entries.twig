@@ -11,16 +11,9 @@
 </script>
 <script type="text/x-template" id="search-list">
     <div>
-        <h1>search list here</h1>
         <div class="loader" v-if="loading">Loading...</div>
         <div class="row" v-for="entry in items">
-            <div class="col3">
-                <h2>${ entry.title }</h2>
-                <div>===========</div>
-                <div class="content">
-                    ${ entry.contentText }
-                </div>
-            </div>
+            {% include 'entry' %}
         </div>
 
         <b-pagination
@@ -31,6 +24,8 @@
                 aria-controls="my-table"
                 @input="updateList(currentPage)"
         ></b-pagination>
+        {% set path = craft.app.view.setTemplatesPath(craft.app.path.getSiteTemplatesPath()) %}
+        {% include 'entry' %}
     </div>
 </script>
 

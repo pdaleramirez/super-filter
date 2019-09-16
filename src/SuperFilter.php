@@ -14,6 +14,7 @@ namespace pdaleramirez\superfilter;
 use Craft;
 use craft\base\Plugin;
 use craft\web\twig\variables\CraftVariable;
+use pdaleramirez\superfilter\models\Settings;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\web\twig\variables\SearchFilterVariable;
 use pdaleramirez\superfilter\web\twig\variables\SuperFilterVariable;
@@ -72,13 +73,29 @@ class SuperFilter extends Plugin
             $event->sender->set('superFilter', SuperFilterVariable::class);
         });
 
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function (RegisterUrlRulesEvent $event) {
+            $event->rules['super-filter/settings'] = 'super-filter/super-filter/settings';
+        });
+
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function (RegisterUrlRulesEvent $event) {
             $event->rules["show-list"] = 'super-filter/elements/get-elements';
         });
 
     }
 
-    // Protected Methods
-    // =========================================================================
+    public function getCpNavItem()
+    {
+        $parent = parent::getCpNavItem();
 
+        $parent['subnav']['settings'] = [
+            'label' => Craft::t('super-filter', 'Settings'),
+            'url' => 'super-filter/settings'
+        ];
+
+        return $parent;
+    }
+    protected function createSettingsModel()
+    {
+        return new Settings();
+    }
 }

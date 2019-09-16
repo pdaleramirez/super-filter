@@ -1,0 +1,51 @@
+{% import "_includes/forms" as forms %}
+{% requireAdmin %}
+
+{% extends "_layouts/cp" %}
+
+{% set title = "Settings"|t('super-filter') %}
+{% set fullPageForm = true  %}
+{% set settingsForm = true  %}
+{% set selectedSubnavItem = 'settings' %}
+
+{% block actionButton %}
+
+    <div class="buttons">
+        <input class="btn submit" type="submit"
+               value="{{ 'Save'|t('super-filter') }}">
+    </div>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div id="settings-cp">
+        <div>
+            <input type="hidden" name="action" value="super-filter/super-filter/save-settings-config">
+
+            {{ forms.textField({
+                id: 'name',
+                label: 'Name',
+                name: 'settings[name]',
+                value: settings.name
+            }) }}
+            <combo-box v-model="comboValue"></combo-box>
+        </div>
+    </div>
+
+    <script>
+        let app = new Vue({
+            el: "#settings-cp",
+            data: {
+                selected: null,
+                options: ['CA', 'Canada', 'BA', 'TA'],
+                comboValue: 'grid'
+            }
+        });
+    </script>
+{% endblock %}
+{% js %}
+
+{% endjs %}
+

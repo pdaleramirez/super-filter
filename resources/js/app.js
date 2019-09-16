@@ -1,4 +1,5 @@
 import BootstrapVue from 'bootstrap-vue'
+
 window.axios = require('axios');
 window.Vue = require('vue');
 

@@ -18,7 +18,9 @@
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0",
     "laravel-mix": "^4.1.2",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "vue-clickaway": "^2.2.2",
+    "vue-select": "^3.1.0"
   },
   "devDependencies": {
     "qs": "^6.7.0",

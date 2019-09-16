@@ -1,0 +1,112 @@
+$base-color: #bf503f;
+
+.combobox-input {
+  padding: 0.5rem;
+  font-size: 15px;
+  -webkit-appearance: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  text-align: left;
+  background: white;
+  float: left;
+
+  &:focus {
+    box-shadow: none;
+    -webkit-appearance: none;
+    outline: 0;
+  }
+}
+
+.combobox-list {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  .combobox-list-item {
+    margin: 0;
+    list-style-type: none;
+    padding: 0.5rem;
+    font-size: 14px;
+    display: block;
+    text-align: left;
+    cursor: pointer;
+    &.add-custom {
+      font-weight: bold
+    }
+
+    &:hover {
+      opacity: 0.5;
+    }
+
+    &.selected {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.classic {
+  background-image:
+          linear-gradient(45deg, transparent 50%, white 50%),
+          linear-gradient(135deg, white 50%, transparent 50%),
+          linear-gradient(to right, $base-color, $base-color);
+  background-position:
+          calc(100% - 20px) calc(1em + 2px),
+          calc(100% - 15px) calc(1em + 2px),
+          100% 0;
+  background-size:
+          5px 5px,
+          5px 5px,
+          2.5em 2.5em;
+  background-repeat: no-repeat;
+  float: left;
+  width: 39px;
+  height: 35px;
+  background-color: $base-color;
+
+  &.focus {
+    background-image:
+            linear-gradient(45deg, white 50%, transparent 50%),
+            linear-gradient(135deg, transparent 50%, white 50%),
+            linear-gradient(to right, gray, gray);
+    background-position:
+            calc(100% - 15px) 1em,
+            calc(100% - 20px) 1em,
+            100% 0;
+    background-size:
+            5px 5px,
+            5px 5px,
+            2.5em 2.5em;
+    background-repeat: no-repeat;
+    border-color: grey;
+    outline: 0;
+    background-color: gray;
+  }
+}
+
+.combobox {
+  position: relative;
+  max-width: 240px;
+  .close {
+    background: transparent;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: 60px;
+    top: 5px;
+    float: left;
+    &:after {
+      content: '';
+      height: 25px;
+      border-left: 2px solid gray;
+      position: absolute;
+      transform: rotate(45deg);
+      left: 15px;
+    }
+    &:before {
+      content: '';
+      height: 25px;
+      border-left: 2px solid gray;
+      position: absolute;
+      transform: rotate(-45deg);
+      left: 15px;
+    }
+  }
+
+}
