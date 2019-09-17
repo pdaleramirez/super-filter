@@ -30,7 +30,9 @@
                 name: 'settings[name]',
                 value: settings.name
             }) }}
-            <combo-box v-model="comboValue"></combo-box>
+
+            <input type="hidden" name="settings[entryTemplate]" :value="comboValue" />
+            <combo-box v-model="comboValue" :options="options"></combo-box>
         </div>
     </div>
 
@@ -39,8 +41,13 @@
             el: "#settings-cp",
             data: {
                 selected: null,
-                options: ['CA', 'Canada', 'BA', 'TA'],
-                comboValue: 'grid'
+                options: [
+                    {value: 'table', label:'Table'},
+                    {value:'list', label:'List'},
+                    {value:'grid', label:'Grid'},
+                    {value:'custom', label:'Add Custom'}
+                ],
+                comboValue: '{{ settings.entryTemplate }}'
             }
         });
     </script>

@@ -2164,7 +2164,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ComboBox',
@@ -2173,19 +2172,6 @@ __webpack_require__.r(__webpack_exports__);
     return {
       time: "",
       readonly: true,
-      options: [{
-        value: 'table',
-        label: 'Table'
-      }, {
-        value: 'list',
-        label: 'List'
-      }, {
-        value: 'grid',
-        label: 'Grid'
-      }, {
-        value: 'custom',
-        label: 'Add Custom'
-      }],
       showAutocompleteDropdown: false,
       selectedValue: null,
       inputModel: this.value,
@@ -2195,16 +2181,31 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   props: {
-    placeholder: String,
+    options: Array,
     value: String
   },
   mounted: function mounted() {
-    console.log('val prop');
-    console.log(this.value);
+    if (this.value !== '') {
+      this.inputModel = this.getLabel(this.value);
+    }
   },
   methods: {
     away: function away() {
       this.showAutocompleteDropdown = false;
+    },
+    getLabel: function getLabel(value) {
+      var obj = this.options.find(function (obj) {
+        return obj.value === value;
+      });
+
+      if (obj) {
+        return obj.label;
+      } else {
+        this.selectedValue = 'custom';
+        this.arrowDown = false;
+        this.readonly = false;
+        return value;
+      }
     },
     handleBackspace: function handleBackspace() {
       this.showAutocompleteDropdown = true;
@@ -2212,33 +2213,47 @@ __webpack_require__.r(__webpack_exports__);
     inputValue: function inputValue() {
       this.showAutocompleteDropdown = true;
     },
-    select: function select(value) {
-      this.selectedValue = value;
+    select: function select(option) {
+      var _this = this;
 
-      if (value === 'custom') {
-        this.inputModel = '';
+      this.selectedValue = option.value;
+
+      if (this.selectedValue === 'custom') {
+        var isType = this.options.find(function (obj) {
+          return obj.label === _this.inputModel;
+        });
+
+        if (isType) {
+          this.inputModel = '';
+        }
+
         this.readonly = false;
         this.arrowDown = false;
         this.$refs.search.focus();
       } else {
         this.readonly = true;
         this.arrowDown = true;
-        this.inputModel = value;
+        this.inputModel = option.label;
       }
 
       this.showAutocompleteDropdown = false;
     },
-    closeInput: function closeInput() {
-      console.log('close input here');
-    },
+    closeInput: function closeInput() {},
     clearInput: function clearInput() {
       this.inputModel = '';
     },
     modelValue: function modelValue() {}
   },
   watch: {
+    'selectedValue': function selectedValue(newVal, oldVal) {
+      if (this.selectedValue !== 'custom') {
+        this.$emit("input", this.selectedValue);
+      }
+    },
     'inputModel': function inputModel(newVal, oldVal) {
-      this.$emit("input", this.inputModel);
+      if (this.selectedValue === 'custom') {
+        this.$emit("input", this.inputModel);
+      }
     }
   }
 });
@@ -35603,7 +35618,7 @@ var render = function() {
           ],
           ref: "search",
           staticClass: "combobox-input",
-          attrs: { placeholder: _vm.placeholder, readonly: _vm.readonly },
+          attrs: { readonly: _vm.readonly },
           domProps: { value: _vm.inputModel },
           on: {
             click: _vm.inputValue,
@@ -35648,7 +35663,7 @@ var render = function() {
                 },
                 on: {
                   click: function($event) {
-                    return _vm.select(option.value)
+                    return _vm.select(option)
                   }
                 }
               },

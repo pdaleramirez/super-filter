@@ -2,7 +2,6 @@
     <div class="combobox">
         <div class="wrap-input" v-on-clickaway="away">
             <input class="combobox-input" ref="search"
-                   v-bind:placeholder="placeholder"
                    v-model="inputModel"
                    v-on:click="inputValue"
                    :readonly="readonly"
@@ -14,7 +13,7 @@
         <ul class="combobox-list" v-if="showAutocompleteDropdown">
             <li class="combobox-list-item"
                 v-for="(option, index) in options"
-                v-on:click="select(option.value)"
+                v-on:click="select(option)"
                 v-bind:class="{'selected': option.value === selectedValue, 'add-custom': option.value === 'custom'}">
                 {{ option.label }}
             </li>
@@ -32,12 +31,6 @@
             return {
                 time: "",
                 readonly: true,
-                options: [
-                    {value: 'table', label:'Table'},
-                    {value:'list', label:'List'},
-                    {value:'grid', label:'Grid'},
-                    {value:'custom', label:'Add Custom'}
-                ],
                 showAutocompleteDropdown: false,
                 selectedValue: null,
                 inputModel: this.value,
@@ -47,16 +40,29 @@
             }
         },
         props: {
-            placeholder: String,
+            options: Array,
             value: String
         },
         mounted() {
-            console.log('val prop');
-            console.log(this.value);
+            if (this.value !== '') {
+                this.inputModel = this.getLabel(this.value);
+            }
         },
         methods: {
             away() {
                 this.showAutocompleteDropdown = false;
+            },
+            getLabel(value) {
+                let obj = this.options.find(obj => { return obj.value === value });
+
+                if (obj) {
+                    return obj.label;
+                } else {
+                    this.selectedValue = 'custom';
+                    this.arrowDown = false;
+                    this.readonly = false;
+                    return value;
+                }
             },
             handleBackspace() {
                 this.showAutocompleteDropdown = true;
@@ -64,24 +70,30 @@
             inputValue() {
                 this.showAutocompleteDropdown = true;
             },
-            select(value) {
-                this.selectedValue = value;
+            select(option) {
 
-                if (value === 'custom') {
-                    this.inputModel = '';
+                this.selectedValue = option.value;
+
+                if (this.selectedValue === 'custom') {
+
+                    let isType = this.options.find(obj => { return obj.label === this.inputModel });
+                    if (isType) {
+                        this.inputModel = '';
+                    }
+
                     this.readonly = false;
                     this.arrowDown = false;
                     this.$refs.search.focus();
                 } else {
                     this.readonly = true;
                     this.arrowDown = true;
-                    this.inputModel = value;
+                    this.inputModel = option.label;
                 }
 
                 this.showAutocompleteDropdown = false;
             },
             closeInput() {
-                console.log('close input here')
+
             },
             clearInput() {
                 this.inputModel = '';
@@ -91,8 +103,15 @@
             }
         },
         watch: {
+            'selectedValue': function (newVal, oldVal) {
+                if (this.selectedValue !== 'custom') {
+                    this.$emit("input", this.selectedValue);
+                }
+            },
             'inputModel': function (newVal, oldVal) {
-                this.$emit("input", this.inputModel);
+                if (this.selectedValue === 'custom') {
+                    this.$emit("input", this.inputModel);
+                }
             }
         }
     };
