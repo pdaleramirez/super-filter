@@ -2199,6 +2199,7 @@ __webpack_require__.r(__webpack_exports__);
       });
 
       if (obj) {
+        this.selectedValue = obj.value;
         return obj.label;
       } else {
         this.selectedValue = 'custom';

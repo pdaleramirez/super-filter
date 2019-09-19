@@ -130,4 +130,27 @@ class App extends Component
     {
         return static::$pageSize;
     }
+
+    public function getSettings()
+    {
+        $plugin = Craft::$app->plugins->getPlugin('super-filter');
+
+        return $plugin->getSettings();
+    }
+
+    public function getEntryTemplates()
+    {
+        return [
+          'table' => Craft::t('super-filter', 'Table'),
+          'list'  => Craft::t('super-filter', 'List'),
+          'grid'  => Craft::t('super-filter', 'Grid')
+        ];
+    }
+
+    public function isEntryTemplateIn($value)
+    {
+        $keys = array_keys($this->getEntryTemplates());
+
+        return in_array($value, $keys);
+    }
 }

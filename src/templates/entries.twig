@@ -13,7 +13,8 @@
     <div>
         <div class="loader" v-if="loading">Loading...</div>
         <div class="row" v-for="entry in items">
-            {% include 'entry' %}
+            {{ entryHtml|raw }}
+
         </div>
 
         <b-pagination

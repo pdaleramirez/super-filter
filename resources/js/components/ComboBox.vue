@@ -56,6 +56,7 @@
                 let obj = this.options.find(obj => { return obj.value === value });
 
                 if (obj) {
+                    this.selectedValue = obj.value;
                     return obj.label;
                 } else {
                     this.selectedValue = 'custom';

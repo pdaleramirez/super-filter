@@ -23,11 +23,24 @@ class SuperFilterVariable
 
         $alias = Craft::getAlias('@superfilter/templates');
 
-        Craft::$app->getView()->setTemplatesPath($alias);
+        $settings = SuperFilter::$app->getSettings();
 
-       // $siteTemplatePath = Craft::$app->path->getSiteTemplatesPath();
+        $entryTemplate = (empty($settings->entryTemplate)) ? 'grid' : $settings->entryTemplate;
 
-        //Craft::$app->getView()->setTemplatesPath($siteTemplatePath);
+        if (!SuperFilter::$app->isEntryTemplateIn($entryTemplate)) {
+            $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
+
+            Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);
+
+        } else {
+            $entryTemplate = 'entry/' . $entryTemplate;
+
+            Craft::$app->getView()->setTemplatesPath($alias);
+        }
+
+        $entryHtml = Craft::$app->getView()->renderTemplate($entryTemplate);
+
+        $entryHtml = Template::raw($entryHtml);;
 
         $params = [
             'handle'      => 'entry',
@@ -38,8 +51,13 @@ class SuperFilterVariable
         ];
 
         SuperFilter::$app->setParams($params);
-        //\Craft::dd(SuperFilter::$app->getParams());
-        $html = Craft::$app->getView()->renderTemplate('entries', ['config' => Json::encode($params)]);
+
+        Craft::$app->getView()->setTemplatesPath($alias);
+
+        $html = Craft::$app->getView()->renderTemplate('entries', [
+            'config'     => Json::encode($params),
+            'entryHtml' => $entryHtml
+        ]);
 
 
         return Template::raw($html);
