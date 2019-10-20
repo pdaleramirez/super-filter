@@ -1,7 +1,10 @@
-<div class="col3">
-    <h1>This is grid type</h1>
-    <h2>${ entry.title }</h2>
-    <div class="content">
-        ${ entry.contentText }
+<h1>This is grid type</h1>
+<div class="row" v-for="entry in items">
+    <div class="col3">
+        <h2>${ entry.title }</h2>
+        <div class="content">
+            ${ entry.contentText }
+        </div>
     </div>
 </div>
+{{ craft.superFilter.pagination() }}

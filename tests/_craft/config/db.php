@@ -10,7 +10,7 @@
 return [
 
 	// The datzzabase server name or IP address. Usually this is 'localhost' or '127.0.0.1'.
-	'server' => 'localhost',
+	'server' =>  getenv('DB_SERVER'),
 
 	// The database username to connect with.
     'user' => getenv('DB_USER'),

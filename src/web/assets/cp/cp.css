@@ -9,29 +9,23 @@
 }
 
 /* KeyFrames */
-
 @-webkit-keyframes vSelectSpinner {
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
 }
-
 @keyframes vSelectSpinner {
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
 }
-
 /* Dropdown Default Transition */
-
 .vs__fade-enter-active,
 .vs__fade-leave-active {
   transition: opacity 0.15s cubic-bezier(1, 0.5, 0.8, 1);
@@ -43,7 +37,6 @@
 }
 
 /** Component States */
-
 /*
  * Disabled
  *
@@ -52,7 +45,6 @@
  * and change the cursor displayed on the interactive
  * components.
  */
-
 .vs--disabled .vs__dropdown-toggle,
 .vs--disabled .vs__clear,
 .vs--disabled .vs__search,
@@ -69,21 +61,17 @@
  *  HTML attribute does most of the work for us by
  *  rearranging the child elements visually.
  */
-
 .v-select[dir=rtl] .vs__actions {
   padding: 0 3px 0 6px;
 }
-
 .v-select[dir=rtl] .vs__clear {
   margin-left: 6px;
   margin-right: 0;
 }
-
 .v-select[dir=rtl] .vs__deselect {
   margin-left: 0;
   margin-right: 2px;
 }
-
 .v-select[dir=rtl] .vs__dropdown-menu {
   text-align: right;
 }
@@ -99,7 +87,6 @@
 
     .vs__actions holds the clear button and dropdown toggle.
  */
-
 .vs__dropdown-toggle {
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -128,7 +115,6 @@
 }
 
 /* Dropdown Toggle States */
-
 .vs--searchable .vs__dropdown-toggle {
   cursor: text;
 }
@@ -159,7 +145,6 @@
 }
 
 /* Clear Button */
-
 .vs__clear {
   fill: rgba(60, 60, 60, 0.5);
   padding: 0;
@@ -170,7 +155,6 @@
 }
 
 /* Dropdown Menu */
-
 .vs__dropdown-menu {
   display: block;
   position: absolute;
@@ -197,7 +181,6 @@
 }
 
 /* List Items */
-
 .vs__dropdown-option {
   line-height: 1.42857143;
   /* Normalize line height */
@@ -208,7 +191,6 @@
   /* Overrides most CSS frameworks */
   white-space: nowrap;
 }
-
 .vs__dropdown-option:hover {
   cursor: pointer;
 }
@@ -219,7 +201,6 @@
 }
 
 /* Selected Tags */
-
 .vs__selected {
   display: flex;
   align-items: center;
@@ -247,23 +228,19 @@
 }
 
 /* States */
-
 .vs--single .vs__selected {
   background-color: transparent;
   border-color: transparent;
 }
-
 .vs--single.vs--open .vs__selected {
   position: absolute;
   opacity: 0.4;
 }
-
 .vs--single.vs--searching .vs__selected {
   display: none;
 }
 
 /* Search Input */
-
 .vs__search::-webkit-search-decoration,
 .vs__search::-webkit-search-cancel-button,
 .vs__search::-webkit-search-results-button,
@@ -314,11 +291,9 @@
 /**
     States
  */
-
 .vs--unsearchable .vs__search {
   opacity: 1;
 }
-
 .vs--unsearchable .vs__search:hover {
   cursor: pointer;
 }
@@ -328,7 +303,6 @@
 }
 
 /* Loading Spinner */
-
 .vs__spinner {
   align-self: center;
   opacity: 0;
@@ -353,8 +327,6 @@
 }
 
 /* Loading Spinner States */
-
 .vs--loading .vs__spinner {
   opacity: 1;
 }
-

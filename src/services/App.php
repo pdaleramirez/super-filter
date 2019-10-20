@@ -11,11 +11,12 @@ use craft\web\twig\variables\Paginate;
 
 class App extends Component
 {
-    static $pageSize = 1;
+    public static $pageSize = 5;
     protected $elements = [];
     protected $links;
     protected $elementQuery;
     public $params;
+    const DEFAULT_TEMPLATE = 'grid';
 
     public function config($params)
 	{
@@ -152,5 +153,10 @@ class App extends Component
         $keys = array_keys($this->getEntryTemplates());
 
         return in_array($value, $keys);
+    }
+
+    public function wamba()
+    {
+        return 'assad';
     }
 }

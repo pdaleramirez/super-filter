@@ -20,7 +20,8 @@
     "laravel-mix": "^4.1.2",
     "vue": "^2.6.10",
     "vue-clickaway": "^2.2.2",
-    "vue-select": "^3.1.0"
+    "vue-select": "^3.1.0",
+    "vuedraggable": "^2.23.1"
   },
   "devDependencies": {
     "qs": "^6.7.0",

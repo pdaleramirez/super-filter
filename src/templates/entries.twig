@@ -1,8 +1,6 @@
 <div id="search-app">
     <div>
-        <div>
         <search-list :config="{{ config }}"></search-list>
-        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -12,21 +10,7 @@
 <script type="text/x-template" id="search-list">
     <div>
         <div class="loader" v-if="loading">Loading...</div>
-        <div class="row" v-for="entry in items">
             {{ entryHtml|raw }}
-
-        </div>
-
-        <b-pagination
-                v-if="config.total"
-                v-model="currentPage"
-                :total-rows="config.total"
-                :per-page="config.limit"
-                aria-controls="my-table"
-                @input="updateList(currentPage)"
-        ></b-pagination>
-        {% set path = craft.app.view.setTemplatesPath(craft.app.path.getSiteTemplatesPath()) %}
-        {% include 'entry' %}
     </div>
 </script>
 

@@ -1,7 +1,7 @@
 {% import "_includes/forms" as forms %}
 {% requireAdmin %}
 
-{% extends "_layouts/cp" %}
+{% extends "super-filter/_layouts/basesettings" %}
 
 {% set title = "Settings"|t('super-filter') %}
 {% set fullPageForm = true  %}
@@ -19,7 +19,10 @@
 
 
 {% block content %}
-
+    <script type="text/javascript">
+        window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
+        window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
+    </script>
     <div id="settings-cp">
         <div>
             <input type="hidden" name="action" value="super-filter/super-filter/save-settings-config">
@@ -33,10 +36,15 @@
 
             <input type="hidden" name="settings[entryTemplate]" :value="comboValue" />
             <combo-box v-model="comboValue" :options="options"></combo-box>
+
+            <div class="field">
+                <button @click.prevent="installSampleData" class="btn submit">Install Example Data</button>
+            </div>
         </div>
     </div>
 
     <script>
+
         let app = new Vue({
             el: "#settings-cp",
             data: {
@@ -48,6 +56,19 @@
                     {value:'custom', label:'Add Custom'}
                 ],
                 comboValue: '{{ settings.entryTemplate }}'
+            },
+            methods: {
+                installSampleData() {
+                    let url = Craft.getActionUrl("super-filter/super-filter/install-sample-data");
+                    let data = {};
+
+                    data[csrfTokenName] = csrfTokenValue;
+
+                    axios.post(url, qs.stringify(data))
+                        .then(({data}) => {
+
+                        });
+                }
             }
         });
     </script>
