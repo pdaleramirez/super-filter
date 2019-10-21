@@ -9,7 +9,10 @@ use craft\fields\PlainText;
 use craft\helpers\Json;
 use craft\models\CategoryGroup;
 use craft\models\CategoryGroup_SiteSettings;
+use craft\models\EntryType;
 use craft\models\FieldGroup;
+use craft\models\Section;
+use craft\models\Section_SiteSettings;
 use craft\web\Controller;
 use Craft;
 use pdaleramirez\superfilter\models\Settings;
@@ -150,10 +153,78 @@ class SuperFilterController extends Controller
     {
         $this->requirePostRequest();
 
-        $result = $this->createFields();
+        $ids = $this->createFields();
 
-        return Json::encode(['result' => $result]);
+        $section = $this->createSection();
+
+        $this->saveEntryType($section, $ids);
+
+
+        return Json::encode(['result' => $ids]);
     }
+
+    public function saveEntryType(Section $section, $ids)
+    {
+        $entryTypes = $section->getEntryTypes();
+
+        $entryType  = $entryTypes[0];
+
+        $test = [
+          'Content' => $ids
+        ];
+
+        $fieldLayout = Craft::$app->getFields()->assembleLayout($test);
+        //$fieldLayout->id = $fieldLayoutId;
+        // Set the field layout
+        //$fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
+        $fieldLayout->type = Entry::class;
+        $entryType->setFieldLayout($fieldLayout);
+
+        if (!Craft::$app->getSections()->saveEntryType($entryType)) {
+
+        }
+    }
+
+    public function createSection()
+    {
+        $handle = 'superFilterShows';
+        $section = Craft::$app->getSections()->getSectionByHandle($handle);
+        if (!$section) {
+            $section = new Section();
+            $section->name   = "Shows";
+            $section->handle = $handle;
+            $section->type   = "channel";
+            $section->enableVersioning  = true;
+            $section->propagationMethod = Section::PROPAGATION_METHOD_ALL;
+            $section->previewTargets    = [];
+
+            $sites = Craft::$app->getSites()->getAllSiteIds();
+
+            $siteSettings = [];
+
+            if ($sites) {
+                foreach ($sites as $siteId) {
+                    $sectionSiteSettings = new Section_SiteSettings();
+
+                    $sectionSiteSettings->siteId = $siteId;
+                    $sectionSiteSettings->hasUrls = true;
+                    $sectionSiteSettings->uriFormat = 'super-filter-shows/{slug}';
+
+                    $siteSettings[$siteId] = $sectionSiteSettings;
+                }
+            }
+
+            $section->setSiteSettings($siteSettings);
+
+            if (!Craft::$app->getSections()->saveSection($section)) {
+
+                return false;
+            }
+        }
+
+        return $section;
+    }
+
 
     /**
      * @return |null
@@ -163,34 +234,50 @@ class SuperFilterController extends Controller
     private function createFields()
     {
         $fieldGroup = $this->getFieldGroup();
+        $ids = [];
+        $handle = 'superFilterDescription';
 
-        $config  = [
-            'type'    => PlainText::class,
-            "groupId" => $fieldGroup->id,
-            'name'    => 'Description',
-            'handle'  => 'superFilterDescription',
-            'multiline'   => true,
-            "initialRows" => 4,
-            "columnType"  => "text"
-        ];
+        $fieldDescription = Craft::$app->getFields()->getFieldByHandle($handle);
 
-        $fieldDescription = Craft::$app->getFields()->createField($config);
+        if (!$fieldDescription) {
+            $config  = [
+                'type'    => PlainText::class,
+                "groupId" => $fieldGroup->id,
+                'name'    => 'Description',
+                'handle'  => $handle,
+                'multiline'   => true,
+                "initialRows" => 4,
+                "columnType"  => "text"
+            ];
 
-        Craft::$app->getFields()->saveField($fieldDescription);
+            $fieldDescription = Craft::$app->getFields()->createField($config);
 
-        $config = [
-            "type"    => "craft\\fields\\Categories",
-            "groupId" => $fieldGroup->id,
-            "source" => 'group:' . $this->getCategoryGroup()->id,
-            "name"    => "Genre",
-            "handle"  => "superFilterGenre"
-        ];
+            Craft::$app->getFields()->saveField($fieldDescription);
+        }
 
-        $fieldGenre = Craft::$app->getFields()->createField($config);
+        $ids[] = $fieldDescription->id;
 
-        Craft::$app->getFields()->saveField($fieldGenre);
+        $handle = "superFilterGenre";
 
-        return null;
+        $fieldGenre = Craft::$app->getFields()->getFieldByHandle($handle);
+
+        if (!$fieldGenre) {
+            $config = [
+                "type"    => "craft\\fields\\Categories",
+                "groupId" => $fieldGroup->id,
+                "source" => 'group:' . $this->getCategoryGroup()->id,
+                "name"    => "Genre",
+                "handle"  => $handle
+            ];
+
+            $fieldGenre = Craft::$app->getFields()->createField($config);
+
+            Craft::$app->getFields()->saveField($fieldGenre);
+        }
+
+        $ids[] = $fieldGenre->id;
+
+        return $ids;
     }
 
     private function getFieldGroup()
@@ -225,6 +312,7 @@ class SuperFilterController extends Controller
     {
         $categoryGroup = new CategoryGroup();
         $handle = 'superFilterGenre';
+
         $categoryGroupRecord = CategoryGroupRecord::find()
             ->where([
                 'dateDeleted' => null,
