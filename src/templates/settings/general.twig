@@ -38,7 +38,8 @@
             <combo-box v-model="comboValue" :options="options"></combo-box>
 
             <div class="field">
-                <button @click.prevent="installSampleData" class="btn submit">Install Example Data</button>
+                <button @click.prevent="installSampleData" class="btn submit">Install Example Data
+                    <i class="fa fa-spin fa-spinner" style="display: none"></i></button>
             </div>
         </div>
     </div>
@@ -58,15 +59,19 @@
                 comboValue: '{{ settings.entryTemplate }}'
             },
             methods: {
-                installSampleData() {
+                installSampleData(event) {
                     let url = Craft.getActionUrl("super-filter/super-filter/install-sample-data");
                     let data = {};
 
                     data[csrfTokenName] = csrfTokenValue;
 
+                    let spinner = event.currentTarget.getElementsByTagName('i')[0];
+
+                    spinner.style.display = 'inline-block';
+
                     axios.post(url, qs.stringify(data))
                         .then(({data}) => {
-
+                            spinner.style.display = 'none';
                         });
                 }
             }

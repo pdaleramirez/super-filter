@@ -68,6 +68,7 @@ class SuperFilter extends Plugin
         self::$app = $this->get('app');
 
         Craft::setAlias('@superfilter', $this->getBasePath());
+        Craft::setAlias('@superfilterResources', dirname(__DIR__).'/resources/lib');
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $event->sender->set('superFilter', SuperFilterVariable::class);

@@ -17,7 +17,7 @@ use craft\web\Controller;
 use Craft;
 use pdaleramirez\superfilter\models\Settings;
 use pdaleramirez\superfilter\services\App;
-use pdaleramirez\superfilter\web\assets\VueAsset;
+use pdaleramirez\superfilter\web\assets\FontAwesomeAsset;
 use pdaleramirez\superfilter\web\assets\VueCpAsset;
 use craft\records\CategoryGroup as CategoryGroupRecord;
 
@@ -30,6 +30,7 @@ class SuperFilterController extends Controller
      */
     public function actionSettings()
     {
+        Craft::$app->getView()->registerAssetBundle(FontAwesomeAsset::class);
         Craft::$app->getView()->registerAssetBundle(VueCpAsset::class, 1);
 
         $plugin = Craft::$app->plugins->getPlugin('super-filter');
@@ -149,18 +150,31 @@ class SuperFilterController extends Controller
         \Craft::dd($field);
     }
 
+    /**
+     * @return string|null
+     * @throws \Throwable
+     * @throws \craft\errors\CategoryGroupNotFoundException
+     * @throws \yii\web\BadRequestHttpException
+     */
     public function actionInstallSampleData()
     {
         $this->requirePostRequest();
 
         $ids = $this->createFields();
 
-        $section = $this->createSection();
+        if ($ids) {
+            $section = $this->createSection();
 
-        $this->saveEntryType($section, $ids);
+            if ($section) {
+                $entryType = $this->saveEntryType($section, $ids);
 
+                if ($entryType) {
+                    return Json::encode(['result' => $ids]);
+                }
+            }
+        }
 
-        return Json::encode(['result' => $ids]);
+        return null;
     }
 
     public function saveEntryType(Section $section, $ids)
@@ -181,8 +195,10 @@ class SuperFilterController extends Controller
         $entryType->setFieldLayout($fieldLayout);
 
         if (!Craft::$app->getSections()->saveEntryType($entryType)) {
-
+            return false;
         }
+
+        return $entryType;
     }
 
     public function createSection()
@@ -217,7 +233,6 @@ class SuperFilterController extends Controller
             $section->setSiteSettings($siteSettings);
 
             if (!Craft::$app->getSections()->saveSection($section)) {
-
                 return false;
             }
         }
