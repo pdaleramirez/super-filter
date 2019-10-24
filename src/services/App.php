@@ -18,6 +18,16 @@ class App extends Component
     public $params;
     const DEFAULT_TEMPLATE = 'grid';
 
+    /**
+     * @var $sampleData SampleData
+     */
+    public $sampleData;
+
+    public function init()
+    {
+        $this->sampleData = new SampleData();
+    }
+
     public function config($params)
 	{
 	    $this->params = $params;

@@ -3,6 +3,7 @@ namespace pdaleramirez\superfilter\controllers;
 
 
 use barrelstrength\sproutbaseemail\elements\NotificationEmail;
+use craft\elements\Category;
 use craft\elements\Entry;
 use craft\errors\InvalidPluginException;
 use craft\fields\PlainText;
@@ -17,12 +18,14 @@ use craft\web\Controller;
 use Craft;
 use pdaleramirez\superfilter\models\Settings;
 use pdaleramirez\superfilter\services\App;
+use pdaleramirez\superfilter\SuperFilter;
 use pdaleramirez\superfilter\web\assets\FontAwesomeAsset;
 use pdaleramirez\superfilter\web\assets\VueCpAsset;
 use craft\records\CategoryGroup as CategoryGroupRecord;
 
 class SuperFilterController extends Controller
 {
+
     /**
      * @return \yii\web\Response
      * @throws InvalidPluginException
@@ -160,207 +163,8 @@ class SuperFilterController extends Controller
     {
         $this->requirePostRequest();
 
-        $ids = $this->createFields();
+        SuperFilter::$app->sampleData->generateSampleData();
 
-        if ($ids) {
-            $section = $this->createSection();
-
-            if ($section) {
-                $entryType = $this->saveEntryType($section, $ids);
-
-                if ($entryType) {
-                    return Json::encode(['result' => $ids]);
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public function saveEntryType(Section $section, $ids)
-    {
-        $entryTypes = $section->getEntryTypes();
-
-        $entryType  = $entryTypes[0];
-
-        $test = [
-          'Content' => $ids
-        ];
-
-        $fieldLayout = Craft::$app->getFields()->assembleLayout($test);
-        //$fieldLayout->id = $fieldLayoutId;
-        // Set the field layout
-        //$fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
-        $fieldLayout->type = Entry::class;
-        $entryType->setFieldLayout($fieldLayout);
-
-        if (!Craft::$app->getSections()->saveEntryType($entryType)) {
-            return false;
-        }
-
-        return $entryType;
-    }
-
-    public function createSection()
-    {
-        $handle = 'superFilterShows';
-        $section = Craft::$app->getSections()->getSectionByHandle($handle);
-        if (!$section) {
-            $section = new Section();
-            $section->name   = "Shows";
-            $section->handle = $handle;
-            $section->type   = "channel";
-            $section->enableVersioning  = true;
-            $section->propagationMethod = Section::PROPAGATION_METHOD_ALL;
-            $section->previewTargets    = [];
-
-            $sites = Craft::$app->getSites()->getAllSiteIds();
-
-            $siteSettings = [];
-
-            if ($sites) {
-                foreach ($sites as $siteId) {
-                    $sectionSiteSettings = new Section_SiteSettings();
-
-                    $sectionSiteSettings->siteId = $siteId;
-                    $sectionSiteSettings->hasUrls = true;
-                    $sectionSiteSettings->uriFormat = 'super-filter-shows/{slug}';
-
-                    $siteSettings[$siteId] = $sectionSiteSettings;
-                }
-            }
-
-            $section->setSiteSettings($siteSettings);
-
-            if (!Craft::$app->getSections()->saveSection($section)) {
-                return false;
-            }
-        }
-
-        return $section;
-    }
-
-
-    /**
-     * @return |null
-     * @throws \Throwable
-     * @throws \craft\errors\CategoryGroupNotFoundException
-     */
-    private function createFields()
-    {
-        $fieldGroup = $this->getFieldGroup();
-        $ids = [];
-        $handle = 'superFilterDescription';
-
-        $fieldDescription = Craft::$app->getFields()->getFieldByHandle($handle);
-
-        if (!$fieldDescription) {
-            $config  = [
-                'type'    => PlainText::class,
-                "groupId" => $fieldGroup->id,
-                'name'    => 'Description',
-                'handle'  => $handle,
-                'multiline'   => true,
-                "initialRows" => 4,
-                "columnType"  => "text"
-            ];
-
-            $fieldDescription = Craft::$app->getFields()->createField($config);
-
-            Craft::$app->getFields()->saveField($fieldDescription);
-        }
-
-        $ids[] = $fieldDescription->id;
-
-        $handle = "superFilterGenre";
-
-        $fieldGenre = Craft::$app->getFields()->getFieldByHandle($handle);
-
-        if (!$fieldGenre) {
-            $config = [
-                "type"    => "craft\\fields\\Categories",
-                "groupId" => $fieldGroup->id,
-                "source" => 'group:' . $this->getCategoryGroup()->id,
-                "name"    => "Genre",
-                "handle"  => $handle
-            ];
-
-            $fieldGenre = Craft::$app->getFields()->createField($config);
-
-            Craft::$app->getFields()->saveField($fieldGenre);
-        }
-
-        $ids[] = $fieldGenre->id;
-
-        return $ids;
-    }
-
-    private function getFieldGroup()
-    {
-        $name = 'Super Filter';
-
-        $group = new FieldGroup();
-
-        $record = \craft\records\FieldGroup::find()->where([
-                    'name'      => $name
-                 ])->one();
-
-        if ($record) {
-            $group->setAttributes($record->getAttributes());
-
-            return $group;
-        }
-
-        $group->name = $name;
-
-        Craft::$app->getFields()->saveGroup($group);
-
-        return $group;
-    }
-
-    /**
-     * @return bool|CategoryGroup
-     * @throws \Throwable
-     * @throws \craft\errors\CategoryGroupNotFoundException
-     */
-    private function getCategoryGroup()
-    {
-        $categoryGroup = new CategoryGroup();
-        $handle = 'superFilterGenre';
-
-        $categoryGroupRecord = CategoryGroupRecord::find()
-            ->where([
-                'dateDeleted' => null,
-                'handle'      => $handle
-            ])->one();
-
-        if ($categoryGroupRecord) {
-            $categoryGroup->setAttributes($categoryGroupRecord->getAttributes());
-
-            return $categoryGroup;
-        }
-
-        $categoryGroup->name   = 'Genre';
-        $categoryGroup->handle = $handle;
-
-        $siteSettings = [];
-
-        $sites = Craft::$app->getSites()->getAllSiteIds();
-
-        if ($sites) {
-            foreach ($sites as $siteId) {
-                $categorySiteSettings = new CategoryGroup_SiteSettings();
-
-                $categorySiteSettings->siteId = $siteId;
-
-                $siteSettings[$siteId] = $categorySiteSettings;
-            }
-        }
-
-        $categoryGroup->setSiteSettings($siteSettings);
-
-        Craft::$app->getCategories()->saveGroup($categoryGroup);
-
-        return $categoryGroup;
+        return Json::encode(['result' => 'temp']);
     }
 }
