@@ -76,7 +76,7 @@ class SuperFilter extends Plugin
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function (RegisterUrlRulesEvent $event) {
             $event->rules['super-filter/settings/<settingsSectionHandle:.*>'] = 'super-filter/super-filter/settings';
-       //     $event->rules['super-filter/test'] = 'super-filter/super-filter/test';
+            $event->rules['super-filter/test'] = 'super-filter/super-filter/test';
             $event->rules['super-filter/install-sample-data'] = 'super-filter/super-filter/install-sample-data';
         });
 
