@@ -1,0 +1,30 @@
+{% from "_includes/forms" import textField %}
+{% from "_includes/forms" import textareaField %}
+
+
+{% set tabLayout = doc.getFieldLayout() %}
+{% set tabs = tabLayout.getTabs() %}
+
+{% if tabs|length %}
+
+    {% for index, tab  in doc.getFieldLayout().getTabs() %}
+        <div id="tab{{ loop.index }}"{% if not loop.first %} class="hidden"{% endif %}>
+            {% include "_includes/fields" with {
+                fields:  tab.getFields(),
+                element: doc,
+                static:  static is defined ? static : false
+            } only %}
+        </div>
+    {% endfor %}
+{% endif %}
+<div id="tab2" class="hidden">
+    {% if asset is not null %}
+        <img  sizes="30px" srcset="{{ asset.getThumbUrl(100) }} 100w, {{ asset.getThumbUrl(200) }} 200w" alt="">
+        <div class="input-group">
+            <label>File Name:</label> <strong>{{ asset.getFileName() }}</strong>
+        </div>
+        <div class="input-group">
+            <label>Public URL:</label> <input type="text" style="width: 50%" disabled value="{{ asset.getUrl() }}" />
+        </div>
+    {% endif %}
+</div>

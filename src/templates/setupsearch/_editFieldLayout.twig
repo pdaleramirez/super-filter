@@ -1,0 +1,58 @@
+{% requireAdmin %}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Edit Docs"|t('pde-merge') %}
+
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = cpUrl('pdf-merge/settings/docs/edit/{id}') %}
+
+{% if doc.id is not null %}
+    {% set docId = doc.id %}
+{% else %}
+    {% set docId = 'new' %}
+{% endif %}
+
+{% block actionButton %}
+
+    <div class="buttons">
+        <div class="btngroup">
+            <input class="btn submit" type="submit"
+                   value="{{ 'Save'|t('pde-merge') }}">
+
+            {% if doc['id'] is defined %}
+
+                {% set dataSaveEditRedirect = cpUrl('pdf-merge/docs/edit/' ~ docId) %}
+
+                <div class="btn submit menubtn"></div>
+                <div class="menu">
+                    <ul>
+                        <li><a class="formsubmit"
+                               data-redirect="{{ craft.app.request.url|hash }}"
+                               title="{{ 'Save and continue editing'|t('pde-merge') }}">{{ 'Save and continue editing'|t('pde-merge') }}
+                                <span
+                                    class="shortcut">⌘S</span></a>
+                        </li>
+                    </ul>
+                </div>
+
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% set content %}
+
+    <input type="hidden" name="action"
+           value="pdf-merge/pdf-merge/save-settings">
+    {{ redirectInput('pdf-merge/docs/edit/' ~ docId) }}
+
+    <input type="hidden" name="docId" value="{{ docId }}">
+
+    {% include "_includes/fieldlayoutdesigner" with {
+        fieldLayout: doc.getFieldLayout()
+    } only %}
+
+{% endset %}

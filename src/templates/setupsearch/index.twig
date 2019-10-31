@@ -1,0 +1,16 @@
+{% extends "_layouts/elementindex" %}
+
+{% set title = "Setup Search" %}
+
+{% set elementType = 'pdaleramirez\\superfilter\\elements\\SetupSearch' %}
+
+{% set selectedSubnavItem = craft.app.request.segment(2) %}
+
+{% block actionButton %}
+    <div class="buttons">
+        <a class="btn submit add icon"
+           href="{{ url('super-filter/setup-search/edit/new') }}">
+            {{ "New Setup"|t('super-filter') }}
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% requireAdmin %}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+
+{% if setupElement.id is null %}
+    {% set setupId = 'new' %}
+{% else %}
+    {% set setupId = setupElement.id %}
+{% endif %}
+
+{% set crumbs = [
+    { label: "Setup Search"|t('super-filter'), url: url('super-filter/setup-search') },
+    { label: "Settings"|t('super-filter'), url: url('super-filter/settings/setup-search/edit/' ~ setupId) },
+] %}
+
+{% set title  = setupElement is defined ? setupElement.title : 'Create a new Setup'|t('super-filter') %}
+
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = continueEditingUrl %}
+
+{% block actionButton %}
+
+    <div class="buttons">
+        <div class="btngroup">
+            <input class="btn submit" type="submit"
+                   value="{{ 'Save'|t('super-filter') }}">
+            <div class="btn submit menubtn"></div>
+            <div class="menu">
+                <ul>
+                    <li><a class="formsubmit"
+                           data-redirect="{{ saveShortcutRedirect|hash }}">
+                            {{ "Save and continue editing"|t('super-filter') }}
+                            <span
+                                class="shortcut">⌘S</span></a></li>
+                </ul>
+                {% if setupElement.id is not null %}
+                    <hr>
+                    <ul>
+                        <li><a class="formsubmit error"
+                               data-action="super-filter/setup-search/delete-setup"
+                               data-confirm="{{ 'Are you sure you want to delete this setup?'|t('super-filter') }}"
+                               data-redirect="{{ "super-filter/setup-search"|hash }}">{{ "Delete"|t('super-filter') }}</a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block content %}
+
+    <input type="hidden" name="action" value="super-filter/setup-search/save-setup">
+    {{ redirectInput('super-filter/setup-search') }}
+
+    {% if setupElement.id is not null %}
+        <input type="hidden" name="setupId" value="{{ setupElement.id }}">
+    {% endif %}
+
+    {{ forms.textField({
+        label: "Title"|t('super-filter'),
+        id: 'title',
+        name: 'title',
+        value: setupElement is defined ? setupElement.title : null,
+        autofocus: true,
+        first: true,
+        errors: setupElement is defined ? setupElement.getErrors('title') : null
+    }) }}
+
+    {% if namespace is not defined %}{% set namespace = 'fields' %}{% endif %}
+
+{% endblock %}

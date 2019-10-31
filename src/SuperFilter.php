@@ -78,6 +78,8 @@ class SuperFilter extends Plugin
             $event->rules['super-filter/settings/<settingsSectionHandle:.*>'] = 'super-filter/super-filter/settings';
             $event->rules['super-filter/test'] = 'super-filter/super-filter/test';
             $event->rules['super-filter/install-sample-data'] = 'super-filter/super-filter/install-sample-data';
+            $event->rules['super-filter/setup-search'] = ['template' => 'super-filter/setupsearch'];
+            $event->rules['super-filter/setup-search/edit/<setupId:\d+|new>'] = 'super-filter/setup-search/edit';
         });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function (RegisterUrlRulesEvent $event) {
@@ -89,6 +91,11 @@ class SuperFilter extends Plugin
     public function getCpNavItem()
     {
         $parent = parent::getCpNavItem();
+
+        $parent['subnav']['setup-search'] = [
+            'label' => Craft::t('super-filter', 'Setup Search'),
+            'url' => 'super-filter/setup-search'
+        ];
 
         $parent['subnav']['settings'] = [
             'label' => Craft::t('super-filter', 'Settings'),

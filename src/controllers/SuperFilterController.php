@@ -1,27 +1,17 @@
 <?php
 namespace pdaleramirez\superfilter\controllers;
 
-
-use barrelstrength\sproutbaseemail\elements\NotificationEmail;
-use craft\elements\Category;
 use craft\elements\Entry;
 use craft\errors\InvalidPluginException;
-use craft\fields\PlainText;
 use craft\helpers\Json;
-use craft\models\CategoryGroup;
-use craft\models\CategoryGroup_SiteSettings;
-use craft\models\EntryType;
-use craft\models\FieldGroup;
-use craft\models\Section;
-use craft\models\Section_SiteSettings;
 use craft\web\Controller;
 use Craft;
 use pdaleramirez\superfilter\models\Settings;
+use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 use pdaleramirez\superfilter\web\assets\FontAwesomeAsset;
 use pdaleramirez\superfilter\web\assets\VueCpAsset;
-use craft\records\CategoryGroup as CategoryGroupRecord;
 
 class SuperFilterController extends Controller
 {
@@ -105,27 +95,13 @@ class SuperFilterController extends Controller
 
     public function actionTest()
     {
-        \Craft::dd('xxx');
-        $this->createCategoriesField();
-       // $this->generateSampleData();
-        exit;
-//        $element = Entry::find()->section(1);
-//
-//        $enrtryTypes = Craft::$app->sections->getEntryTypesBySectionId(1);
-//
-//        $fields = $enrtryTypes[0]->getFieldLayout()->getFields();
-//        \Craft::dd($fields);
-        $elements = Craft::$app->getElements()->getAllElementTypes();
+        $entries = Entry::find()->orderBy('superFilterReleaseDates ASC')->all();
 
-        \Craft::dd($elements);
-        $entries = Entry::findAll(['sproutExamplePlainText' => 'xxx']);
-        $entries = NotificationEmail::findAll(['sproutExamplePlainText' => 'xxx']);
         foreach ($entries as $entry) {
 
-            echo $entry->title . '<br/>';
+            echo $entry->title . ' - ' . $entry->superFilterReleaseDates . ' - ' . $entry->superFilterImdbRating . '<br/>';
         }
-        exit;
-        \Craft::dd('asfd');
+        return null;
     }
 
     public function generateSampleData()
@@ -166,5 +142,20 @@ class SuperFilterController extends Controller
         SuperFilter::$app->sampleData->generateSampleData();
 
         return Json::encode(['result' => 'temp']);
+    }
+
+    public function actionEdit($setupId = null, SetupSearch $setupElement = null)
+    {
+        if ($setupId == 'new') {
+            $setupElement = new SetupSearch();
+        }
+
+        if (!$setupElement) {
+            $setupElement = Craft::$app->getElements()->getElementById($setupId, SetupSearch::class);
+        }
+
+        return $this->renderTemplate('super-filter/setupsearch/_edit', [
+            'setup' => $setupElement
+        ]);
     }
 }
