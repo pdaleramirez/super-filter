@@ -53,7 +53,10 @@
 {% endblock %}
 
 {% block content %}
-
+    <script type="text/javascript">
+        window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
+        window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
+    </script>
     <input type="hidden" name="action" value="super-filter/setup-search/save-setup">
     {{ redirectInput('super-filter/setup-search') }}
 
@@ -71,6 +74,167 @@
         errors: setupElement is defined ? setupElement.getErrors('title') : null
     }) }}
 
-    {% if namespace is not defined %}{% set namespace = 'fields' %}{% endif %}
+    <div class="field">
+        <div class="heading">
+            <label>Items per page</label>
+        </div>
+        <div class="input">
+            <input class="text" type="number" name="options[perPage]" placeholder="25"
+                   value="{{ options.perPage is defined ? options.perPage : ''  }}" />
+        </div>
+    </div>
+
+
+    {{ forms.selectField({
+        label: "Content Loading Type"|t('super-filter'),
+        id: 'content-loading-type',
+        name: 'options[contentLoadingType]',
+        instructions: "The type of content loading the search result be."|t('super-filter'),
+        options: [
+            { value: 'pagination', label: 'Pagination' },
+            { value: 'infinite-scroll', label: 'Infinite Scroll' }
+        ],
+        value: options.contentLoadingType is defined ? options.contentLoadingType : ''
+    }) }}
+
+    <div id="field-setting">
+        <div class="field">
+            <div class="heading">
+                <label>Element:</label>
+            </div>
+            <div class="input">
+                <div class="select">
+                    <select v-model="selectedElement" @change="onChangeElement" name="elementSearchType">
+                        <option v-for="(option, key) in elements" :value="key">${ option.label }</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field" v-if="elements && elements[selectedElement].container">
+            <div class="heading">
+                <label>Container:</label>
+            </div>
+            <div class="input">
+                <div class="select">
+                    <select v-model="selectedContainer" name="options[container]">
+                        <option v-for="(option, key) in elements[selectedElement].container" :value="key">${ option }</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field" v-if="elements && elements[selectedElement].fields">
+            <div class="heading">
+                <label>Sort Fields:</label>
+            </div>
+            <input type="hidden" name="sorts" :value="JSON.stringify(elements[selectedElement].fields[selectedContainer])" />
+
+            <cards v-if="selectedContainer === key" v-for="(option, key) in elements[selectedElement].fields"
+                   :fields='option.options' :selected-fields="option.selected" :group="key" v-on:drag:fields="dragFields">
+                ${ option }
+            </cards>
+        </div>
+
+        <div class="field">
+            <div class="heading">
+                <label>Template:</label>
+            </div>
+            <input type="hidden" name="options[entryTemplate]" :value="comboValue" />
+            <combo-box v-model="comboValue" :options="options"></combo-box>
+        </div>
+    </div>
+
+    <script>
+
+        let app = new Vue({
+            el: "#field-setting",
+            delimiters: ['${', '}'],
+            data: {
+                selected: [],
+                elements: null,
+                selectedElements: null,
+                origElements: null,
+                selectedElement: 'entry',
+                selectedContainer: null,
+                group: null,
+                firstContainer: null,
+                options: [
+                    {value: 'table', label:'Table'},
+                    {value:'list', label:'List'},
+                    {value:'grid', label:'Grid'},
+                    {value:'custom', label:'Add Custom'}
+                ],
+                sortOptions: null,
+                comboValue: ''
+            },
+            methods: {
+                installSampleData(event) {
+                    let url = Craft.getActionUrl("super-filter/super-filter/install-sample-data");
+                    let data = {};
+
+                    data[csrfTokenName] = csrfTokenValue;
+
+                    let spinner = event.currentTarget.getElementsByTagName('i')[0];
+
+                    spinner.style.display = 'inline-block';
+
+                    axios.post(url, qs.stringify(data))
+                        .then(({data}) => {
+                            spinner.style.display = 'none';
+                        });
+                },
+                dragFields(obj) {
+
+                    console.log(obj);
+                },
+                onChangeElement() {
+                    //this.setSortOptions();
+                },
+                setSortOptions() {
+                    let entryTypes = this.elements[this.selectedElement].fields;
+
+                    if (entryTypes !== null) {
+                        if (this.selectedContainer == null
+                            && Object.keys(entryTypes).length > 0) {
+                            this.selectedContainer = Object.keys(entryTypes)[0];
+                        }
+
+                        if (this.selectedContainer) {
+                            this.sortOptions = entryTypes[this.selectedContainer];
+                        }
+                    } else {
+                        this.sortOptions = {};
+                    }
+                }
+            },
+            mounted() {
+                let url = "{{ baseUrl }}super-filter/setup-search/setup-options";
+                let data = { id: {{ setupId }} };
+
+                data[csrfTokenName] = csrfTokenValue;
+
+                axios.post(url, qs.stringify(data)).then((response) => {
+                    this.elements = response.data.elements;
+
+                    if (response.data.selectedElement !== null) {
+                        this.selectedElement = response.data.selectedElement;
+                    }
+
+                    if (response.data.selectedContainer !== null) {
+                        this.selectedContainer = response.data.selectedContainer;
+                    }
+
+                    this.setSortOptions();
+                });
+            },
+            watch: {
+                selectedContainer(value) {
+                   // this.sortOptions = this.elements[this.selectedElement].fields[value];
+                    this.group = value;
+                }
+            }
+        });
+    </script>
 
 {% endblock %}

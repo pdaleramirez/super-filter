@@ -14,8 +14,12 @@ namespace pdaleramirez\superfilter;
 use Craft;
 use craft\base\Plugin;
 use craft\web\twig\variables\CraftVariable;
+use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\models\Settings;
+use pdaleramirez\superfilter\searchtypes\CategorySearchType;
+use pdaleramirez\superfilter\searchtypes\EntrySearchType;
 use pdaleramirez\superfilter\services\App;
+use pdaleramirez\superfilter\services\SearchTypes;
 use pdaleramirez\superfilter\web\twig\variables\SearchFilterVariable;
 use pdaleramirez\superfilter\web\twig\variables\SuperFilterVariable;
 use yii\base\Event;
@@ -80,12 +84,17 @@ class SuperFilter extends Plugin
             $event->rules['super-filter/install-sample-data'] = 'super-filter/super-filter/install-sample-data';
             $event->rules['super-filter/setup-search'] = ['template' => 'super-filter/setupsearch'];
             $event->rules['super-filter/setup-search/edit/<setupId:\d+|new>'] = 'super-filter/setup-search/edit';
+            $event->rules['super-filter/setup-search/setup-options'] = 'super-filter/setup-search/setup-options';
         });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function (RegisterUrlRulesEvent $event) {
             $event->rules["super-filter/show-list"] = 'super-filter/elements/get-elements';
         });
 
+        Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_TYPES, function (RegisterSearchTypeEvent $event) {
+            $event->searchTypes['entry']    = new EntrySearchType();
+            $event->searchTypes['category'] = new CategorySearchType();
+        });
     }
 
     public function getCpNavItem()

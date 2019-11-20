@@ -3,7 +3,9 @@ namespace pdaleramirez\superfilter\controllers;
 
 use craft\elements\Entry;
 use craft\errors\InvalidPluginException;
+use craft\fields\Dropdown;
 use craft\helpers\Json;
+use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
 use pdaleramirez\superfilter\models\Settings;
@@ -95,26 +97,9 @@ class SuperFilterController extends Controller
 
     public function actionTest()
     {
-        $entries = Entry::find()->orderBy('superFilterReleaseDates ASC')->all();
-
-        foreach ($entries as $entry) {
-
-            echo $entry->title . ' - ' . $entry->superFilterReleaseDates . ' - ' . $entry->superFilterImdbRating . '<br/>';
-        }
+        $test = UrlHelper::actionUrl('/');
+        \Craft::dd($test);
         return null;
-    }
-
-    public function generateSampleData()
-    {
-        $entry = new Entry();
-        $entry->sectionId = 2;
-        $entry->typeId = 2;
-        $entry->title = 'this is a test 2';
-        $entry->setFieldValue('subTitle', 'xvasd');
-
-        $result = Craft::$app->elements->saveElement($entry);
-
-        \Craft::dd($result);
     }
 
     public function createCategoriesField()

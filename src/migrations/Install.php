@@ -22,6 +22,7 @@ class Install extends Migration
             $this->createTable($this->setupSearchTable,
                 [
                     'id'     => $this->primaryKey(),
+                    'elementSearchType'=> $this->string(),
                     'options'=> $this->text(),
                     'fields' => $this->text(),
                     'sorts'  => $this->text(),

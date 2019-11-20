@@ -2088,43 +2088,23 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     draggable: vuedraggable__WEBPACK_IMPORTED_MODULE_0___default.a
   },
+  props: {
+    fields: {},
+    selectedFields: {},
+    group: null
+  },
   data: function data() {
     return {
-      list1: [{
-        name: "John",
-        id: 1
-      }, {
-        name: "Joao",
-        id: 2
-      }, {
-        name: "Jean",
-        id: 3
-      }, {
-        name: "Gerard",
-        id: 4
-      }],
-      list2: [{
-        name: "Juan",
-        id: 5
-      }, {
-        name: "Edgard",
-        id: 6
-      }, {
-        name: "Johnson",
-        id: 7
-      }]
+      selected: [],
+      options: []
     };
   },
   methods: {
     add: function add() {
-      this.list.push({
-        name: "Juan"
-      });
+      console.log("add");
     },
     replace: function replace() {
-      this.list = [{
-        name: "Edgard"
-      }];
+      console.log("replace");
     },
     clone: function clone(el) {
       return {
@@ -2132,7 +2112,30 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     log: function log(evt) {
-      window.console.log(evt);
+      this.$emit('drag:fields', {
+        options: this.options,
+        selected: this.selected
+      });
+    }
+  },
+  mounted: function mounted() {
+    //this.options   =  Object.assign([], this.fields);
+    this.options = this.fields;
+    this.selected = this.selectedFields; // let url = "/admin/super-filter/setup-search/setup-options";
+    // let data = {};
+    //
+    // data[csrfTokenName] = csrfTokenValue;
+    // //this.sortOptions = this.sortOptions2;
+    // axios.post(url, qs.stringify(data)).then((response) => {
+    //
+    //     this.options =  response.data['entry'].fields['superFilterShows'].options;
+    // });
+  },
+  watch: {
+    fields: function fields(value) {//this.options  = value;
+      // this.selected  = value.selected;
+    },
+    selectedFields: function selectedFields(value) {// this.selected  = value;
     }
   }
 });
@@ -8108,10 +8111,9 @@ var render = function() {
             "draggable",
             {
               staticClass: "list-group fld-tabcontent",
-              attrs: { swapThreshold: 1, list: _vm.list1, group: "people" },
-              on: { change: _vm.log }
+              attrs: { swapThreshold: 1, list: _vm.options, group: _vm.group }
             },
-            _vm._l(_vm.list1, function(element, index) {
+            _vm._l(_vm.options, function(element, index) {
               return _c(
                 "div",
                 { key: element.name, staticClass: "fld-field" },
@@ -8119,8 +8121,6 @@ var render = function() {
                   _vm._v(
                     "\n                " +
                       _vm._s(element.name) +
-                      " " +
-                      _vm._s(index) +
                       "\n            "
                   )
                 ]
@@ -8142,10 +8142,10 @@ var render = function() {
             "draggable",
             {
               staticClass: "list-group fld-tabcontent",
-              attrs: { swapThreshold: 1, list: _vm.list2, group: "people" },
+              attrs: { swapThreshold: 1, list: _vm.selected, group: _vm.group },
               on: { change: _vm.log }
             },
-            _vm._l(_vm.list2, function(element, index) {
+            _vm._l(_vm.selected, function(element, index) {
               return _c(
                 "div",
                 { key: element.name, staticClass: "fld-field" },
@@ -8153,8 +8153,6 @@ var render = function() {
                   _vm._v(
                     "\n                " +
                       _vm._s(element.name) +
-                      " " +
-                      _vm._s(index) +
                       "\n            "
                   )
                 ]
@@ -8177,7 +8175,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "tabs" }, [
       _c("div", { staticClass: "tab draggable" }, [
-        _c("span", [_vm._v("Tab 1")])
+        _c("span", [_vm._v("Options")])
       ])
     ])
   },
@@ -8187,7 +8185,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "tabs" }, [
       _c("div", { staticClass: "tab draggable" }, [
-        _c("span", [_vm._v("Tab 2")])
+        _c("span", [_vm._v("Selected")])
       ])
     ])
   }

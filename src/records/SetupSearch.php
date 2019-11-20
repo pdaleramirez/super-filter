@@ -6,7 +6,14 @@ use craft\base\Element;
 use craft\db\ActiveRecord;
 use yii\db\ActiveQueryInterface;
 
-
+/**
+ * @property $id
+ * @property $elementSearchType
+ * @property $options
+ * @property $sorts
+ * Class SetupSearch
+ * @package pdaleramirez\superfilter\records
+ */
 class SetupSearch extends ActiveRecord
 {
     /**

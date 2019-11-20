@@ -4,16 +4,16 @@
         <div class="col-3 fld-tab">
             <div class="tabs">
                 <div class="tab draggable">
-                    <span>Tab 1</span>
+                    <span>Options</span>
                 </div>
             </div>
-            <draggable :swapThreshold="1" class="list-group fld-tabcontent" :list="list1" group="people" @change="log">
+            <draggable :swapThreshold="1" class="list-group fld-tabcontent" :list="options" :group="group">
                 <div
                         class="fld-field"
-                        v-for="(element, index) in list1"
+                        v-for="(element, index) in options"
                         :key="element.name"
                 >
-                    {{ element.name }} {{ index }}
+                    {{ element.name }}
                 </div>
             </draggable>
         </div>
@@ -21,16 +21,16 @@
         <div class="col-3 fld-tab">
             <div class="tabs">
                 <div class="tab draggable">
-                    <span>Tab 2</span>
+                    <span>Selected</span>
                 </div>
             </div>
-            <draggable :swapThreshold="1" class="list-group fld-tabcontent" :list="list2" group="people" @change="log">
+            <draggable :swapThreshold="1" class="list-group fld-tabcontent" :list="selected" :group="group" @change="log">
                 <div
                         class="fld-field"
-                        v-for="(element, index) in list2"
+                        v-for="(element, index) in selected"
                         :key="element.name"
                 >
-                    {{ element.name }} {{ index }}
+                    {{ element.name }}
                 </div>
             </draggable>
         </div>
@@ -49,27 +49,23 @@
         components: {
             draggable
         },
+        props: {
+            fields: {},
+            selectedFields: {},
+            group: null
+        },
         data() {
             return {
-                list1: [
-                    { name: "John", id: 1 },
-                    { name: "Joao", id: 2 },
-                    { name: "Jean", id: 3 },
-                    { name: "Gerard", id: 4 }
-                ],
-                list2: [
-                    { name: "Juan", id: 5 },
-                    { name: "Edgard", id: 6 },
-                    { name: "Johnson", id: 7 }
-                ]
+                selected: [],
+                options: [],
             };
         },
         methods: {
             add: function() {
-                this.list.push({ name: "Juan" });
+               console.log("add");
             },
             replace: function() {
-                this.list = [{ name: "Edgard" }];
+                console.log("replace");
             },
             clone: function(el) {
                 return {
@@ -77,7 +73,35 @@
                 };
             },
             log: function(evt) {
-                window.console.log(evt);
+                this.$emit('drag:fields', {
+                    options: this.options,
+                    selected: this.selected
+                })
+            }
+        },
+        mounted: function() {
+            //this.options   =  Object.assign([], this.fields);
+            this.options   = this.fields;
+            this.selected  = this.selectedFields;
+
+            // let url = "/admin/super-filter/setup-search/setup-options";
+            // let data = {};
+            //
+            // data[csrfTokenName] = csrfTokenValue;
+            // //this.sortOptions = this.sortOptions2;
+            // axios.post(url, qs.stringify(data)).then((response) => {
+            //
+            //     this.options =  response.data['entry'].fields['superFilterShows'].options;
+            // });
+
+        },
+        watch: {
+            fields(value) {
+                //this.options  = value;
+               // this.selected  = value.selected;
+            },
+            selectedFields(value) {
+               // this.selected  = value;
             }
         }
     };

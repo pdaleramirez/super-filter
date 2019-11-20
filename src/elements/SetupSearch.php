@@ -12,6 +12,8 @@ use craft\helpers\UrlHelper;
 use Doctrine\ORM\Tools\Setup;
 use pdaleramirez\superfilter\elements\db\SetupSearchQuery;
 use pdaleramirez\superfilter\records\SetupSearch as SetupSearchRecord;
+use pdaleramirez\superfilter\web\assets\FontAwesomeAsset;
+use pdaleramirez\superfilter\web\assets\VueCpAsset;
 use yii\base\Exception;
 
 /**
@@ -27,6 +29,7 @@ class SetupSearch extends Element
     public $fields;
     public $options;
     public $sorts;
+    public $elementSearchType;
 
     /**
      * @inheritdoc
@@ -76,25 +79,17 @@ class SetupSearch extends Element
     {
         $attributes = [
             'title' => ['label' => Craft::t('super-filter', 'Title')],
-            'dateCreated' => ['label' => Craft::t('super-filter', 'Date Created')],
-            'edit' => ['label' => ''],
+            'dateCreated' => ['label' => Craft::t('super-filter', 'Date Created')]
         ];
 
         return $attributes;
     }
 
-    public function getTableAttributeHtml(string $attribute): string
+    public function getCpEditUrl()
     {
-        if ($attribute === 'edit') {
-            $link = UrlHelper::cpUrl(
-                'super-filter/setup-search/edit/'.$this->id
-            );
-
-            return "<a href='$link'>Edit</a>";
-        }
-
-
-        return parent::getTableAttributeHtml($attribute);
+        return UrlHelper::cpUrl(
+            'super-filter/setup-search/edit/'.$this->id
+        );
     }
 
     /**
@@ -139,6 +134,9 @@ class SetupSearch extends Element
             $record->id = $this->id;
         }
 
+        $record->elementSearchType = $this->elementSearchType;
+        $record->sorts       = $this->sorts;
+        $record->options     = $this->options;
         $record->dateCreated = $this->dateCreated;
         $record->dateUpdated = $this->dateUpdated;
 
@@ -195,5 +193,20 @@ class SetupSearch extends Element
         ]);
 
         return $actions;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function rules(): array
+    {
+        $rules = parent::rules();
+
+        $rules[] = [['elementSearchType'], 'required'];
+
+
+        return $rules;
     }
 }

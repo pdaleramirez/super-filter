@@ -23,9 +23,15 @@ class App extends Component
      */
     public $sampleData;
 
+    /**
+     * @var $searchTypes SearchTypes
+     */
+    public $searchTypes;
+
     public function init()
     {
-        $this->sampleData = new SampleData();
+        $this->sampleData  = new SampleData();
+        $this->searchTypes = new SearchTypes();
     }
 
     public function config($params)
