@@ -37,7 +37,7 @@ class EntrySearchType extends SearchType
      * @return array|null
      * @throws \yii\base\InvalidConfigException
      */
-    public function getFields($sorts = null)
+    public function getFields()
     {
         $sections = Craft::$app->getSections()->getAllSections();
 
@@ -51,10 +51,10 @@ class EntrySearchType extends SearchType
                 if (count($entryTypes) > 0) {
                     foreach ($entryTypes as $entryType) {
                         $fieldObjects = $entryType->getFieldLayout()->getFields();
-
+                        $fields[$section->handle]['label'] = $section->name;
+                        $fields[$section->handle]['selected'] = [];
                         if (count($fieldObjects) > 0) {
                             foreach ($fieldObjects as $key => $fieldObject) {
-                                $fields[$section->handle]['selected'] = [];
                                 $fields[$section->handle]['options'][$key]['name'] = $fieldObject->name;
                                 $fields[$section->handle]['options'][$key]['id']   = $fieldObject->id;
                             }
@@ -64,10 +64,15 @@ class EntrySearchType extends SearchType
             }
         }
 
-        if ($sorts) {
-            $fields = array_merge($fields, $sorts);
-        }
-
         return (array) $fields;
+    }
+
+    /**
+     * @return array|null
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getSorts()
+    {
+        return $this->getFields();
     }
 }

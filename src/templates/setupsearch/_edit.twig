@@ -97,43 +97,59 @@
         value: options.contentLoadingType is defined ? options.contentLoadingType : ''
     }) }}
 
-    <div id="field-setting">
-        <div class="field">
-            <div class="heading">
-                <label>Element:</label>
-            </div>
-            <div class="input">
-                <div class="select">
-                    <select v-model="selectedElement" @change="onChangeElement" name="elementSearchType">
-                        <option v-for="(option, key) in elements" :value="key">${ option.label }</option>
-                    </select>
+    <div id="field-setting" v-if="!loading">
+        <div v-if="items && items.elements.items">
+            <input type="hidden" name="fields" :value="JSON.stringify(items)" />
+            <div class="field">
+                <div class="heading">
+                    <label>Element:</label>
+                </div>
+                <div class="input">
+                    <div class="select">
+                        <select v-model="items.elements.selected" name="elementSearchType">
+                            <option v-for="(option, key) in items.elements.items" :value="key">${ option.label }</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div v-if="items.elements.selected === key" class="input" v-for="(option, key) in items.elements.items" >
+                <div class="field">
+                        <div class="heading">
+                            <label>Container: ${ key }</label>
+                        </div>
 
-        <div class="field" v-if="elements && elements[selectedElement].container">
-            <div class="heading">
-                <label>Container:</label>
-            </div>
-            <div class="input">
-                <div class="select">
-                    <select v-model="selectedContainer" name="options[container]">
-                        <option v-for="(option, key) in elements[selectedElement].container" :value="key">${ option }</option>
-                    </select>
+                        <div class="select">
+                            <select v-if="option.container" v-model="option.container.selected" name="options[container]">
+                                <option v-for="(option, key) in option.container.items" :value="key">${ option }</option>
+                            </select>
+                        </div>
+
+                </div>
+
+                <div class="field">
+                    <div class="heading">
+                        <label>Sort Fields:</label>
+                    </div>
+                    <div v-if="option.container.selected === index" v-for="(sort, index) in option.sorts">
+                        <cards
+                               :fields='sort.options' :selected-fields="sort.selected" :group="index" v-on:drag:fields="dragFields">
+                            ${ option }
+                        </cards>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="heading">
+                        <label>Search Fields:</label>
+                    </div>
+                    <div v-if="option.container.selected === index" v-for="(field, index) in option.fields">
+                        <cards
+                               :fields='field.options' :selected-fields="field.selected" :group="index" v-on:drag:fields="dragFields">
+                            ${ option }
+                        </cards>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="field" v-if="elements && elements[selectedElement].fields">
-            <div class="heading">
-                <label>Sort Fields:</label>
-            </div>
-            <input type="hidden" name="sorts" :value="JSON.stringify(elements[selectedElement].fields[selectedContainer])" />
-
-            <cards v-if="selectedContainer === key" v-for="(option, key) in elements[selectedElement].fields"
-                   :fields='option.options' :selected-fields="option.selected" :group="key" v-on:drag:fields="dragFields">
-                ${ option }
-            </cards>
         </div>
 
         <div class="field">
@@ -143,6 +159,10 @@
             <input type="hidden" name="options[entryTemplate]" :value="comboValue" />
             <combo-box v-model="comboValue" :options="options"></combo-box>
         </div>
+        <div class="field">
+            <button type="button" @click="saveSetting">Save Setting</button>
+        </div>
+
     </div>
 
     <script>
@@ -151,7 +171,9 @@
             el: "#field-setting",
             delimiters: ['${', '}'],
             data: {
+                loading: true,
                 selected: [],
+                items: null,
                 elements: null,
                 selectedElements: null,
                 origElements: null,
@@ -185,27 +207,10 @@
                         });
                 },
                 dragFields(obj) {
-
                     console.log(obj);
                 },
-                onChangeElement() {
-                    //this.setSortOptions();
-                },
-                setSortOptions() {
-                    let entryTypes = this.elements[this.selectedElement].fields;
-
-                    if (entryTypes !== null) {
-                        if (this.selectedContainer == null
-                            && Object.keys(entryTypes).length > 0) {
-                            this.selectedContainer = Object.keys(entryTypes)[0];
-                        }
-
-                        if (this.selectedContainer) {
-                            this.sortOptions = entryTypes[this.selectedContainer];
-                        }
-                    } else {
-                        this.sortOptions = {};
-                    }
+                saveSetting() {
+                    console.log(this.items);
                 }
             },
             mounted() {
@@ -213,26 +218,12 @@
                 let data = { id: {{ setupId }} };
 
                 data[csrfTokenName] = csrfTokenValue;
-
+                this.loading = true;
                 axios.post(url, qs.stringify(data)).then((response) => {
-                    this.elements = response.data.elements;
-
-                    if (response.data.selectedElement !== null) {
-                        this.selectedElement = response.data.selectedElement;
-                    }
-
-                    if (response.data.selectedContainer !== null) {
-                        this.selectedContainer = response.data.selectedContainer;
-                    }
-
-                    this.setSortOptions();
+                    this.items = response.data.items;
+                    console.log(this.items)
+                    this.loading = false;
                 });
-            },
-            watch: {
-                selectedContainer(value) {
-                   // this.sortOptions = this.elements[this.selectedElement].fields[value];
-                    this.group = value;
-                }
             }
         });
     </script>

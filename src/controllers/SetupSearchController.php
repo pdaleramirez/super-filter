@@ -41,10 +41,6 @@ class SetupSearchController extends Controller
             $options = Json::decodeIfJson($options);
         }
 
-        $sorts = $setupElement->sorts;
-        if ($sorts !== '') {
-            $sorts = Json::decodeIfJson($sorts);
-        }
 
         $fields = $setupElement->fields;
         if ($fields !== '') {
@@ -57,8 +53,7 @@ class SetupSearchController extends Controller
             'setupElement' => $setupElement,
             'baseUrl'      => $baseUrl,
             'options'      => $options,
-            'sorts'        => $sorts,
-            'fields'       => $fields,
+            'items'        => $fields,
             'continueEditingUrl' => 'super-filter/setup-search/edit/{id}'
         ]);
     }
@@ -84,7 +79,7 @@ class SetupSearchController extends Controller
         }
 
         $setupElement->title             = Craft::$app->getRequest()->getBodyParam('title');
-        $setupElement->sorts             = Craft::$app->getRequest()->getBodyParam('sorts');
+        $setupElement->fields            = Craft::$app->getRequest()->getBodyParam('fields');
         $setupElement->options           = Craft::$app->getRequest()->getBodyParam('options');
         $setupElement->elementSearchType = Craft::$app->getRequest()->getBodyParam('elementSearchType');
 
@@ -140,22 +135,19 @@ class SetupSearchController extends Controller
         $searchTypes = SuperFilter::$app->searchTypes->getSearchTypes();
         $id = (int) Craft::$app->getRequest()->getBodyParam('id');
 
-        $selectedElement = null;
-        $container = null;
-        $fields = null;
         if ($id) {
             $setup = SetupSearch::findOne($id);
 
-            $selectedElement = $setup->elementSearchType;
+            $fields = Json::decodeIfJson($setup->fields);
 
-            $options = Json::decodeIfJson($setup->options);
-            $sorts   = Json::decodeIfJson($setup->sorts);
-            $container = $options['container'];
-
-            $fields[$container] = $sorts;
+            if ($fields !== null) {
+                return $this->asJson([
+                    'items'    => $fields
+                ]);
+            }
         }
 
-        $options = [];
+        $items['elements']['selected'] = null;
 
         if ($searchTypes) {
             foreach ($searchTypes as $handle => $searchType) {
@@ -164,17 +156,32 @@ class SetupSearchController extends Controller
                  *
                  */
                 $className = $searchType->getElement();
+                $container = $searchType->getContainer();
+                $sort      = $searchType->getSorts();
+                $field     = $searchType->getFields();
 
-                $options[$handle]['label']     = $className::displayName();
-                $options[$handle]['container'] = $searchType->getContainer();
-                $options[$handle]['fields']    = $searchType->getFields($fields);
+                $items['elements']['items'][$handle]['label'] = $className::displayName();
+                $items['elements']['items'][$handle]['handle'] = $handle;
+
+                $items['elements']['items'][$handle]['container'] = null;
+
+                if ($container) {
+                    $items['elements']['items'][$handle]['container']['items'] = $container;
+                    $items['elements']['items'][$handle]['container']['selected'] = null;
+                }
+
+                if ($sort) {
+                    $items['elements']['items'][$handle]['sorts'] = $sort;
+                }
+
+                if ($field) {
+                    $items['elements']['items'][$handle]['fields'] = $field;
+                }
             }
         }
 
         return $this->asJson([
-          'elements' => $options,
-          'selectedElement' => $selectedElement,
-          'selectedContainer' => $container
+          'items'    => $items
         ]);
     }
 }

@@ -11,6 +11,7 @@ use yii\db\ActiveQueryInterface;
  * @property $elementSearchType
  * @property $options
  * @property $sorts
+ * @property $fields
  * Class SetupSearch
  * @package pdaleramirez\superfilter\records
  */

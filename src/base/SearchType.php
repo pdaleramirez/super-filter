@@ -24,7 +24,12 @@ abstract class SearchType extends Component
         return null;
     }
 
-    public function getFields($selected)
+    public function getFields()
+    {
+        return null;
+    }
+
+    public function getSorts()
     {
         return null;
     }

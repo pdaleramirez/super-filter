@@ -135,7 +135,7 @@ class SetupSearch extends Element
         }
 
         $record->elementSearchType = $this->elementSearchType;
-        $record->sorts       = $this->sorts;
+        $record->fields      = $this->fields;
         $record->options     = $this->options;
         $record->dateCreated = $this->dateCreated;
         $record->dateUpdated = $this->dateUpdated;
