@@ -8,6 +8,7 @@ use yii\db\ActiveQueryInterface;
 
 /**
  * @property $id
+ * @property $handle
  * @property $elementSearchType
  * @property $options
  * @property $sorts

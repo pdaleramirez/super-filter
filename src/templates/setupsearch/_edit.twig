@@ -74,6 +74,16 @@
         errors: setupElement is defined ? setupElement.getErrors('title') : null
     }) }}
 
+    {{ forms.textField({
+        label: "Handle"|t('super-filter'),
+        id: 'handle',
+        name: 'handle',
+        value: setupElement is defined ? setupElement.handle : null,
+        autofocus: true,
+        first: true,
+        errors: setupElement is defined ? setupElement.getErrors('handle') : null
+    }) }}
+
     <div class="field">
         <div class="heading">
             <label>Items per page</label>
@@ -119,7 +129,7 @@
                         </div>
 
                         <div class="select">
-                            <select v-if="option.container" v-model="option.container.selected" name="options[container]">
+                            <select v-if="option.container" v-model="option.container.selected">
                                 <option v-for="(option, key) in option.container.items" :value="key">${ option }</option>
                             </select>
                         </div>
@@ -156,13 +166,9 @@
             <div class="heading">
                 <label>Template:</label>
             </div>
-            <input type="hidden" name="options[entryTemplate]" :value="comboValue" />
-            <combo-box v-model="comboValue" :options="options"></combo-box>
+            <input type="hidden" name="options[entryTemplate]" :value="entryTemplate" />
+            <combo-box v-model="entryTemplate" :options="options"></combo-box>
         </div>
-        <div class="field">
-            <button type="button" @click="saveSetting">Save Setting</button>
-        </div>
-
     </div>
 
     <script>
@@ -188,7 +194,7 @@
                     {value:'custom', label:'Add Custom'}
                 ],
                 sortOptions: null,
-                comboValue: ''
+                entryTemplate: 'grid'
             },
             methods: {
                 installSampleData(event) {
@@ -215,13 +221,16 @@
             },
             mounted() {
                 let url = "{{ baseUrl }}super-filter/setup-search/setup-options";
-                let data = { id: {{ setupId }} };
+
+                {% set data = setupId != 'new' ? '{ id:' ~ setupId ~ '}' : '{}' %}
+
+                let data = {{ data }};
 
                 data[csrfTokenName] = csrfTokenValue;
                 this.loading = true;
                 axios.post(url, qs.stringify(data)).then((response) => {
                     this.items = response.data.items;
-                    console.log(this.items)
+                    this.entryTemplate = response.data.entryTemplate;
                     this.loading = false;
                 });
             }
@@ -229,3 +238,4 @@
     </script>
 
 {% endblock %}
+{% js "new Craft.HandleGenerator('#title', '#handle');" %}

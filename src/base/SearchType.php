@@ -3,9 +3,10 @@
 namespace pdaleramirez\superfilter\base;
 
 use craft\base\Component;
+use pdaleramirez\superfilter\contracts\SearchTypeInterface;
 use pdaleramirez\superfilter\elements\SetupSearch;
 
-abstract class SearchType extends Component
+abstract class SearchType extends Component implements SearchTypeInterface
 {
     /**
      * @var SetupSearch
@@ -17,19 +18,7 @@ abstract class SearchType extends Component
         $this->element = SetupSearch::findOne($id);
     }
 
-    abstract function getElement();
-
     public function getContainer()
-    {
-        return null;
-    }
-
-    public function getFields()
-    {
-        return null;
-    }
-
-    public function getSorts()
     {
         return null;
     }

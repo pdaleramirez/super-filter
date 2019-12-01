@@ -1,0 +1,12 @@
+[30-Nov-2019 05:30:40 America/Los_Angeles] PHP Fatal error:  Dynamic class names are not allowed in compile-time ::class fetch in C:\MAMP_\htdocs\craft3\localplugins\pdaleramirez\super-filter\tests\unit\SearchTypeTest.php on line 15
+[30-Nov-2019 05:30:40 America/Los_Angeles] PHP Fatal error:  Uncaught Error: Call to a member function getRequest() on null in C:\MAMP_\htdocs\craft3\vendor\craftcms\cms\src\helpers\App.php:683
+Stack trace:
+#0 C:\MAMP_\htdocs\craft3\vendor\craftcms\cms\src\config\app.web.php(18): craft\helpers\App::webResponseConfig()
+#1 [internal function]: craft\test\TestSetup::{closure}()
+#2 C:\MAMP_\htdocs\craft3\vendor\yiisoft\yii2\di\Container.php(508): call_user_func_array(Object(Closure), Array)
+#3 C:\MAMP_\htdocs\craft3\vendor\yiisoft\yii2\BaseYii.php(351): yii\di\Container->invoke(Object(Closure), Array)
+#4 C:\MAMP_\htdocs\craft3\vendor\yiisoft\yii2\di\ServiceLocator.php(137): yii\BaseYii::createObject(Object(Closure))
+#5 C:\MAMP_\htdocs\craft3\vendor\yiisoft\yii2\base\Module.php(742): yii\di\ServiceLocator->get('response', true)
+#6 C:\MAMP_\htdocs\craft3\vendor\craftcms\cms\src\web\Application.php(350): yii\base\Module->get('response', true)
+#7 C:\MAMP_\htdocs\craft3\vendor\yiisoft\yii2\web\Application.php(169): craft\web\Application->get('response')
+#8 C:\MAMP_\htdocs\craft in C:\MAMP_\htdocs\craft3\vendor\craftcms\cms\src\helpers\App.php on line 683

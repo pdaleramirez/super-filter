@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\web\twig\variables;
 use Craft;
 use craft\helpers\Json;
 use craft\helpers\Template;
+use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 use pdaleramirez\superfilter\web\assets\VueAsset;
@@ -12,27 +13,24 @@ use pdaleramirez\superfilter\web\assets\VueAsset;
 class SuperFilterVariable
 {
 
-    /**
-     * @return \Twig\Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function getVueJs()
+    public function getVueJs($id = null)
     {
         Craft::$app->getView()->registerAssetBundle(VueAsset::class, 1);
 
         $alias = Craft::getAlias('@superfilter/templates');
 
+        $setupSearch = SuperFilter::$app->searchTypes->getSearchSetup($id);
+
+        $options = $setupSearch->options();
+        $fields  = $setupSearch->fields();
+
         $settings = SuperFilter::$app->getSettings();
 
-        if (empty($settings->entryTemplate)) {
+        $entryTemplate = $options['entryTemplate'] ?? null;
+
+        if ($entryTemplate == null) {
             $settings->entryTemplate = App::DEFAULT_TEMPLATE;
         }
-
-        $entryTemplate = $settings->entryTemplate;
 
         if (!SuperFilter::$app->isEntryTemplateIn($entryTemplate)) {
             $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
@@ -53,10 +51,11 @@ class SuperFilterVariable
             'handle'      => 'entry',
             //'section'     => 'blog',
             'currentPage' => Craft::$app->getRequest()->getPageNum() ?? 1,
-            'category'    =>  Craft::$app->getRequest()->get('category'),
+            'category'    => Craft::$app->getRequest()->get('category'),
             'limit'       => SuperFilter::$app->getPageSize()
         ];
 
+        // To get all config on all variable method.
         SuperFilter::$app->setParams($params);
 
         Craft::$app->getView()->setTemplatesPath($alias);

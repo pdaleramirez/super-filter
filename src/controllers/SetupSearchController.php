@@ -79,6 +79,7 @@ class SetupSearchController extends Controller
         }
 
         $setupElement->title             = Craft::$app->getRequest()->getBodyParam('title');
+        $setupElement->handle            = Craft::$app->getRequest()->getBodyParam('handle');
         $setupElement->fields            = Craft::$app->getRequest()->getBodyParam('fields');
         $setupElement->options           = Craft::$app->getRequest()->getBodyParam('options');
         $setupElement->elementSearchType = Craft::$app->getRequest()->getBodyParam('elementSearchType');
@@ -132,17 +133,20 @@ class SetupSearchController extends Controller
 
     public function actionSetupOptions()
     {
-        $searchTypes = SuperFilter::$app->searchTypes->getSearchTypes();
+        $searchTypes = SuperFilter::$app->searchTypes->getAllSearchTypes();
+
         $id = (int) Craft::$app->getRequest()->getBodyParam('id');
 
         if ($id) {
             $setup = SetupSearch::findOne($id);
 
-            $fields = Json::decodeIfJson($setup->fields);
+            $fields  = Json::decodeIfJson($setup->fields);
+            $options = Json::decodeIfJson($setup->options);
 
             if ($fields !== null) {
                 return $this->asJson([
-                    'items'    => $fields
+                    'items'    => $fields,
+                    'entryTemplate' => $options['entryTemplate'] ?? null
                 ]);
             }
         }
@@ -151,32 +155,7 @@ class SetupSearchController extends Controller
 
         if ($searchTypes) {
             foreach ($searchTypes as $handle => $searchType) {
-                /**
-                 * @var $className Element
-                 *
-                 */
-                $className = $searchType->getElement();
-                $container = $searchType->getContainer();
-                $sort      = $searchType->getSorts();
-                $field     = $searchType->getFields();
-
-                $items['elements']['items'][$handle]['label'] = $className::displayName();
-                $items['elements']['items'][$handle]['handle'] = $handle;
-
-                $items['elements']['items'][$handle]['container'] = null;
-
-                if ($container) {
-                    $items['elements']['items'][$handle]['container']['items'] = $container;
-                    $items['elements']['items'][$handle]['container']['selected'] = null;
-                }
-
-                if ($sort) {
-                    $items['elements']['items'][$handle]['sorts'] = $sort;
-                }
-
-                if ($field) {
-                    $items['elements']['items'][$handle]['fields'] = $field;
-                }
+                $items['elements']['items'][$handle] = SuperFilter::$app->searchTypes->getSearchTypeOptions($searchType);
             }
         }
 

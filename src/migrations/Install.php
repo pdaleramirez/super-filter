@@ -22,6 +22,7 @@ class Install extends Migration
             $this->createTable($this->setupSearchTable,
                 [
                     'id'     => $this->primaryKey(),
+                    'handle' => $this->string(),
                     'elementSearchType'=> $this->string(),
                     'options'=> $this->text(),
                     'fields' => $this->text(),
@@ -42,6 +43,6 @@ class Install extends Migration
      */
     public function safeDown()
     {
-        // Place uninstallation code here...
+
     }
 }

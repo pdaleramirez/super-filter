@@ -6,14 +6,12 @@ use Craft;
 use craft\base\Element;
 use craft\behaviors\FieldLayoutBehavior;
 use craft\elements\actions\Delete;
-use craft\elements\Asset;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\UrlHelper;
-use Doctrine\ORM\Tools\Setup;
+use craft\validators\HandleValidator;
+use craft\validators\UniqueValidator;
 use pdaleramirez\superfilter\elements\db\SetupSearchQuery;
 use pdaleramirez\superfilter\records\SetupSearch as SetupSearchRecord;
-use pdaleramirez\superfilter\web\assets\FontAwesomeAsset;
-use pdaleramirez\superfilter\web\assets\VueCpAsset;
 use yii\base\Exception;
 
 /**
@@ -27,6 +25,7 @@ class SetupSearch extends Element
      * @var array
      */
     public $fields;
+    public $handle;
     public $options;
     public $sorts;
     public $elementSearchType;
@@ -134,6 +133,7 @@ class SetupSearch extends Element
             $record->id = $this->id;
         }
 
+        $record->handle = $this->handle;
         $record->elementSearchType = $this->elementSearchType;
         $record->fields      = $this->fields;
         $record->options     = $this->options;
@@ -205,6 +205,17 @@ class SetupSearch extends Element
         $rules = parent::rules();
 
         $rules[] = [['elementSearchType'], 'required'];
+        $rules[] = [
+            ['handle'],
+            HandleValidator::class
+        ];
+
+        $rules[] = [
+            ['handle'],
+            UniqueValidator::class,
+            'targetClass' => SetupSearchRecord::class,
+            'targetAttribute' => ['handle']
+        ];
 
 
         return $rules;
