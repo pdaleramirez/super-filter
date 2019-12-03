@@ -62,4 +62,9 @@ class CategorySearchType extends SearchType
     {
         return $this->getFields();
     }
+
+    public function getItems()
+    {
+
+    }
 }

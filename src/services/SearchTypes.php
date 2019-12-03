@@ -8,6 +8,7 @@ use craft\base\Element;
 use craft\elements\Entry;
 use craft\helpers\Json;
 use pdaleramirez\superfilter\base\SearchType;
+use pdaleramirez\superfilter\contracts\SearchTypeInterface;
 use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 
@@ -21,12 +22,6 @@ class SearchTypes extends Component
      * @var $searchSetup SetupSearch
      */
     protected $searchSetup = null;
-    protected $searchSetupId = null;
-
-    public function setId($id)
-    {
-        $this->searchSetupId = $id;
-    }
 
     /**
      * @return array|SearchType[]
@@ -105,8 +100,10 @@ class SearchTypes extends Component
         ];
     }
 
-    public function getSearchTypeByRef(string $ref)
+    public function getSearchTypeByElement(SetupSearch $setupSearch)
     {
+        $ref = $setupSearch->elementSearchType;
+
         if (array_key_exists($ref, $this->_searchTypesByRef)) {
             return $this->_searchTypesByRef[$ref] ?? null;
         }
@@ -119,6 +116,7 @@ class SearchTypes extends Component
                 ($elementRefHandle = $element::refHandle()) !== null &&
                 strcasecmp($elementRefHandle, $ref) === 0
             ) {
+                $class->setElement($setupSearch);
                 return $this->_searchTypesByRef[$ref] = $class;
             }
         }
@@ -129,8 +127,6 @@ class SearchTypes extends Component
 
     public function getSearchSetup($id)
     {
-        $setupSearch = null;
-
         if (is_int($id)) {
             /**
              * @var $setupSearch SetupSearch
@@ -151,23 +147,17 @@ class SearchTypes extends Component
         return $this->searchSetup;
     }
 
-    public function options()
+    public function getItems()
     {
-        return Json::decodeIfJson($this->searchSetup->options);
-    }
+        $element = $this->searchSetup;
 
-    public function fields()
-    {
-        return Json::decodeIfJson($this->searchSetup->fields);
-    }
+        $searchType = null;
+        if ($element) {
 
-    public function getItems($id = null)
-    {
-        $setupId = $this->searchSetupId ?? $id;
-        $setupSearch = $this->getSearchSetup($setupId);
+            $searchType = $element->getSearchType();
 
-        $searchTypeRef = $setupSearch->element()->elementSearchType;
+        }
 
-
+        return $searchType->getItems();
     }
 }

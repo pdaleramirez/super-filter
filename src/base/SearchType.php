@@ -13,9 +13,9 @@ abstract class SearchType extends Component implements SearchTypeInterface
      */
     protected $element = null;
 
-    public function setElement($id)
+    public function setElement(SetupSearch $setupSearch)
     {
-        $this->element = SetupSearch::findOne($id);
+        $this->element = $setupSearch;
     }
 
     public function getContainer()

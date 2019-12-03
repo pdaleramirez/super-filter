@@ -41,11 +41,11 @@ class SetupSearchController extends Controller
             $options = Json::decodeIfJson($options);
         }
 
-
-        $fields = $setupElement->fields;
-        if ($fields !== '') {
-            $fields = Json::decodeIfJson($fields);
-        }
+//
+//        $fields = $setupElement->fields;
+//        if ($fields !== '') {
+//            $fields = Json::decodeIfJson($fields);
+//        }
 
         $baseUrl = UrlHelper::actionUrl('/');
 
@@ -53,7 +53,7 @@ class SetupSearchController extends Controller
             'setupElement' => $setupElement,
             'baseUrl'      => $baseUrl,
             'options'      => $options,
-            'items'        => $fields,
+            'items'        => null,
             'continueEditingUrl' => 'super-filter/setup-search/edit/{id}'
         ]);
     }
@@ -80,7 +80,7 @@ class SetupSearchController extends Controller
 
         $setupElement->title             = Craft::$app->getRequest()->getBodyParam('title');
         $setupElement->handle            = Craft::$app->getRequest()->getBodyParam('handle');
-        $setupElement->fields            = Craft::$app->getRequest()->getBodyParam('fields');
+        //$setupElement->fields            = Craft::$app->getRequest()->getBodyParam('fields');
         $setupElement->options           = Craft::$app->getRequest()->getBodyParam('options');
         $setupElement->elementSearchType = Craft::$app->getRequest()->getBodyParam('elementSearchType');
 
@@ -146,7 +146,7 @@ class SetupSearchController extends Controller
             if ($fields !== null) {
                 return $this->asJson([
                     'items'    => $fields,
-                    'entryTemplate' => $options['entryTemplate'] ?? null
+                    'template' => $options['template'] ?? null
                 ]);
             }
         }

@@ -109,7 +109,7 @@
 
     <div id="field-setting" v-if="!loading">
         <div v-if="items && items.elements.items">
-            <input type="hidden" name="fields" :value="JSON.stringify(items)" />
+{#            <input type="hidden" name="fields" :value="JSON.stringify(items)" />#}
             <div class="field">
                 <div class="heading">
                     <label>Element:</label>
@@ -166,8 +166,8 @@
             <div class="heading">
                 <label>Template:</label>
             </div>
-            <input type="hidden" name="options[entryTemplate]" :value="entryTemplate" />
-            <combo-box v-model="entryTemplate" :options="options"></combo-box>
+            <input type="hidden" name="options[template]" :value="template" />
+            <combo-box v-model="template" :options="options"></combo-box>
         </div>
     </div>
 
@@ -194,7 +194,7 @@
                     {value:'custom', label:'Add Custom'}
                 ],
                 sortOptions: null,
-                entryTemplate: 'grid'
+                template: 'grid'
             },
             methods: {
                 installSampleData(event) {
@@ -230,7 +230,7 @@
                 this.loading = true;
                 axios.post(url, qs.stringify(data)).then((response) => {
                     this.items = response.data.items;
-                    this.entryTemplate = response.data.entryTemplate;
+                    this.template = response.data.template;
                     this.loading = false;
                 });
             }

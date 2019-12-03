@@ -21,8 +21,8 @@ class SuperFilterVariable
 
         $setupSearch = SuperFilter::$app->searchTypes->getSearchSetup($id);
 
-        $options = $setupSearch->options();
-        $fields  = $setupSearch->fields();
+        $options = $setupSearch->element()->options();
+        $fields  = $setupSearch->element()->fields();
 
         $settings = SuperFilter::$app->getSettings();
 
@@ -67,6 +67,18 @@ class SuperFilterVariable
 
 
         return Template::raw($html);
+    }
+
+    public function getItems($id)
+    {
+        $searchSetup = SuperFilter::$app->searchTypes->getSearchSetup($id);
+
+        $element = $searchSetup->element();
+
+        $items = SuperFilter::$app->searchTypes->getItems();
+
+        $options = $element->options();
+        \Craft::dd();
     }
 
 

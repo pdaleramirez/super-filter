@@ -36,9 +36,7 @@ class EntrySearchType extends SearchType
     }
 
     /**
-     * @param array $sorts
-     * @return array|null
-     * @throws \yii\base\InvalidConfigException
+     * @return array
      */
     public function getFields()
     {
@@ -94,6 +92,15 @@ class EntrySearchType extends SearchType
         }
 
         return $fields;
+    }
+
+    public function getItems()
+    {
+        $options = $this->element->options();
+        $limit = $options['perPage'] ?? null;
+
+
+       return Entry::find()->limit($limit)->all();
     }
 
     private function getFieldObjects()

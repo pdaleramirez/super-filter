@@ -12,4 +12,5 @@ interface SearchTypeInterface
     public function getElement();
     public function getFields();
     public function getSorts();
+    public function getItems();
 }

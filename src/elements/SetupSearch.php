@@ -7,11 +7,13 @@ use craft\base\Element;
 use craft\behaviors\FieldLayoutBehavior;
 use craft\elements\actions\Delete;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\validators\HandleValidator;
 use craft\validators\UniqueValidator;
 use pdaleramirez\superfilter\elements\db\SetupSearchQuery;
 use pdaleramirez\superfilter\records\SetupSearch as SetupSearchRecord;
+use pdaleramirez\superfilter\SuperFilter;
 use yii\base\Exception;
 
 /**
@@ -24,11 +26,11 @@ class SetupSearch extends Element
     /**
      * @var array
      */
-    public $fields;
     public $handle;
-    public $options;
     public $sorts;
     public $elementSearchType;
+    public $options;
+    //public $fields;
 
     /**
      * @inheritdoc
@@ -148,35 +150,35 @@ class SetupSearch extends Element
         parent::afterSave($isNew);
     }
 
-    /**
-     * @return \craft\models\FieldLayout|null
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function getFieldLayout()
-    {
-        $behaviors = $this->getBehaviors();
-
-        /**
-         * @var FieldLayoutBehavior $fieldLayout
-         */
-        $fieldLayout = $behaviors['fieldLayout'];
-
-        return $fieldLayout->getFieldLayout();
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return array_merge(parent::behaviors(), [
-            'fieldLayout' => [
-                'class' => FieldLayoutBehavior::class,
-                'elementType' => self::class
-            ],
-        ]);
-    }
+//    /**
+//     * @return \craft\models\FieldLayout|null
+//     * @throws \yii\base\InvalidConfigException
+//     */
+//    public function getFieldLayout()
+//    {
+//        $behaviors = $this->getBehaviors();
+//
+//        /**
+//         * @var FieldLayoutBehavior $fieldLayout
+//         */
+//        $fieldLayout = $behaviors['fieldLayout'];
+//
+//        return $fieldLayout->getFieldLayout();
+//    }
+//
+//
+//    /**
+//     * @inheritdoc
+//     */
+//    public function behaviors()
+//    {
+//        return array_merge(parent::behaviors(), [
+//            'fieldLayout' => [
+//                'class' => FieldLayoutBehavior::class,
+//                'elementType' => self::class
+//            ],
+//        ]);
+//    }
 
     /**
      * @inheritdoc
@@ -204,20 +206,35 @@ class SetupSearch extends Element
     {
         $rules = parent::rules();
 
-        $rules[] = [['elementSearchType'], 'required'];
-        $rules[] = [
-            ['handle'],
-            HandleValidator::class
-        ];
-
-        $rules[] = [
-            ['handle'],
-            UniqueValidator::class,
-            'targetClass' => SetupSearchRecord::class,
-            'targetAttribute' => ['handle']
-        ];
+//        $rules[] = [['elementSearchType'], 'required'];
+//        $rules[] = [
+//            ['handle'],
+//            HandleValidator::class
+//        ];
+//
+//        $rules[] = [
+//            ['handle'],
+//            UniqueValidator::class,
+//            'targetClass' => SetupSearchRecord::class,
+//            'targetAttribute' => ['handle']
+//        ];
 
 
         return $rules;
     }
+
+    public function getSearchType()
+    {
+        return SuperFilter::$app->searchTypes->getSearchTypeByElement($this);
+    }
+
+//    public function options()
+//    {
+//        return Json::decodeIfJson($this->options);
+//    }
+//
+//    public function fields()
+//    {
+//        return Json::decodeIfJson($this->fields);
+//    }
 }
