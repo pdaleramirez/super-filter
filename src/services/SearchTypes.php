@@ -64,7 +64,7 @@ class SearchTypes extends Component
         }
 
         if ($field) {
-            $items['fields'] = (array) $field;
+            $items['items'] = (array) $field;
         }
 
         return $items;

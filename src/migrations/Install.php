@@ -24,9 +24,9 @@ class Install extends Migration
                     'id'     => $this->primaryKey(),
                     'handle' => $this->string(),
                     'elementSearchType'=> $this->string(),
-                    'options'=> $this->text(),
-                    'fields' => $this->text(),
-                    'sorts'  => $this->text(),
+                    'options'       => $this->text(),
+                    'items'         => $this->text(),
+                    'sorts'         => $this->text(),
                     'dateCreated'   => $this->dateTime(),
                     'dateUpdated'   => $this->dateTime(),
                     'uid'           => $this->uid()

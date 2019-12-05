@@ -41,11 +41,11 @@ class SetupSearchController extends Controller
             $options = Json::decodeIfJson($options);
         }
 
-//
-//        $fields = $setupElement->fields;
-//        if ($fields !== '') {
-//            $fields = Json::decodeIfJson($fields);
-//        }
+
+        $items = $setupElement->items;
+        if ($items !== '') {
+            $items = Json::decodeIfJson($items);
+        }
 
         $baseUrl = UrlHelper::actionUrl('/');
 
@@ -53,7 +53,7 @@ class SetupSearchController extends Controller
             'setupElement' => $setupElement,
             'baseUrl'      => $baseUrl,
             'options'      => $options,
-            'items'        => null,
+            'items'        => $items,
             'continueEditingUrl' => 'super-filter/setup-search/edit/{id}'
         ]);
     }
@@ -80,7 +80,7 @@ class SetupSearchController extends Controller
 
         $setupElement->title             = Craft::$app->getRequest()->getBodyParam('title');
         $setupElement->handle            = Craft::$app->getRequest()->getBodyParam('handle');
-        //$setupElement->fields            = Craft::$app->getRequest()->getBodyParam('fields');
+        $setupElement->items            = Craft::$app->getRequest()->getBodyParam('items');
         $setupElement->options           = Craft::$app->getRequest()->getBodyParam('options');
         $setupElement->elementSearchType = Craft::$app->getRequest()->getBodyParam('elementSearchType');
 
@@ -140,12 +140,12 @@ class SetupSearchController extends Controller
         if ($id) {
             $setup = SetupSearch::findOne($id);
 
-            $fields  = Json::decodeIfJson($setup->fields);
+            $items  = Json::decodeIfJson($setup->items);
             $options = Json::decodeIfJson($setup->options);
 
-            if ($fields !== null) {
+            if ($items !== null) {
                 return $this->asJson([
-                    'items'    => $fields,
+                    'items'    => $items,
                     'template' => $options['template'] ?? null
                 ]);
             }

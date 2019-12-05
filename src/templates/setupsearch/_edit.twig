@@ -109,7 +109,7 @@
 
     <div id="field-setting" v-if="!loading">
         <div v-if="items && items.elements.items">
-{#            <input type="hidden" name="fields" :value="JSON.stringify(items)" />#}
+            <input type="hidden" name="items" :value="JSON.stringify(items)" />
             <div class="field">
                 <div class="heading">
                     <label>Element:</label>
@@ -152,9 +152,9 @@
                     <div class="heading">
                         <label>Search Fields:</label>
                     </div>
-                    <div v-if="option.container.selected === index" v-for="(field, index) in option.fields">
+                    <div v-if="option.container.selected === index" v-for="(item, index) in option.items">
                         <cards
-                               :fields='field.options' :selected-fields="field.selected" :group="index" v-on:drag:fields="dragFields">
+                               :fields='item.options' :selected-fields="item.selected" :group="index" v-on:drag:fields="dragFields">
                             ${ option }
                         </cards>
                     </div>
@@ -169,6 +169,8 @@
             <input type="hidden" name="options[template]" :value="template" />
             <combo-box v-model="template" :options="options"></combo-box>
         </div>
+
+
     </div>
 
     <script>

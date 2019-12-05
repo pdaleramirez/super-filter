@@ -12,7 +12,7 @@ use yii\db\ActiveQueryInterface;
  * @property $elementSearchType
  * @property $options
  * @property $sorts
- * @property $fields
+ * @property $items
  * Class SetupSearch
  * @package pdaleramirez\superfilter\records
  */

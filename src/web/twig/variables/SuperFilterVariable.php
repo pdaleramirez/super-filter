@@ -22,7 +22,7 @@ class SuperFilterVariable
         $setupSearch = SuperFilter::$app->searchTypes->getSearchSetup($id);
 
         $options = $setupSearch->element()->options();
-        $fields  = $setupSearch->element()->fields();
+        $items  = $setupSearch->element()->items();
 
         $settings = SuperFilter::$app->getSettings();
 

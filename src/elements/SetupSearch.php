@@ -4,6 +4,7 @@ namespace pdaleramirez\superfilter\elements;
 
 use Craft;
 use craft\base\Element;
+use craft\base\Field;
 use craft\behaviors\FieldLayoutBehavior;
 use craft\elements\actions\Delete;
 use craft\elements\db\ElementQueryInterface;
@@ -30,7 +31,7 @@ class SetupSearch extends Element
     public $sorts;
     public $elementSearchType;
     public $options;
-    //public $fields;
+    public $items;
 
     /**
      * @inheritdoc
@@ -137,7 +138,7 @@ class SetupSearch extends Element
 
         $record->handle = $this->handle;
         $record->elementSearchType = $this->elementSearchType;
-        $record->fields      = $this->fields;
+        $record->items       = $this->items;
         $record->options     = $this->options;
         $record->dateCreated = $this->dateCreated;
         $record->dateUpdated = $this->dateUpdated;
@@ -149,36 +150,6 @@ class SetupSearch extends Element
 
         parent::afterSave($isNew);
     }
-
-//    /**
-//     * @return \craft\models\FieldLayout|null
-//     * @throws \yii\base\InvalidConfigException
-//     */
-//    public function getFieldLayout()
-//    {
-//        $behaviors = $this->getBehaviors();
-//
-//        /**
-//         * @var FieldLayoutBehavior $fieldLayout
-//         */
-//        $fieldLayout = $behaviors['fieldLayout'];
-//
-//        return $fieldLayout->getFieldLayout();
-//    }
-//
-//
-//    /**
-//     * @inheritdoc
-//     */
-//    public function behaviors()
-//    {
-//        return array_merge(parent::behaviors(), [
-//            'fieldLayout' => [
-//                'class' => FieldLayoutBehavior::class,
-//                'elementType' => self::class
-//            ],
-//        ]);
-//    }
 
     /**
      * @inheritdoc
@@ -206,18 +177,18 @@ class SetupSearch extends Element
     {
         $rules = parent::rules();
 
-//        $rules[] = [['elementSearchType'], 'required'];
-//        $rules[] = [
-//            ['handle'],
-//            HandleValidator::class
-//        ];
-//
-//        $rules[] = [
-//            ['handle'],
-//            UniqueValidator::class,
-//            'targetClass' => SetupSearchRecord::class,
-//            'targetAttribute' => ['handle']
-//        ];
+        $rules[] = [['elementSearchType'], 'required'];
+        $rules[] = [
+            ['handle'],
+            HandleValidator::class
+        ];
+
+        $rules[] = [
+            ['handle'],
+            UniqueValidator::class,
+            'targetClass' => SetupSearchRecord::class,
+            'targetAttribute' => ['handle']
+        ];
 
 
         return $rules;
@@ -228,13 +199,13 @@ class SetupSearch extends Element
         return SuperFilter::$app->searchTypes->getSearchTypeByElement($this);
     }
 
-//    public function options()
-//    {
-//        return Json::decodeIfJson($this->options);
-//    }
-//
-//    public function fields()
-//    {
-//        return Json::decodeIfJson($this->fields);
-//    }
+    public function options()
+    {
+        return Json::decodeIfJson($this->options);
+    }
+
+    public function items()
+    {
+        return Json::decodeIfJson($this->items);
+    }
 }
