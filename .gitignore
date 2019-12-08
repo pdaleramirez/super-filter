@@ -31,3 +31,6 @@
 !.vscode/extensions.json
 config.codekit3
 prepros-6.config
+
+# Tests storage
+/tests/_craft/storage/*

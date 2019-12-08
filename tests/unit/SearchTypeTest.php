@@ -8,7 +8,6 @@ use pdaleramirez\superfilter\SuperFilter;
 
 class SearchTypeTest extends Unit
 {
-
     public function testSearchByRef()
     {
         $type = SuperFilter::$app->searchTypes->getSearchTypeByRef('entry');
@@ -38,7 +37,7 @@ class SearchTypeTest extends Unit
                 'selected' => null
             ],
             'sorts' => ['selected' => null, 'options' => ['description', 'rating']],
-            'fields' => ['selected' => null, 'options' => ['description', 'rating']]
+            'items' => ['selected' => null, 'options' => ['description', 'rating']]
         ];
 
         $this->assertEquals($expected, $items);

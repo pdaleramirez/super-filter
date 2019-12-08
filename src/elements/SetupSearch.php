@@ -194,10 +194,10 @@ class SetupSearch extends Element
         return $rules;
     }
 
-    public function getSearchType()
-    {
-        return SuperFilter::$app->searchTypes->getSearchTypeByElement($this);
-    }
+//    public function getSearchType()
+//    {
+//        return SuperFilter::$app->searchTypes->getSearchTypeByElement($this);
+//    }
 
     public function options()
     {
@@ -207,5 +207,10 @@ class SetupSearch extends Element
     public function items()
     {
         return Json::decodeIfJson($this->items);
+    }
+
+    public function sorts()
+    {
+        return Json::decodeIfJson($this->sorts) ?? [];
     }
 }

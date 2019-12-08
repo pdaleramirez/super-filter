@@ -160,7 +160,8 @@ class SetupSearchController extends Controller
         }
 
         return $this->asJson([
-          'items'    => $items
+          'items'    => $items,
+          'template' => null
         ]);
     }
 }

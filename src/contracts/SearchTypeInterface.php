@@ -3,6 +3,7 @@
 namespace pdaleramirez\superfilter\contracts;
 
 use craft\base\ElementInterface;
+use craft\elements\db\ElementQuery;
 
 interface SearchTypeInterface
 {
@@ -12,5 +13,9 @@ interface SearchTypeInterface
     public function getElement();
     public function getFields();
     public function getSorts();
-    public function getItems();
+
+    /**
+     * @return ElementQuery
+     */
+    public function getQuery();
 }

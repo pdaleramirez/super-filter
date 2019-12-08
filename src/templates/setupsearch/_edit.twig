@@ -231,9 +231,13 @@
                 data[csrfTokenName] = csrfTokenValue;
                 this.loading = true;
                 axios.post(url, qs.stringify(data)).then((response) => {
-                    this.items = response.data.items;
-                    this.template = response.data.template;
-                    this.loading = false;
+                     this.items = response.data.items;
+
+                     if (response.data.template) {
+                         this.template = response.data.template;
+                     }
+
+                     this.loading = false;
                 });
             }
         });

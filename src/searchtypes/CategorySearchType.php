@@ -12,6 +12,7 @@ class CategorySearchType extends SearchType
     {
         return Category::class;
     }
+
     public function getContainer(): array
     {
         $groups = Craft::$app->getCategories()->getAllGroups();
@@ -45,13 +46,13 @@ class CategorySearchType extends SearchType
                 if (count($fieldObjects) > 0) {
                     foreach ($fieldObjects as $key => $fieldObject) {
                         $fields[$group->handle]['options'][$key]['name'] = $fieldObject->name;
-                        $fields[$group->handle]['options'][$key]['id']   = $fieldObject->id;
+                        $fields[$group->handle]['options'][$key]['id'] = $fieldObject->id;
                     }
                 }
             }
         }
 
-        return (array) $fields;
+        return (array)$fields;
     }
 
     /**
@@ -63,8 +64,20 @@ class CategorySearchType extends SearchType
         return $this->getFields();
     }
 
-    public function getItems()
+    public function getQuery()
     {
+        if ($this->query === null) {
+            $this->query = Category::find();
 
+            $filter = $this->getElementFilter();
+
+            $groupHandle = $filter['container']['selected'] ?? null;
+
+            if ($groupHandle) {
+                $this->query->group($groupHandle);
+            }
+        }
+
+        return $this->query;
     }
 }

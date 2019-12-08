@@ -6,7 +6,6 @@ use Craft;
 use craft\elements\Entry;
 use pdaleramirez\superfilter\base\SearchType;
 use pdaleramirez\superfilter\SuperFilter;
-use yii\base\InvalidValueException;
 
 class EntrySearchType extends SearchType
 {
@@ -37,6 +36,7 @@ class EntrySearchType extends SearchType
 
     /**
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFields()
     {
@@ -63,6 +63,7 @@ class EntrySearchType extends SearchType
 
     /**
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getSorts()
     {
@@ -94,15 +95,10 @@ class EntrySearchType extends SearchType
         return $fields;
     }
 
-    public function getItems()
-    {
-        $options = $this->element->options();
-        $limit = $options['perPage'] ?? null;
-
-
-       return Entry::find()->limit($limit)->all();
-    }
-
+    /**
+     * @return |null
+     * @throws \yii\base\InvalidConfigException
+     */
     private function getFieldObjects()
     {
         $sections = Craft::$app->getSections()->getAllSections();
@@ -127,4 +123,20 @@ class EntrySearchType extends SearchType
         return $this->_getFields;
     }
 
+    public function getQuery()
+    {
+        if ($this->query === null) {
+            $this->query = Entry::find();
+
+            $filter = $this->getElementFilter();
+
+            $sectionHandle = $filter['container']['selected'] ?? null;
+
+            if ($sectionHandle) {
+                $this->query->section($sectionHandle);
+            }
+        }
+
+        return $this->query;
+    }
 }
