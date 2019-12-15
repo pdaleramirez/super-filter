@@ -37,7 +37,28 @@ class SearchTypes extends Component
         return $event->searchTypes;
     }
 
-    public function getSearchTypeOptions(SearchType $searchType)
+    public function getItemFormat(SetupSearch $setupSearch = null)
+    {
+        $selected = [];
+
+        if ($setupSearch) {
+            $selected = Json::decodeIfJson($setupSearch->items);
+        }
+
+        $searchTypes = SuperFilter::$app->searchTypes->getAllSearchTypes();
+        // Default element entry
+        $items['elements']['selected'] = $setupSearch->elementSearchType ?? 'entry';
+
+        if ($searchTypes) {
+            foreach ($searchTypes as $handle => $searchType) {
+                $items['elements']['items'][$handle] = SuperFilter::$app->searchTypes->getSearchTypeOptions($searchType, $selected);
+            }
+        }
+
+        return $items;
+    }
+
+    public function getSearchTypeOptions(SearchType $searchType, $selected = [])
     {
         /**
          * @var $element Element
@@ -54,9 +75,10 @@ class SearchTypes extends Component
 
         $items['container'] = null;
 
+        $selectedContainer = $selected['container'] ?? null;
         if ($container) {
             $items['container']['items'] = $container;
-            $items['container']['selected'] = null;
+            $items['container']['selected'] = $selectedContainer;
         }
 
         if ($sort) {
@@ -65,6 +87,16 @@ class SearchTypes extends Component
 
         if ($field) {
             $items['items'] = (array) $field;
+        }
+
+        $selectedSorts = $selected['sorts'] ?? null;
+        if ($selectedSorts && $selectedContainer) {
+            $items['sorts'][$selectedContainer] = $selectedSorts;
+        }
+
+        $selectedItems = $selected['items'] ?? null;
+        if ($selectedItems && $selectedContainer) {
+            $items['items'][$selectedContainer] = $selectedItems;
         }
 
         return $items;
@@ -80,10 +112,12 @@ class SearchTypes extends Component
             if (is_string($key)) {
                 $defaultSortOptions[$count]['name'] = $sortOption;
                 $defaultSortOptions[$count]['attribute'] = $key;
+                $defaultSortOptions[$count]['orderBy']   = $key;
             } else {
                 if (in_array($sortOption['orderBy'], ['elements.dateCreated', 'elements.dateUpdated'])) {
                     $defaultSortOptions[$count]['name'] = $sortOption['label'];
                     $defaultSortOptions[$count]['attribute'] = $sortOption['attribute'];
+                    $defaultSortOptions[$count]['orderBy'] = $sortOption['orderBy'];
                 }
 
                 $attribute = str_replace('field_', '', $sortOption['orderBy']) ?? null;
@@ -187,6 +221,7 @@ class SearchTypes extends Component
 
     public function getPaginator($config)
     {
+
         $searchTypeRef = $config['element'];
 
         $searchType = $this->getSearchTypeByRef($searchTypeRef);
@@ -212,5 +247,30 @@ class SearchTypes extends Component
     public function getItems()
     {
         return $this->items;
+    }
+
+    public function getDisplaySortOptions()
+    {
+        $items = $this->config['items'];
+
+        return $items['sorts']['selected'] ?? null;
+    }
+
+    public function setSelectedItems($items)
+    {
+        $items = Json::decodeIfJson($items);
+
+        $elementHandle = $items['elements']['selected'];
+        $element = $items['elements']['items'][$elementHandle];
+
+        $container = $element['container']['selected'];
+        $sorts = $element['sorts'][$container];
+        $items = $element['items'][$container];
+
+        return [
+            'container' => $container,
+            'sorts' => $sorts,
+            'items' => $items
+        ];
     }
 }

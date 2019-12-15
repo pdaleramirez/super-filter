@@ -15,7 +15,12 @@ class SuperFilterVariable
      * @var $searchSetupService SearchTypes
      */
     private $searchSetupService;
+    private $template;
 
+    /**
+     * @param $handle
+     * @throws \yii\base\InvalidConfigException
+     */
     public function setup($handle)
     {
         Craft::$app->getView()->registerAssetBundle(VueAsset::class, 1);
@@ -23,38 +28,63 @@ class SuperFilterVariable
         $this->searchSetupService = SuperFilter::$app->searchTypes->getSearchSetup($handle);
     }
 
+    public function getTemplate()
+    {
+        if ($this->template == null) {
+            $config  = $this->searchSetupService->getConfig();
+
+            $options = $config['options'];
+
+            $template = $options['template'] ?? null;
+
+            if ($template) {
+                $alias = Craft::getAlias('@superfilter/templates');
+
+                if (!SuperFilter::$app->isEntryTemplateIn($template)) {
+                    $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
+
+                    Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);
+
+                } else {
+                    Craft::$app->getView()->setTemplatesPath($alias);
+                    $template = 'style/' . $template;
+                }
+
+                $this->template = $template;
+            }
+        }
+
+        return $this->template;
+    }
+
+    /**
+     * @return \Twig\Markup|null
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\Exception
+     */
     public function getItems()
     {
         $items   = $this->searchSetupService->getItems();
 
-        $config  = $this->searchSetupService->getConfig();
+        $template = $this->getTemplate();
 
-        $options = $config['options'];
+        $entryHtml = Craft::$app->getView()->renderTemplate($template . '/items', [
+            'items' => $items
+        ]);
 
-        $template = $options['template'] ?? null;
-
-        if ($template) {
-            $alias = Craft::getAlias('@superfilter/templates');
-
-            if (!SuperFilter::$app->isEntryTemplateIn($template)) {
-                $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
-
-                Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);
-
-            } else {
-                Craft::$app->getView()->setTemplatesPath($alias);
-            }
-
-            $entryHtml = Craft::$app->getView()->renderTemplate('style/' . $template, [
-                'items' => $items
-            ]);
-
-            return Template::raw($entryHtml);
-        }
-
-        return null;
+        return Template::raw($entryHtml);
     }
 
+    /**
+     * @return \Twig\Markup
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\InvalidConfigException
+     * @throws Exception
+     */
     public function getPaginateLinks()
     {
         if ($this->searchSetupService === null) {
@@ -72,6 +102,18 @@ class SuperFilterVariable
         ]);
 
         return Template::raw($html);
+    }
 
+    public function displaySortOptions()
+    {
+        $sorts = $this->searchSetupService->getDisplaySortOptions();
+
+        $template = $this->getTemplate();
+
+        $entryHtml = Craft::$app->getView()->renderTemplate($template . '/sorts', [
+            'sorts' => $sorts
+        ]);
+
+        return Template::raw($entryHtml);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace pdaleramirez\superfilter\controllers;
 
 use craft\base\Element;
@@ -51,9 +52,9 @@ class SetupSearchController extends Controller
 
         return $this->renderTemplate('super-filter/setupsearch/_edit', [
             'setupElement' => $setupElement,
-            'baseUrl'      => $baseUrl,
-            'options'      => $options,
-            'items'        => $items,
+            'baseUrl' => $baseUrl,
+            'options' => $options,
+            'items' => $items,
             'continueEditingUrl' => 'super-filter/setup-search/edit/{id}'
         ]);
     }
@@ -78,10 +79,14 @@ class SetupSearchController extends Controller
             $setupElement = Craft::$app->getElements()->getElementById($setupElement->id, SetupSearch::class);
         }
 
-        $setupElement->title             = Craft::$app->getRequest()->getBodyParam('title');
-        $setupElement->handle            = Craft::$app->getRequest()->getBodyParam('handle');
-        $setupElement->items            = Craft::$app->getRequest()->getBodyParam('items');
-        $setupElement->options           = Craft::$app->getRequest()->getBodyParam('options');
+        $setupElement->title = Craft::$app->getRequest()->getBodyParam('title');
+        $setupElement->handle = Craft::$app->getRequest()->getBodyParam('handle');
+        $postItems = Craft::$app->getRequest()->getBodyParam('items');
+
+        $items = SuperFilter::$app->searchTypes->setSelectedItems($postItems);
+        $setupElement->items = $items;
+
+        $setupElement->options = Craft::$app->getRequest()->getBodyParam('options');
         $setupElement->elementSearchType = Craft::$app->getRequest()->getBodyParam('elementSearchType');
 
         if (!Craft::$app->getElements()->saveElement($setupElement)) {
@@ -133,35 +138,20 @@ class SetupSearchController extends Controller
 
     public function actionSetupOptions()
     {
-        $searchTypes = SuperFilter::$app->searchTypes->getAllSearchTypes();
+        $id = (int)Craft::$app->getRequest()->getBodyParam('id');
 
-        $id = (int) Craft::$app->getRequest()->getBodyParam('id');
-
+        $setup = null;
         if ($id) {
             $setup = SetupSearch::findOne($id);
 
-            $items  = Json::decodeIfJson($setup->items);
             $options = Json::decodeIfJson($setup->options);
-
-            if ($items !== null) {
-                return $this->asJson([
-                    'items'    => $items,
-                    'template' => $options['template'] ?? null
-                ]);
-            }
         }
 
-        $items['elements']['selected'] = null;
-
-        if ($searchTypes) {
-            foreach ($searchTypes as $handle => $searchType) {
-                $items['elements']['items'][$handle] = SuperFilter::$app->searchTypes->getSearchTypeOptions($searchType);
-            }
-        }
+        $items = SuperFilter::$app->searchTypes->getItemFormat($setup);
 
         return $this->asJson([
-          'items'    => $items,
-          'template' => null
+            'items' => $items,
+            'template' => $options['template'] ?? null
         ]);
     }
 }

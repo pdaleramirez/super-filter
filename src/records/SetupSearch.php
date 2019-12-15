@@ -2,8 +2,10 @@
 
 namespace pdaleramirez\superfilter\records;
 
-use craft\base\Element;
+use Craft;
+use craft\records\Element;
 use craft\db\ActiveRecord;
+use yii\db\ActiveQuery;
 use yii\db\ActiveQueryInterface;
 
 /**
@@ -18,6 +20,39 @@ use yii\db\ActiveQueryInterface;
  */
 class SetupSearch extends ActiveRecord
 {
+
+    /**
+     * @return ActiveQuery
+     */
+    public static function find()
+    {
+        $query = parent::find()
+            ->innerJoinWith(['element element']);
+
+        // todo: remove schema version condition after next beakpoint
+        $schemaVersion = Craft::$app->getInstalledSchemaVersion();
+        if (version_compare($schemaVersion, '3.1.19', '>=')) {
+            $query->where(['element.dateDeleted' => null]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public static function findWithTrashed(): ActiveQuery
+    {
+        return static::find()->where([]);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public static function findTrashed(): ActiveQuery
+    {
+        return static::find()->where(['not', ['element.dateDeleted' => null]]);
+    }
     /**
      * @return string
      */

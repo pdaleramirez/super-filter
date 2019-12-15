@@ -164,7 +164,7 @@
 
         <div class="field">
             <div class="heading">
-                <label>Template:</label>
+                <label>Template Folder:</label>
             </div>
             <input type="hidden" name="options[template]" :value="template" />
             <combo-box v-model="template" :options="options"></combo-box>
@@ -183,10 +183,6 @@
                 selected: [],
                 items: null,
                 elements: null,
-                selectedElements: null,
-                origElements: null,
-                selectedElement: 'entry',
-                selectedContainer: null,
                 group: null,
                 firstContainer: null,
                 options: [

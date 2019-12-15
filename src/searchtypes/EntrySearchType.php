@@ -68,6 +68,7 @@ class EntrySearchType extends SearchType
     public function getSorts()
     {
         $entryOptions = SuperFilter::$app->searchTypes->getSortOptions(Entry::sortOptions());
+
         $fields = [];
 
         $fieldObjects = $this->_getFields ?? $this->getFieldObjects();
@@ -83,7 +84,7 @@ class EntrySearchType extends SearchType
                 foreach ($itemObjects as $key => $fieldObject) {
                     if (in_array($fieldObject->handle, $entryOptions['sortOptions'])) {
                         $sortFields[$key]['name'] = $fieldObject->name;
-                        $sortFields[$key]['id']   = $fieldObject->handle;
+                        $sortFields[$key]['orderBy'] = $fieldObject->handle;
                     }
                 }
             }
@@ -128,12 +129,14 @@ class EntrySearchType extends SearchType
         if ($this->query === null) {
             $this->query = Entry::find();
 
-            $filter = $this->getElementFilter();
+            $filter = $this->items;
 
-            $sectionHandle = $filter['container']['selected'] ?? null;
+            $sectionHandle = $filter['container'] ?? null;
 
             if ($sectionHandle) {
-                $this->query->section($sectionHandle);
+                // elements.dateCreated
+                // superFilterImdbRating
+                $this->query->section($sectionHandle)->orderBy(['elements.dateCreated' => SORT_DESC]);
             }
         }
 

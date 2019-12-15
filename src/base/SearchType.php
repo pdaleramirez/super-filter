@@ -45,10 +45,4 @@ abstract class SearchType extends Component implements SearchTypeInterface
     {
         return null;
     }
-
-    public function getElementFilter()
-    {
-        $element = $this->getElement();
-        return $this->items['elements']['items'][$element::refHandle()];
-    }
 }
