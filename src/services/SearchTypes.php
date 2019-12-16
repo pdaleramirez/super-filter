@@ -22,6 +22,7 @@ class SearchTypes extends Component
     protected $config;
     protected $items;
     protected $links;
+    protected $params;
 
     /**
      * @return array|SearchType[]
@@ -168,7 +169,7 @@ class SearchTypes extends Component
         return null;
     }
 
-    public function getSearchSetup($params)
+    public function getSearchSetup($options)
     {
         $config = [];
         $config['element']     = null;
@@ -176,10 +177,10 @@ class SearchTypes extends Component
         $config['items']       = [];
         $config['sorts']       = [];
 
-        if (!is_array($params)) {
-            $config = $this->getConfigById($params);
+        if (!is_array($options)) {
+            $config = $this->getConfigById($options);
         } else {
-            $config = array_merge($config, $params);
+            $config = array_merge($config, $options);
         }
 
         $config['currentPage'] = Craft::$app->getRequest()->getPageNum();
@@ -189,6 +190,11 @@ class SearchTypes extends Component
         $this->config = $config;
 
         return $this;
+    }
+
+    public function setParams($params)
+    {
+        $this->params = $params;
     }
 
     public function getConfig()
@@ -229,6 +235,7 @@ class SearchTypes extends Component
         $searchType->setOptions($config['options']);
         $searchType->setItems($config['items']);
         $searchType->setSorts($config['sorts']);
+        $searchType->setParams($this->params);
 
         $paginator = new Paginator($searchType->getQuery(), [
             'currentPage' => $config['currentPage'],

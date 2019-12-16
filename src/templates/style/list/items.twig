@@ -2,7 +2,7 @@
 <ul>
     {% for item in items %}
         <li>
-            {{  item.title }} - {{ item.dateCreated.format('Y-m-d H:i:s') }} - {{ item.superFilterImdbRating }}
+            {{  item.title }} - {{ item.dateCreated.format('Y-m-d H:i:s') }} - {{ item.superFilterImdbRating }} - {{ item.superFilterShowTypes }}
         </li>
     {% endfor %}
 </ul>

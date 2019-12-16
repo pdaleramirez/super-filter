@@ -16,6 +16,8 @@ abstract class SearchType extends Component implements SearchTypeInterface
     protected $options = null;
     protected $items = null;
     protected $sorts = null;
+    protected $sortParam = null;
+    protected $params = null;
     /**
      * @var $query ElementQuery
      */
@@ -39,6 +41,21 @@ abstract class SearchType extends Component implements SearchTypeInterface
     public function setSorts(array $sorts)
     {
         $this->sorts = $sorts;
+    }
+
+    public function setParams($params)
+    {
+        $this->params = $params;
+
+        $sort = $params['sort'] ?? null;
+
+        if ($sort) {
+            $sort = explode('-', $sort);
+
+            $this->sortParam['attribute'] = $sort[0];
+            $this->sortParam['sort'] = $sort[1] === 'desc' ? SORT_DESC : SORT_ASC;
+        }
+
     }
 
     public function getContainer()

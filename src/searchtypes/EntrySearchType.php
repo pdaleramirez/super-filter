@@ -136,7 +136,11 @@ class EntrySearchType extends SearchType
             if ($sectionHandle) {
                 // elements.dateCreated
                 // superFilterImdbRating
-                $this->query->section($sectionHandle)->orderBy(['elements.dateCreated' => SORT_DESC]);
+                $query = $this->query->section($sectionHandle);
+
+                if ($this->sortParam) {
+                    $query->orderBy([$this->sortParam['attribute'] => $this->sortParam['sort']]);
+                }
             }
         }
 

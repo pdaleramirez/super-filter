@@ -1,0 +1,10 @@
+<h1>This is list type sorty</h1>
+<form>
+        <select>
+                {% for item in sorts %}
+                        <option value="{{ item.orderBy }}">
+                                {{  item.name }}
+                        </option>
+                {% endfor %}
+        </select>
+</form>

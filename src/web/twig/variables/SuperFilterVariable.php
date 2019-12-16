@@ -25,6 +25,9 @@ class SuperFilterVariable
     {
         Craft::$app->getView()->registerAssetBundle(VueAsset::class, 1);
 
+        $params = Craft::$app->getRequest()->getQueryParams();
+
+        SuperFilter::$app->searchTypes->setParams($params);
         $this->searchSetupService = SuperFilter::$app->searchTypes->getSearchSetup($handle);
     }
 
@@ -110,8 +113,12 @@ class SuperFilterVariable
 
         $template = $this->getTemplate();
 
+        $params = Craft::$app->getRequest()->getQueryParams();
+        $selected = $params['sort'] ?? null;
+
         $entryHtml = Craft::$app->getView()->renderTemplate($template . '/sorts', [
-            'sorts' => $sorts
+            'sorts'    => $sorts,
+            'selected' => $selected
         ]);
 
         return Template::raw($entryHtml);

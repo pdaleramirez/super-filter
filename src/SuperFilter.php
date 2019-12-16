@@ -13,7 +13,9 @@ namespace pdaleramirez\superfilter;
 
 use Craft;
 use craft\base\Plugin;
+use craft\events\RegisterTemplateRootsEvent;
 use craft\web\twig\variables\CraftVariable;
+use craft\web\View;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\models\Settings;
 use pdaleramirez\superfilter\searchtypes\CategorySearchType;
@@ -76,6 +78,11 @@ class SuperFilter extends Plugin
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $event->sender->set('superFilter', SuperFilterVariable::class);
+        });
+
+        // Setup Template Roots
+        Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
+            $e->roots['super-filter'] = $this->getBasePath().DIRECTORY_SEPARATOR.'templates';
         });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function (RegisterUrlRulesEvent $event) {
