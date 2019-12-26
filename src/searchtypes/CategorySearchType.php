@@ -43,6 +43,7 @@ class CategorySearchType extends SearchType
                 $fieldObjects = $group->getFieldLayout()->getFields();
                 $fields[$group->handle]['label'] = $group->name;
                 $fields[$group->handle]['selected'] = [];
+                $fields[$group->handle]['options'] = [];
                 if (count($fieldObjects) > 0) {
                     foreach ($fieldObjects as $key => $fieldObject) {
                         $fields[$group->handle]['options'][$key]['name'] = $fieldObject->name;
@@ -61,7 +62,26 @@ class CategorySearchType extends SearchType
      */
     public function getSorts()
     {
-        return $this->getFields();
+        $groups = Craft::$app->getCategories()->getAllGroups();
+
+        $fields = [];
+
+        if (!empty($groups)) {
+            foreach ($groups as $group) {
+                $fieldObjects = $group->getFieldLayout()->getFields();
+                $fields[$group->handle]['label'] = $group->name;
+                $fields[$group->handle]['selected'] = [];
+                $fields[$group->handle]['options'] = [];
+                if (count($fieldObjects) > 0) {
+                    foreach ($fieldObjects as $key => $fieldObject) {
+                        $fields[$group->handle]['options'][$key]['name'] = $fieldObject->name;
+                        $fields[$group->handle]['options'][$key]['orderBy'] = $fieldObject->handle;
+                    }
+                }
+            }
+        }
+
+        return (array)$fields;
     }
 
     public function getQuery()

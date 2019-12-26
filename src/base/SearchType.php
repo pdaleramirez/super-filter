@@ -4,8 +4,10 @@ namespace pdaleramirez\superfilter\base;
 
 use craft\base\Component;
 use craft\elements\db\ElementQuery;
+use craft\elements\Entry;
 use pdaleramirez\superfilter\contracts\SearchTypeInterface;
 use pdaleramirez\superfilter\elements\SetupSearch;
+use pdaleramirez\superfilter\SuperFilter;
 
 abstract class SearchType extends Component implements SearchTypeInterface
 {
@@ -61,5 +63,41 @@ abstract class SearchType extends Component implements SearchTypeInterface
     public function getContainer()
     {
         return null;
+    }
+
+    /**
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getSorts()
+    {
+        $element = $this->getElement();
+        $entryOptions = SuperFilter::$app->searchTypes->getSortOptions($element::sortOptions());
+
+        $fields = [];
+
+        $fieldObjects = $this->_getFields ?? $this->getFieldObjects();
+
+        foreach ($fieldObjects as $sectionHandle => $item) {
+            //$fields[$sectionHandle] = $entryOptions['defaultSortOptions'];
+            $fields[$sectionHandle]['label']    = $item['label'];
+            $fields[$sectionHandle]['selected'] = [];
+            $itemObjects = $item['fieldObjects'];
+
+            $sortFields = [];
+            if (count($itemObjects) > 0) {
+                foreach ($itemObjects as $key => $fieldObject) {
+                    if (in_array($fieldObject->handle, $entryOptions['sortOptions'])) {
+                        $sortFields[$key]['name'] = $fieldObject->name;
+                        $sortFields[$key]['orderBy'] = $fieldObject->handle;
+                    }
+                }
+            }
+
+            $fields[$sectionHandle]['options'] = array_merge($entryOptions['defaultSortOptions'],
+                $sortFields);
+        }
+
+        return $fields;
     }
 }

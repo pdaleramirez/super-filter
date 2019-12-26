@@ -3,6 +3,7 @@
 namespace pdaleramirez\superfilter\controllers;
 
 use craft\base\Element;
+use craft\fields\Number;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
@@ -42,8 +43,8 @@ class SetupSearchController extends Controller
             $options = Json::decodeIfJson($options);
         }
 
-
         $items = $setupElement->items;
+
         if ($items !== '') {
             $items = Json::decodeIfJson($items);
         }

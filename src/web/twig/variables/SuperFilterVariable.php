@@ -123,4 +123,29 @@ class SuperFilterVariable
 
         return Template::raw($entryHtml);
     }
+
+    public function displaySearchFields()
+    {
+        $searchFields = $this->searchSetupService->getDisplaySearchFields();
+
+        $template = $this->getTemplate();
+
+        $params = Craft::$app->getRequest()->getQueryParams();
+        $selected = $params['fields'] ?? null;
+
+        $fields = [];
+
+        if (count($searchFields) > 0) {
+            foreach ($searchFields as $field) {
+                $fieldObj = Craft::$app->getFields()->getFieldById($field['id']);
+                $fields[] =  get_class($fieldObj);
+            }
+        }
+        $entryHtml = Craft::$app->getView()->renderTemplate($template . '/fields', [
+            'fields'   => $searchFields,
+            'selected' => $selected
+        ]);
+
+        return Template::raw($entryHtml);
+    }
 }

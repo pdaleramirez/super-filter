@@ -9,15 +9,18 @@ use craft\db\Paginator;
 use craft\elements\Entry;
 use craft\helpers\Json;
 use craft\web\twig\variables\Paginate;
+use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\base\SearchType;
 use pdaleramirez\superfilter\contracts\SearchTypeInterface;
 use pdaleramirez\superfilter\elements\SetupSearch;
+use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\SuperFilter;
 
 class SearchTypes extends Component
 {
     const EVENT_REGISTER_SEARCH_TYPES = 'defineSuperFilterSearchTypes';
+    const EVENT_REGISTER_SEARCH_FIELD_TYPES = 'defineSuperFilterSearchFieldTypes';
 
     protected $config;
     protected $items;
@@ -36,6 +39,20 @@ class SearchTypes extends Component
         $this->trigger(self::EVENT_REGISTER_SEARCH_TYPES, $event);
 
         return $event->searchTypes;
+    }
+
+    /**
+     * @return SearchField[]
+     */
+    public function getAllSearchFieldTypes()
+    {
+        $event = new RegisterSearchFieldTypeEvent([
+            'searchFieldTypes' => []
+        ]);
+
+        $this->trigger(self::EVENT_REGISTER_SEARCH_FIELD_TYPES, $event);
+
+        return $event->searchFieldTypes;
     }
 
     public function getItemFormat(SetupSearch $setupSearch = null)
@@ -90,17 +107,73 @@ class SearchTypes extends Component
             $items['items'] = (array) $field;
         }
 
-        $selectedSorts = $selected['sorts'] ?? null;
-        if ($selectedSorts && $selectedContainer) {
-            $items['sorts'][$selectedContainer] = $selectedSorts;
+        if (isset($selected['sorts']) && $selectedContainer !== null) {
+            $diff = $this->getSelectedOptions('sorts', $items, $selected, 'orderBy');
+
+            $items['sorts'] = $diff;
         }
 
-        $selectedItems = $selected['items'] ?? null;
-        if ($selectedItems && $selectedContainer) {
-            $items['items'][$selectedContainer] = $selectedItems;
+        if (isset($selected['items']) && $selectedContainer !== null) {
+
+            $diff = $this->getSelectedOptions('items', $items, $selected);
+
+            $items['items'] = $diff;
         }
 
         return $items;
+    }
+
+    private function getSelectedOptions($key, $items, $selected, $diffKey = 'id')
+    {
+        $selectedItems = $selected[$key] ?? null;
+
+        $entries = $items[$key] ?? null;
+
+        if ($entries) {
+
+            foreach ($entries as $containerHandle => $entry) {
+
+                $options       = $entry['options'];
+
+                if ($selectedItems && $containerHandle !== null) {
+                    if (count($entry['options']) > 0) {
+                        $options = $this->getDiffOptions($entry['options'], $selectedItems, $diffKey);
+                    }
+                }
+
+                $entries[$containerHandle] = [
+                    'selected' => $selectedItems,
+                    'options' => $options,
+                ];
+            }
+        }
+
+        return $entries;
+    }
+
+    private function getDiffOptions($options, $selects, $key = 'id')
+    {
+        $selectedIds = [];
+
+        if (count($selects) > 0) {
+            foreach ($selects as $selected) {
+                $selectedIds[] = $selected[$key];
+            }
+        }
+
+        $diffOptions = [];
+
+        if (count($options) > 0) {
+
+            foreach ($options as $option) {
+
+                if (!in_array($option[$key], $selectedIds)) {
+                    $diffOptions[] = $option;
+                }
+            }
+        }
+
+        return $diffOptions;
     }
 
     public function getSortOptions($elementSortOptions)
@@ -135,23 +208,6 @@ class SearchTypes extends Component
         ];
     }
 
-//    public function getSearchTypeByElement(SetupSearch $setupSearch)
-//    {
-//        $ref = $setupSearch->elementSearchType;
-//
-//        if (array_key_exists($ref, $this->_searchTypesByRef)) {
-//            return $this->_searchTypesByRef[$ref] ?? null;
-//        }
-//
-//        $class = $this->getSearchTypeByRef($ref);
-//
-//        $class->setElement($setupSearch);
-//
-//        $this->_searchTypesByRef[$ref] = $class;
-//
-//        return $this->_searchTypesByRef[$ref] ?? null;
-//    }
-
     public function getSearchTypeByRef($ref)
     {
         foreach ($this->getAllSearchTypes() as $class) {
@@ -161,6 +217,20 @@ class SearchTypes extends Component
             if (
                 ($elementRefHandle = $element::refHandle()) !== null &&
                 strcasecmp($elementRefHandle, $ref) === 0
+            ) {
+                return $class;
+            }
+        }
+
+        return null;
+    }
+
+    public function getSearchFieldType($type)
+    {
+        foreach ($this->getAllSearchFieldTypes() as $class) {
+            if (
+                ($fieldType = $class->fieldType()) !== null &&
+                strcasecmp($fieldType, $type) === 0
             ) {
                 return $class;
             }
@@ -263,6 +333,13 @@ class SearchTypes extends Component
         return $items['sorts']['selected'] ?? null;
     }
 
+    public function getDisplaySearchFields()
+    {
+        $items = $this->config['items'];
+
+        return $items['items']['selected'] ?? null;
+    }
+
     public function setSelectedItems($items)
     {
         $items = Json::decodeIfJson($items);
@@ -271,8 +348,8 @@ class SearchTypes extends Component
         $element = $items['elements']['items'][$elementHandle];
 
         $container = $element['container']['selected'];
-        $sorts = $element['sorts'][$container];
-        $items = $element['items'][$container];
+        $sorts = $element['sorts'][$container]['selected'];
+        $items = $element['items'][$container]['selected'];
 
         return [
             'container' => $container,

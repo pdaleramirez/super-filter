@@ -3,6 +3,7 @@
 namespace pdaleramirez\superfilter\searchtypes;
 
 use Craft;
+use craft\elements\Category;
 use craft\elements\Entry;
 use pdaleramirez\superfilter\base\SearchType;
 use pdaleramirez\superfilter\SuperFilter;
@@ -138,6 +139,14 @@ class EntrySearchType extends SearchType
                 // superFilterImdbRating
                 $query = $this->query->section($sectionHandle);
 
+                Craft::configure($query, [
+                   //'superFilterImdbRating' => 7,
+                    //'superFilterShowTypes'  => 'anime'
+                ]);
+                //$query->search('superFilterGuides:"Violent Programmes"');
+                //$query->search('superFilterImdbRating:"7"');
+               // $cat = Category::findOne(69);
+                //$query->relatedTo([$cat]);
                 if ($this->sortParam) {
                     $query->orderBy([$this->sortParam['attribute'] => $this->sortParam['sort']]);
                 }
