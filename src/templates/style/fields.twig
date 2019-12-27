@@ -1,11 +1,15 @@
 <h1>This is field parent</h1>
 <form>
-        <select name="sort">
-                {% for item in fields %}
-                        <option>
-                                {{  item.name }}
-                        </option>
+
+                {% for field in fields %}
+                        <div class="form-group">
+                                <label>{{ field.object.name }}</label>
+                                <div class="input">
+                                        {{ field.html()|raw }}
+                                </div>
+                        </div>
+
                 {% endfor %}
-        </select>
+
         <button type="submit">Filter</button>
 </form>

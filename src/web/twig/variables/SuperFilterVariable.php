@@ -34,27 +34,7 @@ class SuperFilterVariable
     public function getTemplate()
     {
         if ($this->template == null) {
-            $config  = $this->searchSetupService->getConfig();
-
-            $options = $config['options'];
-
-            $template = $options['template'] ?? null;
-
-            if ($template) {
-                $alias = Craft::getAlias('@superfilter/templates');
-
-                if (!SuperFilter::$app->isEntryTemplateIn($template)) {
-                    $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
-
-                    Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);
-
-                } else {
-                    Craft::$app->getView()->setTemplatesPath($alias);
-                    $template = 'style/' . $template;
-                }
-
-                $this->template = $template;
-            }
+            $this->template = $this->searchSetupService->getTemplate();
         }
 
         return $this->template;
@@ -126,26 +106,30 @@ class SuperFilterVariable
 
     public function displaySearchFields()
     {
-        $searchFields = $this->searchSetupService->getDisplaySearchFields();
-
         $template = $this->getTemplate();
 
         $params = Craft::$app->getRequest()->getQueryParams();
         $selected = $params['fields'] ?? null;
 
-        $fields = [];
-
-        if (count($searchFields) > 0) {
-            foreach ($searchFields as $field) {
-                $fieldObj = Craft::$app->getFields()->getFieldById($field['id']);
-                $fields[] =  get_class($fieldObj);
-            }
-        }
         $entryHtml = Craft::$app->getView()->renderTemplate($template . '/fields', [
-            'fields'   => $searchFields,
+            'fields'   => $this->searchSetupService->getSearchFieldsHtml(),
             'selected' => $selected
         ]);
 
         return Template::raw($entryHtml);
+    }
+
+    public function getSearchField($handle)
+    {
+        $fieldObj = Craft::$app->getFields()->getFieldByHandle($handle);
+        $type = get_class($fieldObj);
+
+        $searchField = $this->searchSetupService->getSearchFieldType($type);
+
+        $template = $this->searchSetupService->getTemplate();
+
+        $searchField->setConfig(['template' => $template]);
+
+        return Template::raw($searchField->getHtml());
     }
 }

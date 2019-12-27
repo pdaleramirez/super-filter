@@ -102,7 +102,7 @@ class SuperFilter extends Plugin
         });
 
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_TYPES, function (RegisterSearchTypeEvent $event) {
-            //$event->searchTypes['entry']    = new EntrySearchType();
+            $event->searchTypes['entry']    = new EntrySearchType();
             $event->searchTypes['category'] = new CategorySearchType();
         });
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_FIELD_TYPES, function (RegisterSearchFieldTypeEvent $event) {

@@ -76,6 +76,12 @@ class SearchTypes extends Component
         return $items;
     }
 
+    /**
+     * @param SearchType $searchType
+     * @param array $selected
+     * @return mixed
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getSearchTypeOptions(SearchType $searchType, $selected = [])
     {
         /**
@@ -130,10 +136,8 @@ class SearchTypes extends Component
         $entries = $items[$key] ?? null;
 
         if ($entries) {
-
             foreach ($entries as $containerHandle => $entry) {
-
-                $options       = $entry['options'];
+                $options = $entry['options'];
 
                 if ($selectedItems && $containerHandle !== null) {
                     if (count($entry['options']) > 0) {
@@ -151,7 +155,7 @@ class SearchTypes extends Component
         return $entries;
     }
 
-    private function getDiffOptions($options, $selects, $key = 'id')
+    public function getDiffOptions($options, $selects, $key = 'id')
     {
         $selectedIds = [];
 
@@ -164,9 +168,7 @@ class SearchTypes extends Component
         $diffOptions = [];
 
         if (count($options) > 0) {
-
             foreach ($options as $option) {
-
                 if (!in_array($option[$key], $selectedIds)) {
                     $diffOptions[] = $option;
                 }
@@ -330,14 +332,37 @@ class SearchTypes extends Component
     {
         $items = $this->config['items'];
 
-        return $items['sorts']['selected'] ?? null;
+        return $items['sorts'] ?? null;
     }
 
     public function getDisplaySearchFields()
     {
         $items = $this->config['items'];
 
-        return $items['items']['selected'] ?? null;
+        return $items['items'] ?? null;
+    }
+
+    public function getSearchFieldsHtml()
+    {
+        $fields = null;
+        $searchFields = $this->getDisplaySearchFields();
+
+        $template = $this->getTemplate();
+
+        if (count($searchFields) > 0) {
+            foreach ($searchFields as $field) {
+                $fieldObj = Craft::$app->getFields()->getFieldById($field['id']);
+                $type = get_class($fieldObj);
+
+                $searchField = $this->getSearchFieldType($type);
+                $searchField->setObject($fieldObj);
+                $searchField->setConfig(['template' => $template]);
+
+                $fields[] =  $searchField;
+            }
+        }
+
+        return $fields;
     }
 
     public function setSelectedItems($items)
@@ -356,5 +381,30 @@ class SearchTypes extends Component
             'sorts' => $sorts,
             'items' => $items
         ];
+    }
+
+    public function getTemplate()
+    {
+        $config  = $this->getConfig();
+
+        $options = $config['options'];
+
+        $template = $options['template'] ?? null;
+
+        if ($template) {
+            $alias = Craft::getAlias('@superfilter/templates');
+
+            if (!SuperFilter::$app->isEntryTemplateIn($template)) {
+                $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
+
+                Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);
+
+            } else {
+                Craft::$app->getView()->setTemplatesPath($alias);
+                $template = 'style/' . $template;
+            }
+        }
+
+        return $template;
     }
 }
