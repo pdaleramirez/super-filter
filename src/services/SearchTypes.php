@@ -5,10 +5,13 @@ namespace pdaleramirez\superfilter\services;
 use Craft;
 use craft\base\Component;
 use craft\base\Element;
+use craft\base\FieldInterface;
 use craft\db\Paginator;
 use craft\elements\Entry;
 use craft\helpers\Json;
+use craft\helpers\Template;
 use craft\web\twig\variables\Paginate;
+use Exception;
 use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\base\SearchType;
 use pdaleramirez\superfilter\contracts\SearchTypeInterface;
@@ -94,7 +97,7 @@ class SearchTypes extends Component
         $sort = $searchType->getSorts();
         $field = $searchType->getFields();
 
-        $items['label'] = $element->displayName();
+        $items['label']  = $element->displayName();
         $items['handle'] = $element->refHandle();
 
         $items['container'] = null;
@@ -342,27 +345,48 @@ class SearchTypes extends Component
         return $items['items'] ?? null;
     }
 
+    /**
+     * @return array|null
+     * @throws \yii\base\Exception
+     */
     public function getSearchFieldsHtml()
     {
         $fields = null;
         $searchFields = $this->getDisplaySearchFields();
 
-        $template = $this->getTemplate();
-
         if (count($searchFields) > 0) {
             foreach ($searchFields as $field) {
                 $fieldObj = Craft::$app->getFields()->getFieldById($field['id']);
-                $type = get_class($fieldObj);
 
-                $searchField = $this->getSearchFieldType($type);
-                $searchField->setObject($fieldObj);
-                $searchField->setConfig(['template' => $template]);
-
-                $fields[] =  $searchField;
+                $fields[] =  $this->getSearchFieldByObj($fieldObj);
             }
         }
 
         return $fields;
+    }
+
+    /**
+     * @param FieldInterface $fieldObj
+     * @return SearchField|null
+     * @throws \yii\base\Exception
+     * @throws Exception
+     */
+    public function getSearchFieldByObj(FieldInterface $fieldObj)
+    {
+        $type = get_class($fieldObj);
+
+        $searchField = $this->getSearchFieldType($type);
+
+        if ($searchField == null) {
+            throw new Exception('Search Field Type not found.');
+        }
+
+        $template = $this->getTemplate();
+
+        $searchField->setObject($fieldObj);
+        $searchField->setConfig(['template' => $template]);
+
+        return $searchField;
     }
 
     public function setSelectedItems($items)
@@ -383,6 +407,10 @@ class SearchTypes extends Component
         ];
     }
 
+    /**
+     * @return string|null
+     * @throws \yii\base\Exception
+     */
     public function getTemplate()
     {
         $config  = $this->getConfig();

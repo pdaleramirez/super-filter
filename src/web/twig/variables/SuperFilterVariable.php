@@ -4,6 +4,7 @@ namespace pdaleramirez\superfilter\web\twig\variables;
 
 use Craft;
 use craft\helpers\Template;
+use craft\helpers\UrlHelper;
 use Exception;
 use pdaleramirez\superfilter\services\SearchTypes;
 use pdaleramirez\superfilter\SuperFilter;
@@ -108,7 +109,8 @@ class SuperFilterVariable
     {
         $template = $this->getTemplate();
 
-        $params = Craft::$app->getRequest()->getQueryParams();
+        $params = Craft::$app->getRequest()->get();
+
         $selected = $params['fields'] ?? null;
 
         $entryHtml = Craft::$app->getView()->renderTemplate($template . '/fields', [
@@ -122,13 +124,8 @@ class SuperFilterVariable
     public function getSearchField($handle)
     {
         $fieldObj = Craft::$app->getFields()->getFieldByHandle($handle);
-        $type = get_class($fieldObj);
 
-        $searchField = $this->searchSetupService->getSearchFieldType($type);
-
-        $template = $this->searchSetupService->getTemplate();
-
-        $searchField->setConfig(['template' => $template]);
+        $searchField = $this->searchSetupService->getSearchFieldByObj($fieldObj);
 
         return Template::raw($searchField->getHtml());
     }

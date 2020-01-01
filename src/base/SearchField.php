@@ -2,11 +2,18 @@
 
 namespace pdaleramirez\superfilter\base;
 
+use Craft;
+use craft\base\Field;
 use craft\base\FieldInterface;
+use yii\db\QueryInterface;
 
 abstract class SearchField
 {
     protected $config;
+
+    /**
+     * @var $object Field
+     */
     protected $object;
 
     public function setConfig($config)
@@ -29,4 +36,16 @@ abstract class SearchField
 
     abstract function fieldType();
     abstract function getHtml();
+
+    public function getQueryParams(QueryInterface $query, $value)
+    {
+        Craft::configure($query, [
+            $this->object->handle => $value
+        ]);
+    }
+
+    public function getRelated($value)
+    {
+        return null;
+    }
 }

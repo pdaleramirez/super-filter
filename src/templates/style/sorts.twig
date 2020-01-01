@@ -1,5 +1,7 @@
 <h1>This is sort parent</h1>
-<form>
+<form method="post">
+    {{ csrfInput() }}
+    {{ actionInput('super-filter/super-filter/filter') }}
         <select name="sort">
                 {% for item in sorts %}
                         {% set orderAsc = item.orderBy ~ '-asc' %}

@@ -17,6 +17,8 @@ class Number extends SearchField
     {
         $template = $this->config['template'];
 
-        return Craft::$app->getView()->renderTemplate($template . '/fields/number');
+        return Craft::$app->getView()->renderTemplate($template . '/fields/number', [
+            'field' => $this
+        ]);
     }
 }

@@ -14,10 +14,12 @@ use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 use pdaleramirez\superfilter\web\assets\FontAwesomeAsset;
 use pdaleramirez\superfilter\web\assets\VueCpAsset;
+use Phpdocx\Create\CreateDocx;
+use yii\helpers\Url;
 
 class SuperFilterController extends Controller
 {
-
+    protected $allowAnonymous = ['filter'];
     /**
      * @return \yii\web\Response
      * @throws InvalidPluginException
@@ -97,8 +99,9 @@ class SuperFilterController extends Controller
 
     public function actionTest()
     {
-        $test = UrlHelper::actionUrl('/');
-        \Craft::dd($test);
+        $entry = Entry::findOne(304);
+        $cats = $entry->superFilterGenre->all();
+        Craft::dd($cats);
         return null;
     }
 
@@ -142,5 +145,38 @@ class SuperFilterController extends Controller
         return $this->renderTemplate('super-filter/setupsearch/_edit', [
             'setup' => $setupElement
         ]);
+    }
+
+    public function actionFilter()
+    {
+        $bodyParams = Craft::$app->request->getBodyParams();
+
+        if (isset($bodyParams['p'])) {
+            unset($bodyParams['p']);
+        }
+
+        if (isset($bodyParams['action'])) {
+            unset($bodyParams['action']);
+        }
+
+        $csrf = Craft::$app->config->getGeneral()->csrfTokenName;
+
+        if (isset($bodyParams[$csrf])) {
+            unset($bodyParams[$csrf]);
+        }
+
+        $fields = $bodyParams['fields'] ?? null;
+
+        if ($fields) {
+            foreach ($fields as $handle => $field) {
+                if (is_string($field) && trim($field) === '') {
+                    unset($bodyParams['fields'][$handle]);
+                }
+            }
+        }
+
+        $url = UrlHelper::urlWithParams(Craft::$app->request->getAbsoluteUrl(), $bodyParams);
+
+        return $this->redirect($url);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace pdaleramirez\superfilter\base;
 
+use Craft;
 use craft\base\Component;
 use craft\elements\db\ElementQuery;
 use craft\elements\Entry;
@@ -99,5 +100,27 @@ abstract class SearchType extends Component implements SearchTypeInterface
         }
 
         return $fields;
+    }
+
+    /**
+     * @return array|null
+     * @throws \yii\base\Exception
+     */
+    protected function getFieldTypes()
+    {
+        $fields = $this->params['fields'] ?? null;
+
+        $fieldTypes = null;
+
+        if ($fields) {
+            foreach ($fields as $handle => $value) {
+                $fieldObj = Craft::$app->getFields()->getFieldByHandle($handle);
+
+                $fieldTypes[$handle]['type']  = SuperFilter::$app->searchTypes->getSearchFieldByObj($fieldObj);
+                $fieldTypes[$handle]['value'] = $value;
+            }
+        }
+
+        return $fieldTypes;
     }
 }

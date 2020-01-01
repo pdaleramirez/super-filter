@@ -1,0 +1,5 @@
+{% for element in elements %}
+    <div class="field">
+        <input type="checkbox" value="{{ element.id }}" name="fields[{{ field.object.handle }}][]" /> {{ element.title }}
+    </div>
+{% endfor %}

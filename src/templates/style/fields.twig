@@ -1,15 +1,17 @@
 <h1>This is field parent</h1>
-<form>
+<form method="post">
+    {{ csrfInput() }}
+    {{ actionInput('super-filter/super-filter/filter') }}
 
-                {% for field in fields %}
-                        <div class="form-group">
-                                <label>{{ field.object.name }}</label>
-                                <div class="input">
-                                        {{ field.html()|raw }}
-                                </div>
+        {% for field in fields %}
+                <div class="form-group">
+                        <label>{{ field.object.name }}</label>
+                        <div class="input">
+                                {{ field.html()|raw }}
                         </div>
+                </div>
 
-                {% endfor %}
+        {% endfor %}
 
         <button type="submit">Filter</button>
 </form>

@@ -18,6 +18,7 @@ use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
+use pdaleramirez\superfilter\fields\Categories;
 use pdaleramirez\superfilter\fields\Number;
 use pdaleramirez\superfilter\fields\PlainText;
 use pdaleramirez\superfilter\models\Settings;
@@ -97,8 +98,10 @@ class SuperFilter extends Plugin
             $event->rules['super-filter/setup-search/setup-options'] = 'super-filter/setup-search/setup-options';
         });
 
+
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function (RegisterUrlRulesEvent $event) {
             $event->rules["super-filter/show-list"] = 'super-filter/elements/get-elements';
+            //$event->rules['super-filter/filter'] = 'super-filter/super-filter/filter';
         });
 
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_TYPES, function (RegisterSearchTypeEvent $event) {
@@ -108,6 +111,7 @@ class SuperFilter extends Plugin
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_FIELD_TYPES, function (RegisterSearchFieldTypeEvent $event) {
             $event->searchFieldTypes[] = new Number();
             $event->searchFieldTypes[] = new PlainText();
+            $event->searchFieldTypes[] = new Categories();
         });
     }
 

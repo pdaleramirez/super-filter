@@ -17,6 +17,9 @@ class PlainText extends SearchField
     {
         $template = $this->config['template'];
 
-        return Craft::$app->getView()->renderTemplate($template . '/fields/plaintext');
+        return Craft::$app->getView()->renderTemplate($template . '/fields/plaintext',
+            [
+               'field' => $this
+            ]);
     }
 }

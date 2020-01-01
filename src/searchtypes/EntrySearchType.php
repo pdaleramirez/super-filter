@@ -5,6 +5,9 @@ namespace pdaleramirez\superfilter\searchtypes;
 use Craft;
 use craft\elements\Category;
 use craft\elements\Entry;
+use craft\helpers\Json;
+use pdaleramirez\superfilter\base\ElementSearchField;
+use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\base\SearchType;
 use pdaleramirez\superfilter\SuperFilter;
 
@@ -75,7 +78,6 @@ class EntrySearchType extends SearchType
         $fieldObjects = $this->_getFields ?? $this->getFieldObjects();
 
         foreach ($fieldObjects as $sectionHandle => $item) {
-            //$fields[$sectionHandle] = $entryOptions['defaultSortOptions'];
             $fields[$sectionHandle]['label']    = $item['label'];
             $fields[$sectionHandle]['selected'] = [];
             $itemObjects = $item['fieldObjects'];
@@ -139,17 +141,49 @@ class EntrySearchType extends SearchType
                 // superFilterImdbRating
                 $query = $this->query->section($sectionHandle);
 
-                Craft::configure($query, [
-                   //'superFilterImdbRating' => 7,
-                    //'superFilterShowTypes'  => 'anime'
-                ]);
+                $fields = $this->params['fields'] ?? null;
+
+                $related = null;
+
+                if ($fields) {
+                    $inc = 0;
+                    foreach ($fields as $handle => $value) {
+                        $fieldObj = Craft::$app->getFields()->getFieldByHandle($handle);
+
+                        $fieldType = SuperFilter::$app->searchTypes->getSearchFieldByObj($fieldObj);
+                        $fieldType->getQueryParams($query, $value);
+
+                        $targetElement = $fieldType->getRelated($value);
+
+                        if ($targetElement) {
+                            $related[$inc]['targetElement'] = $targetElement;
+                            $related[$inc]['field']         = $handle;
+                        }
+
+
+                        $inc++;
+                    }
+                }
+
+                if ($related) {
+                    $query->relatedTo(array_merge(['and'], $related));
+                }
+//                Craft::configure($query, [
+//                    'exampleNumber' => 2
+//                ]);
+//                Craft::configure($query, [
+////                    'superFilterGenre' => [69]
+////                ]);
+                //$query->superFilterGenre = [69];
+                //$query->search('dropDo:two');
                 //$query->search('superFilterGuides:"Violent Programmes"');
                 //$query->search('superFilterImdbRating:"7"');
-               // $cat = Category::findOne(69);
-                //$query->relatedTo([$cat]);
+
                 if ($this->sortParam) {
                     $query->orderBy([$this->sortParam['attribute'] => $this->sortParam['sort']]);
                 }
+
+                $this->query = $query;
             }
         }
 
