@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\services;
 use Craft;
 use craft\base\Component;
 use craft\base\Element;
+use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\db\Paginator;
 use craft\elements\Entry;
@@ -366,7 +367,7 @@ class SearchTypes extends Component
     }
 
     /**
-     * @param FieldInterface $fieldObj
+     * @param FieldInterface|Field $fieldObj
      * @return SearchField|null
      * @throws \yii\base\Exception
      * @throws Exception
@@ -385,6 +386,18 @@ class SearchTypes extends Component
 
         $searchField->setObject($fieldObj);
         $searchField->setConfig(['template' => $template]);
+
+        $fields = $this->params['fields'] ?? null;
+
+        if ($fields) {
+            $handle = $fieldObj->handle;
+
+            $fieldValue = $fields[$handle] ?? null;
+
+            if ($fieldValue) {
+                $searchField->setValue($fieldValue);
+            }
+        }
 
         return $searchField;
     }

@@ -160,7 +160,6 @@ class EntrySearchType extends SearchType
                             $related[$inc]['field']         = $handle;
                         }
 
-
                         $inc++;
                     }
                 }

@@ -19,6 +19,7 @@ use craft\web\View;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\fields\Categories;
+use pdaleramirez\superfilter\fields\Entries;
 use pdaleramirez\superfilter\fields\Number;
 use pdaleramirez\superfilter\fields\PlainText;
 use pdaleramirez\superfilter\models\Settings;
@@ -26,7 +27,6 @@ use pdaleramirez\superfilter\searchtypes\CategorySearchType;
 use pdaleramirez\superfilter\searchtypes\EntrySearchType;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\services\SearchTypes;
-use pdaleramirez\superfilter\web\twig\variables\SearchFilterVariable;
 use pdaleramirez\superfilter\web\twig\variables\SuperFilterVariable;
 use yii\base\Event;
 use craft\web\UrlManager;
@@ -112,6 +112,7 @@ class SuperFilter extends Plugin
             $event->searchFieldTypes[] = new Number();
             $event->searchFieldTypes[] = new PlainText();
             $event->searchFieldTypes[] = new Categories();
+            $event->searchFieldTypes[] = new Entries();
         });
     }
 

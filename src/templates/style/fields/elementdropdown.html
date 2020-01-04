@@ -1,0 +1,7 @@
+<div class="field">
+    <select name="fields[{{ field.object.handle }}][]" >
+        {% for element in elements %}
+            <option {{ element.selected == true ? 'selected="selected"' : '' }} value="{{ element.id }}">{{ element.title }}</option>
+        {% endfor %}
+    </select>
+</div>

@@ -111,11 +111,8 @@ class SuperFilterVariable
 
         $params = Craft::$app->getRequest()->get();
 
-        $selected = $params['fields'] ?? null;
-
         $entryHtml = Craft::$app->getView()->renderTemplate($template . '/fields', [
-            'fields'   => $this->searchSetupService->getSearchFieldsHtml(),
-            'selected' => $selected
+            'fields'   => $this->searchSetupService->getSearchFieldsHtml()
         ]);
 
         return Template::raw($entryHtml);

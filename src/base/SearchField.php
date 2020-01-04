@@ -10,6 +10,7 @@ use yii\db\QueryInterface;
 abstract class SearchField
 {
     protected $config;
+    protected $value;
 
     /**
      * @var $object Field
@@ -47,5 +48,15 @@ abstract class SearchField
     public function getRelated($value)
     {
         return null;
+    }
+
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
     }
 }
