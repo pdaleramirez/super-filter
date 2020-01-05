@@ -22,6 +22,7 @@ use pdaleramirez\superfilter\fields\Categories;
 use pdaleramirez\superfilter\fields\Entries;
 use pdaleramirez\superfilter\fields\Number;
 use pdaleramirez\superfilter\fields\PlainText;
+use pdaleramirez\superfilter\fields\Title;
 use pdaleramirez\superfilter\models\Settings;
 use pdaleramirez\superfilter\searchtypes\CategorySearchType;
 use pdaleramirez\superfilter\searchtypes\EntrySearchType;
@@ -113,6 +114,7 @@ class SuperFilter extends Plugin
             $event->searchFieldTypes[] = new PlainText();
             $event->searchFieldTypes[] = new Categories();
             $event->searchFieldTypes[] = new Entries();
+            $event->searchFieldTypes[] = new Title();
         });
     }
 

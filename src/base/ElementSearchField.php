@@ -12,6 +12,7 @@ use craft\elements\db\ElementQuery;
 use craft\fields\Categories as CraftCategories;
 use craft\helpers\ElementHelper;
 use function GuzzleHttp\debug_resource;
+use pdaleramirez\superfilter\SuperFilter;
 use yii\db\QueryInterface;
 
 abstract class ElementSearchField extends SearchField
@@ -66,7 +67,6 @@ abstract class ElementSearchField extends SearchField
                 }
             }
         }
-
 
         return $query;
     }

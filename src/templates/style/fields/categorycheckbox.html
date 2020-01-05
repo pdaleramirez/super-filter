@@ -1,9 +1,1 @@
-<ul class="field">
-{% for element in elements %}
-
-    <li>
-        <input type="checkbox" {{ element.selected ? 'checked' : '' }} value="{{ element.id }}" name="fields[{{ field.object.handle }}][]" /> {{ element.title }}
-    </li>
-
-{% endfor %}
-</ul>
+{{ categoryHtml }}

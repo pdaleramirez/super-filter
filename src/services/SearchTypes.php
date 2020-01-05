@@ -19,6 +19,7 @@ use pdaleramirez\superfilter\contracts\SearchTypeInterface;
 use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
+use pdaleramirez\superfilter\fields\Title;
 use pdaleramirez\superfilter\SuperFilter;
 
 class SearchTypes extends Component
@@ -114,6 +115,14 @@ class SearchTypes extends Component
         }
 
         if ($field) {
+
+            foreach ($field as $handle => $item) {
+                $length = count($field[$handle]['options']);
+
+                $field[$handle]['options'][$length]['name'] = 'Title';
+                $field[$handle]['options'][$length]['id']   = 'title';
+            }
+
             $items['items'] = (array) $field;
         }
 
@@ -357,9 +366,7 @@ class SearchTypes extends Component
 
         if (count($searchFields) > 0) {
             foreach ($searchFields as $field) {
-                $fieldObj = Craft::$app->getFields()->getFieldById($field['id']);
-
-                $fields[] =  $this->getSearchFieldByObj($fieldObj);
+                $fields[] = $this->getSearchFieldObjectById($field['id']);
             }
         }
 
@@ -367,9 +374,31 @@ class SearchTypes extends Component
     }
 
     /**
+     * @param $id
+     * @return SearchField|Title|null
+     * @throws \yii\base\Exception
+     */
+    public function getSearchFieldObjectById($id)
+    {
+        if (is_string($id) && $id == 'title') {
+            $searchField = new Title();
+            $this->setSearchFieldAttributes($searchField, 'title');
+
+            return $searchField;
+        }
+
+        if (is_string($id)) {
+            $fieldObj = Craft::$app->getFields()->getFieldByHandle($id);
+        } else {
+            $fieldObj = Craft::$app->getFields()->getFieldById($id);
+        }
+
+        return  $this->getSearchFieldByObj($fieldObj);
+    }
+
+    /**
      * @param FieldInterface|Field $fieldObj
      * @return SearchField|null
-     * @throws \yii\base\Exception
      * @throws Exception
      */
     public function getSearchFieldByObj(FieldInterface $fieldObj)
@@ -382,15 +411,29 @@ class SearchTypes extends Component
             throw new Exception('Search Field Type not found.');
         }
 
-        $template = $this->getTemplate();
-
         $searchField->setObject($fieldObj);
+
+        $handle = $fieldObj->handle;
+
+        $this->setSearchFieldAttributes($searchField, $handle);
+
+        return $searchField;
+    }
+
+    /**
+     * @param SearchField $searchField
+     * @param $handle
+     * @return SearchField
+     * @throws \yii\base\Exception
+     */
+    public function setSearchFieldAttributes(SearchField $searchField, $handle)
+    {
+        $template = $this->getTemplate();
         $searchField->setConfig(['template' => $template]);
 
-        $fields = $this->params['fields'] ?? null;
+        $fields = $this->params[SuperFilter::$app->getSettings()->prefixParam] ?? null;
 
         if ($fields) {
-            $handle = $fieldObj->handle;
 
             $fieldValue = $fields[$handle] ?? null;
 

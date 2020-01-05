@@ -108,7 +108,7 @@ abstract class SearchType extends Component implements SearchTypeInterface
      */
     protected function getFieldTypes()
     {
-        $fields = $this->params['fields'] ?? null;
+        $fields = $this->params[SuperFilter::$app->getSettings()->prefixParam] ?? null;
 
         $fieldTypes = null;
 

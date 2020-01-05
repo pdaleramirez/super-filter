@@ -126,4 +126,9 @@ class SuperFilterVariable
 
         return Template::raw($searchField->getHtml());
     }
+
+    public function getSettings()
+    {
+        return SuperFilter::$app->getSettings();
+    }
 }

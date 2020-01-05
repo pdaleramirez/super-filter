@@ -8,6 +8,7 @@ use craft\db\Paginator;
 use craft\elements\Category;
 use craft\elements\db\EntryQuery;
 use craft\web\twig\variables\Paginate;
+use pdaleramirez\superfilter\models\Settings;
 
 class App extends Component
 {
@@ -148,6 +149,9 @@ class App extends Component
         return static::$pageSize;
     }
 
+    /**
+     * @return \craft\base\Model|null|Settings
+     */
     public function getSettings()
     {
         $plugin = Craft::$app->plugins->getPlugin('super-filter');
@@ -169,10 +173,5 @@ class App extends Component
         $keys = array_keys($this->getEntryTemplates());
 
         return in_array($value, $keys);
-    }
-
-    public function wamba()
-    {
-        return 'assad';
     }
 }

@@ -3,11 +3,7 @@
 namespace pdaleramirez\superfilter\searchtypes;
 
 use Craft;
-use craft\elements\Category;
 use craft\elements\Entry;
-use craft\helpers\Json;
-use pdaleramirez\superfilter\base\ElementSearchField;
-use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\base\SearchType;
 use pdaleramirez\superfilter\SuperFilter;
 
@@ -141,16 +137,15 @@ class EntrySearchType extends SearchType
                 // superFilterImdbRating
                 $query = $this->query->section($sectionHandle);
 
-                $fields = $this->params['fields'] ?? null;
+                $fields = $this->params[SuperFilter::$app->getSettings()->prefixParam] ?? null;
 
                 $related = null;
 
                 if ($fields) {
                     $inc = 0;
                     foreach ($fields as $handle => $value) {
-                        $fieldObj = Craft::$app->getFields()->getFieldByHandle($handle);
+                        $fieldType = SuperFilter::$app->searchTypes->getSearchFieldObjectById($handle);
 
-                        $fieldType = SuperFilter::$app->searchTypes->getSearchFieldByObj($fieldObj);
                         $fieldType->getQueryParams($query, $value);
 
                         $targetElement = $fieldType->getRelated($value);
