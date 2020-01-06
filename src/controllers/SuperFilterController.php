@@ -165,12 +165,17 @@ class SuperFilterController extends Controller
             unset($bodyParams[$csrf]);
         }
 
-        $fields = $bodyParams[SuperFilter::$app->getSettings()->prefixParam] ?? null;
+        $prefixParam = SuperFilter::$app->getSettings()->prefixParam;
+
+        $fields = $bodyParams[$prefixParam] ?? null;
 
         if ($fields) {
             foreach ($fields as $handle => $field) {
-                if (is_string($field) && trim($field) === '') {
-                    unset($bodyParams[SuperFilter::$app->getSettings()->prefixParam][$handle]);
+                $fieldValue = trim($field);
+                $bodyParams[$prefixParam][$handle] = $fieldValue;
+
+                if (is_string($field) && $fieldValue === '') {
+                    unset($bodyParams[$prefixParam][$handle]);
                 }
             }
         }

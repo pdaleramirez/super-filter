@@ -3,10 +3,12 @@
 namespace pdaleramirez\superfilter\fields;
 
 use Craft;
+use craft\elements\db\ElementQuery;
 use craft\fields\PlainText as PlainTextCraft;
 use pdaleramirez\superfilter\base\SearchField;
 use phpDocumentor\Reflection\Types\Static_;
 use stdClass;
+use yii\db\QueryInterface;
 
 class Title extends SearchField
 {
@@ -21,6 +23,15 @@ class Title extends SearchField
     public function fieldType()
     {
         return static::class;
+    }
+
+    /**
+     * @param QueryInterface|ElementQuery $query
+     * @param $value
+     */
+    public function getQueryParams(QueryInterface $query, $value)
+    {
+        $query->search("title:*$value*");
     }
 
     public function getHtml()

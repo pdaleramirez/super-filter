@@ -144,7 +144,7 @@ class EntrySearchType extends SearchType
                 if ($fields) {
                     $inc = 0;
                     foreach ($fields as $handle => $value) {
-                        $fieldType = SuperFilter::$app->searchTypes->getSearchFieldObjectById($handle);
+                        $fieldType = SuperFilter::$app->searchTypes->getSearchFieldObjectById($handle, true);
 
                         $fieldType->getQueryParams($query, $value);
 
@@ -162,6 +162,7 @@ class EntrySearchType extends SearchType
                 if ($related) {
                     $query->relatedTo(array_merge(['and'], $related));
                 }
+
 //                Craft::configure($query, [
 //                    'exampleNumber' => 2
 //                ]);

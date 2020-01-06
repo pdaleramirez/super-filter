@@ -373,13 +373,16 @@ class SearchTypes extends Component
         return $fields;
     }
 
+
     /**
      * @param $id
+     * @param bool $handle
      * @return SearchField|Title|null
      * @throws \yii\base\Exception
      */
-    public function getSearchFieldObjectById($id)
+    public function getSearchFieldObjectById($id, $handle = false)
     {
+        $fieldObj = null;
         if (is_string($id) && $id == 'title') {
             $searchField = new Title();
             $this->setSearchFieldAttributes($searchField, 'title');
@@ -387,7 +390,7 @@ class SearchTypes extends Component
             return $searchField;
         }
 
-        if (is_string($id)) {
+        if ($handle == true) {
             $fieldObj = Craft::$app->getFields()->getFieldByHandle($id);
         } else {
             $fieldObj = Craft::$app->getFields()->getFieldById($id);
