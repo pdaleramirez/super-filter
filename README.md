@@ -1,4 +1,4 @@
-# Search Filter plugin for Craft CMS 3.x
+# Super Filter plugin for Craft CMS 3.x
 
 Search elements with filter using Vue JS
 
@@ -22,7 +22,7 @@ To install the plugin, follow these instructions.
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Search Filter.
 
-## Search Filter Overview
+## Super Filter Overview
 
 -Insert text here-
 
@@ -30,11 +30,11 @@ To install the plugin, follow these instructions.
 
 -Insert text here-
 
-## Using Search Filter
+## Using Super Filter
 
 -Insert text here-
 
-## Search Filter Roadmap
+## Super Filter Roadmap
 
 Some things to do, and ideas for potential features:
 
