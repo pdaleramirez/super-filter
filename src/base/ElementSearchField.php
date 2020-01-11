@@ -2,17 +2,11 @@
 
 namespace pdaleramirez\superfilter\base;
 
-use barrelstrength\sproutreportscommerce\integrations\sproutreports\datasources\CommerceProductRevenueDataSource;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
-use craft\db\mysql\QueryBuilder;
-use craft\elements\Category;
-use craft\elements\db\ElementQuery;
 use craft\fields\Categories as CraftCategories;
 use craft\helpers\ElementHelper;
-use function GuzzleHttp\debug_resource;
-use pdaleramirez\superfilter\SuperFilter;
 use yii\db\QueryInterface;
 
 abstract class ElementSearchField extends SearchField

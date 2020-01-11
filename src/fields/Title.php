@@ -28,10 +28,11 @@ class Title extends SearchField
     /**
      * @param QueryInterface|ElementQuery $query
      * @param $value
+     * @return ElementQuery
      */
     public function getQueryParams(QueryInterface $query, $value)
     {
-        $query->search("title:*$value*");
+        return $query->search("title:*$value*");
     }
 
     public function getHtml()

@@ -171,7 +171,7 @@ class SuperFilterController extends Controller
 
         if ($fields) {
             foreach ($fields as $handle => $field) {
-                $fieldValue = trim($field);
+                $fieldValue = is_string($field) ? trim($field) : $field;
                 $bodyParams[$prefixParam][$handle] = $fieldValue;
 
                 if (is_string($field) && $fieldValue === '') {

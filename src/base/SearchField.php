@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\base;
 use Craft;
 use craft\base\Field;
 use craft\base\FieldInterface;
+use craft\elements\db\ElementQuery;
 use yii\db\QueryInterface;
 
 abstract class SearchField
@@ -36,6 +37,13 @@ abstract class SearchField
     }
 
     abstract function fieldType();
+
+    /**
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     abstract function getHtml();
 
     public function getQueryParams(QueryInterface $query, $value)
@@ -46,6 +54,11 @@ abstract class SearchField
     }
 
     public function getRelated($value)
+    {
+        return null;
+    }
+
+    public function getSearchParams($value)
     {
         return null;
     }

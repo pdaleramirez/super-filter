@@ -19,6 +19,7 @@ use craft\web\View;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\fields\Categories;
+use pdaleramirez\superfilter\fields\Dropdown;
 use pdaleramirez\superfilter\fields\Entries;
 use pdaleramirez\superfilter\fields\Number;
 use pdaleramirez\superfilter\fields\PlainText;
@@ -110,11 +111,12 @@ class SuperFilter extends Plugin
             $event->searchTypes['category'] = new CategorySearchType();
         });
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_FIELD_TYPES, function (RegisterSearchFieldTypeEvent $event) {
+            $event->searchFieldTypes[] = new Title();
             $event->searchFieldTypes[] = new Number();
             $event->searchFieldTypes[] = new PlainText();
             $event->searchFieldTypes[] = new Categories();
             $event->searchFieldTypes[] = new Entries();
-            $event->searchFieldTypes[] = new Title();
+            $event->searchFieldTypes[] = new Dropdown();
         });
     }
 

@@ -8,14 +8,11 @@ use craft\base\Element;
 use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\db\Paginator;
-use craft\elements\Entry;
 use craft\helpers\Json;
-use craft\helpers\Template;
 use craft\web\twig\variables\Paginate;
 use Exception;
 use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\base\SearchType;
-use pdaleramirez\superfilter\contracts\SearchTypeInterface;
 use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
@@ -60,6 +57,11 @@ class SearchTypes extends Component
         return $event->searchFieldTypes;
     }
 
+    /**
+     * @param SetupSearch|null $setupSearch
+     * @return mixed
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getItemFormat(SetupSearch $setupSearch = null)
     {
         $selected = [];
@@ -117,10 +119,7 @@ class SearchTypes extends Component
         if ($field) {
 
             foreach ($field as $handle => $item) {
-                $length = count($field[$handle]['options']);
-
-                $field[$handle]['options'][$length]['name'] = 'Title';
-                $field[$handle]['options'][$length]['id']   = 'title';
+                array_unshift($field[$handle]['options'], ['name' => 'Title', 'id' => 'title']);
             }
 
             $items['items'] = (array) $field;
@@ -312,7 +311,6 @@ class SearchTypes extends Component
 
     public function getPaginator($config)
     {
-
         $searchTypeRef = $config['element'];
 
         $searchType = $this->getSearchTypeByRef($searchTypeRef);
@@ -379,6 +377,8 @@ class SearchTypes extends Component
      * @param bool $handle
      * @return SearchField|Title|null
      * @throws \yii\base\Exception
+     * @throws Exception
+     *
      */
     public function getSearchFieldObjectById($id, $handle = false)
     {

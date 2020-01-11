@@ -123,6 +123,10 @@ class EntrySearchType extends SearchType
         return $this->_getFields;
     }
 
+    /**
+     * @return \craft\elements\db\ElementQuery|\craft\elements\db\ElementQueryInterface|\craft\elements\db\EntryQuery
+     * @throws \yii\base\Exception
+     */
     public function getQuery()
     {
         if ($this->query === null) {
@@ -133,20 +137,24 @@ class EntrySearchType extends SearchType
             $sectionHandle = $filter['container'] ?? null;
 
             if ($sectionHandle) {
-                // elements.dateCreated
-                // superFilterImdbRating
                 $query = $this->query->section($sectionHandle);
 
                 $fields = $this->params[SuperFilter::$app->getSettings()->prefixParam] ?? null;
 
                 $related = null;
-
+                $searchQuery = null;
                 if ($fields) {
                     $inc = 0;
                     foreach ($fields as $handle => $value) {
                         $fieldType = SuperFilter::$app->searchTypes->getSearchFieldObjectById($handle, true);
 
                         $fieldType->getQueryParams($query, $value);
+
+                        $searchParams = $fieldType->getSearchParams($value);
+
+                        if ($searchParams) {
+                            $searchQuery[$inc]= $searchParams;
+                        }
 
                         $targetElement = $fieldType->getRelated($value);
 
@@ -157,6 +165,10 @@ class EntrySearchType extends SearchType
 
                         $inc++;
                     }
+                }
+
+                if ($searchQuery) {
+                    $query->search(implode(' OR ', $searchQuery));
                 }
 
                 if ($related) {
