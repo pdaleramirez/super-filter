@@ -19,8 +19,8 @@ abstract class SearchType extends Component implements SearchTypeInterface
     protected $options = null;
     protected $items = null;
     protected $sorts = null;
-    protected $sortParam = null;
-    protected $params = null;
+    public $sortParam = null;
+    public $params = null;
     /**
      * @var $query ElementQuery
      */

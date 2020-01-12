@@ -89,12 +89,14 @@ class CategorySearchType extends SearchType
         if ($this->query === null) {
             $this->query = Category::find();
 
-            $filter = $this->getElementFilter();
+            $filter = $this->items;
 
             $groupHandle = $filter['container']['selected'] ?? null;
 
             if ($groupHandle) {
-                $this->query->group($groupHandle);
+                $query = $this->query->group($groupHandle);
+
+                $this->query = $query;
             }
         }
 

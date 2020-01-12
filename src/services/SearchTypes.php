@@ -320,7 +320,9 @@ class SearchTypes extends Component
         $searchType->setSorts($config['sorts']);
         $searchType->setParams($this->params);
 
-        $paginator = new Paginator($searchType->getQuery(), [
+        $elementQuery = $this->elementQuery($searchType);
+
+        $paginator = new Paginator($elementQuery, [
             'currentPage' => $config['currentPage'],
             'pageSize'    => $config['options']['perPage']
         ]);
@@ -493,5 +495,62 @@ class SearchTypes extends Component
         }
 
         return $template;
+    }
+
+    /**
+     * @param SearchType $searchType
+     * @return \craft\elements\db\ElementQuery
+     * @throws \yii\base\Exception
+     */
+    private function elementQuery(SearchType $searchType)
+    {
+        $query = $searchType->getQuery();
+
+        $fields = $searchType->params[SuperFilter::$app->getSettings()->prefixParam] ?? null;
+
+        $related = null;
+        $searchQuery = null;
+        if ($fields) {
+            $inc = 0;
+            foreach ($fields as $handle => $value) {
+                $fieldType = SuperFilter::$app->searchTypes->getSearchFieldObjectById($handle, true);
+
+                $fieldType->getQueryParams($query, $value);
+
+                $searchParams = $fieldType->getSearchParams($value);
+
+                if ($searchParams) {
+                    $searchQuery[$inc]= $searchParams;
+                }
+
+                $targetElement = $fieldType->getRelated($value);
+
+                if ($targetElement) {
+                    $related[$inc]['targetElement'] = $targetElement;
+                    $related[$inc]['field']         = $handle;
+                }
+
+                $inc++;
+            }
+        }
+
+        $operator = SuperFilter::$app->getSettings()->operator;
+        $operator = strtolower($operator);
+
+        if ($searchQuery) {
+            $searchOperator = $operator == 'and' ? ' ' : ' OR ';
+            $query->search(implode($searchOperator, $searchQuery));
+        }
+
+
+        if ($related) {
+            $query->relatedTo(array_merge([$operator], $related));
+        }
+
+        if ($searchType->sortParam) {
+            $query->orderBy([$this->sortParam['attribute'] => $this->sortParam['sort']]);
+        }
+
+        return $query;
     }
 }

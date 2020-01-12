@@ -38,7 +38,7 @@ class Dropdown extends SearchField
             foreach ($object->options as $key => $option) {
                 $selected = false;
                 $value = $this->value ?? null;
-                if ($value && $option['value'] == $value) {
+                if ($value && isset($option['value']) && $option['value'] == $value) {
                     $selected = true;
                 }
 

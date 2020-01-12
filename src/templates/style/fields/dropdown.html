@@ -1,10 +1,20 @@
+{%- set hasOptgroups = false -%}
 <div class="field">
     {% if field.object.options %}
         <select name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}]" >
                 <option value="">{{ "None"|t  }}</option>
             {% for option in options %}
-                <option  {{ option.selected == true ? 'selected="selected"' : '' }}
-                        value="{{ option.value }}">{{ option.label }}</option>
+                {% if option.optgroup is defined %}
+                        {% if hasOptgroups %}
+                                </optgroup>
+                        {% else %}
+                                {% set hasOptgroups = true %}
+                        {% endif %}
+                        <optgroup label="{{ option.optgroup }}">
+                {% else %}
+                        <option  {{ option.selected == true ? 'selected="selected"' : '' }}
+                                value="{{ option.value }}">{{ option.label }}</option>
+                {% endif %}
             {% endfor %}
         </select>
     {% endif %}

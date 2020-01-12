@@ -9,7 +9,8 @@ class Settings extends Model
 {
     public $name = null;
     public $entryTemplate = null;
-    public $prefixParam = 'fs';
+    public $prefixParam = 'fields';
+    public $operator    = 'and';
 
     public function getSettingsNavItems(): array
     {

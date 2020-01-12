@@ -139,57 +139,6 @@ class EntrySearchType extends SearchType
             if ($sectionHandle) {
                 $query = $this->query->section($sectionHandle);
 
-                $fields = $this->params[SuperFilter::$app->getSettings()->prefixParam] ?? null;
-
-                $related = null;
-                $searchQuery = null;
-                if ($fields) {
-                    $inc = 0;
-                    foreach ($fields as $handle => $value) {
-                        $fieldType = SuperFilter::$app->searchTypes->getSearchFieldObjectById($handle, true);
-
-                        $fieldType->getQueryParams($query, $value);
-
-                        $searchParams = $fieldType->getSearchParams($value);
-
-                        if ($searchParams) {
-                            $searchQuery[$inc]= $searchParams;
-                        }
-
-                        $targetElement = $fieldType->getRelated($value);
-
-                        if ($targetElement) {
-                            $related[$inc]['targetElement'] = $targetElement;
-                            $related[$inc]['field']         = $handle;
-                        }
-
-                        $inc++;
-                    }
-                }
-
-                if ($searchQuery) {
-                    $query->search(implode(' OR ', $searchQuery));
-                }
-
-                if ($related) {
-                    $query->relatedTo(array_merge(['and'], $related));
-                }
-
-//                Craft::configure($query, [
-//                    'exampleNumber' => 2
-//                ]);
-//                Craft::configure($query, [
-////                    'superFilterGenre' => [69]
-////                ]);
-                //$query->superFilterGenre = [69];
-                //$query->search('dropDo:two');
-                //$query->search('superFilterGuides:"Violent Programmes"');
-                //$query->search('superFilterImdbRating:"7"');
-
-                if ($this->sortParam) {
-                    $query->orderBy([$this->sortParam['attribute'] => $this->sortParam['sort']]);
-                }
-
                 $this->query = $query;
             }
         }
