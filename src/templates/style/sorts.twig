@@ -2,7 +2,7 @@
 <form method="post">
     {{ csrfInput() }}
     {{ actionInput('super-filter/super-filter/filter') }}
-        <select name="sort">
+        <select v-model='params.sort' name="sort">
                 {% for item in sorts %}
                         {% set orderAsc = item.orderBy ~ '-asc' %}
                         <option {{ selected == orderAsc ? 'selected' : ''  }} value="{{ orderAsc }}">
@@ -15,5 +15,11 @@
                         </option>
                 {% endfor %}
         </select>
-    <button type="submit">Sort</button>
+
+
+    {% if options.enableVue %}
+        <button @click="submitSort" type="button">Sort</button>
+    {% else %}
+        <button type="submit">Sort</button>
+    {% endif %}
 </form>

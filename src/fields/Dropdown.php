@@ -11,6 +11,7 @@ use yii\db\QueryInterface;
 
 class Dropdown extends SearchField
 {
+    public $initValue = '';
     public function fieldType()
     {
         return DropdownCraft::class;
@@ -59,5 +60,10 @@ class Dropdown extends SearchField
         $handle = $this->object->handle;
 
         return "$handle::'$value'";
+    }
+
+    public function getInitValue()
+    {
+        return '';
     }
 }

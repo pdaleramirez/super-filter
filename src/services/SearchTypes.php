@@ -117,8 +117,17 @@ class SearchTypes extends Component
         }
 
         if ($field) {
-
             foreach ($field as $handle => $item) {
+                foreach ($field[$handle]['options'] as $key => $attribute) {
+                    $id = $attribute['id'];
+
+                    $fieldObj = Craft::$app->getFields()->getFieldById($id);
+
+                    if ($this->getSearchFieldByObj($fieldObj) == null) {
+                        unset($field[$handle]['options'][$key]);
+                    }
+                }
+
                 array_unshift($field[$handle]['options'], ['name' => 'Title', 'id' => 'title']);
             }
 
@@ -253,21 +262,18 @@ class SearchTypes extends Component
         return null;
     }
 
-    public function getSearchSetup($options)
+
+    public function setSearchSetup($options)
     {
         $config = [];
         $config['element']     = null;
         $config['options']     = [];
         $config['items']       = [];
         $config['sorts']       = [];
+        $config['currentPage'] = 1;
+        $config['params'] = [];
 
-        if (!is_array($options)) {
-            $config = $this->getConfigById($options);
-        } else {
-            $config = array_merge($config, $options);
-        }
-
-        $config['currentPage'] = Craft::$app->getRequest()->getPageNum();
+        $config = array_merge($config, $options);
 
         $this->getPaginator($config);
 
@@ -286,14 +292,23 @@ class SearchTypes extends Component
         return $this->config;
     }
 
+    /**
+     * @param $id
+     * @return |null
+     * @throws Exception
+     */
     public function getConfigById($id)
     {
         $config = null;
-
+        $searchSetup = null;
         if (is_int($id)) {
             $searchSetup = Craft::$app->getElements()->getElementById($id, SetupSearch::class);
         } elseif (is_string($id)) {
             $searchSetup = SetupSearch::find()->where(['handle' => $id])->one();
+        }
+
+        if ($searchSetup == null) {
+            throw new \Exception('Invalid id or handle given.');
         }
 
         /**
@@ -318,7 +333,7 @@ class SearchTypes extends Component
         $searchType->setOptions($config['options']);
         $searchType->setItems($config['items']);
         $searchType->setSorts($config['sorts']);
-        $searchType->setParams($this->params);
+        $searchType->setParams($config['params']);
 
         $elementQuery = $this->elementQuery($searchType);
 
@@ -359,7 +374,7 @@ class SearchTypes extends Component
      * @return array|null
      * @throws \yii\base\Exception
      */
-    public function getSearchFieldsHtml()
+    public function getSearchFieldsObjects()
     {
         $fields = null;
         $searchFields = $this->getDisplaySearchFields();
@@ -413,7 +428,7 @@ class SearchTypes extends Component
         $searchField = $this->getSearchFieldType($type);
 
         if ($searchField == null) {
-            throw new Exception('Search Field Type not found.');
+            return null;
         }
 
         $searchField->setObject($fieldObj);
@@ -548,7 +563,7 @@ class SearchTypes extends Component
         }
 
         if ($searchType->sortParam) {
-            $query->orderBy([$this->sortParam['attribute'] => $this->sortParam['sort']]);
+            $query->orderBy([$searchType->sortParam['attribute'] => $searchType->sortParam['sort']]);
         }
 
         return $query;

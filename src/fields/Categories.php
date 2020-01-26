@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\fields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\base\FieldInterface;
 use craft\elements\Category;
 use craft\fields\Categories as CraftCategories;
 use craft\helpers\ElementHelper;
@@ -46,6 +47,18 @@ class Categories extends ElementSearchField
 
         return $query;
     }
+
+    public function setObject(FieldInterface $object)
+    {
+        parent::setObject($object);
+
+        $limit = $object->branchLimit;
+
+        if ($limit == 1) {
+            $this->initValue = '';
+        }
+    }
+
 
     /**
      * @return string
@@ -98,7 +111,7 @@ class Categories extends ElementSearchField
                 $selected = true;
             }
             $checked = ($selected)? 'checked' : '';
-            $html.= '<li> <input type="checkbox" ' . $checked . '  
+            $html.= '<li> <input v-model="params.fields.' . $this->object->handle . '" type="checkbox" ' . $checked . '  
                                  name="' . SuperFilter::$app->getSettings()->prefixParam . '[' . $this->object->handle . '][]" 
                                    value="' . $category->id . '" /> ' . $category->title;
             $children = $category->getChildren();

@@ -1,6 +1,8 @@
 <?php
 namespace pdaleramirez\superfilter\controllers;
 
+use craft\commerce\elements\Product;
+use craft\commerce\Plugin;
 use craft\elements\Entry;
 use craft\errors\InvalidPluginException;
 use craft\fields\Dropdown;
@@ -177,6 +179,10 @@ class SuperFilterController extends Controller
                 if (is_string($field) && $fieldValue === '') {
                     unset($bodyParams[$prefixParam][$handle]);
                 }
+            }
+
+            if (isset($bodyParams['reset'])) {
+                $bodyParams[$prefixParam] = [];
             }
         }
 

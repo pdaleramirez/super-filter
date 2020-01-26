@@ -1,6 +1,6 @@
 {% for element in elements %}
     <div class="field">
-        <input type="checkbox" {{ element.selected ? 'checked' : '' }}
+        <input v-model="params.fields.{{ field.object.handle }}" type="checkbox" {{ element.selected ? 'checked' : '' }}
                value="{{ element.id }}"
                name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}][]" /> {{ element.title }}
     </div>

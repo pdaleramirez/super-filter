@@ -58,7 +58,6 @@ abstract class SearchType extends Component implements SearchTypeInterface
             $this->sortParam['attribute'] = $sort[0];
             $this->sortParam['sort'] = $sort[1] === 'desc' ? SORT_DESC : SORT_ASC;
         }
-
     }
 
     public function getContainer()

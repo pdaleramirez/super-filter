@@ -10,8 +10,10 @@
                                 {{ field.html()|raw }}
                         </div>
                 </div>
-
         {% endfor %}
-
-        <button type="submit">Filter</button>
+        {% if options.enableVue %}
+            <button @click="submitFilter" type="button">Filter</button> <button type="button" name="reset" value="1">Clear</button>
+        {% else %}
+            <button type="submit">Filter</button> <button type="submit" name="reset" value="1">Clear</button>
+        {% endif %}
 </form>

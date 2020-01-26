@@ -1,11 +1,9 @@
-import BootstrapVue from 'bootstrap-vue'
-
 window.axios = require('axios');
 window.Vue = require('vue');
-
+import Paginate from 'vuejs-paginate'
 let qs = require('qs');
 
-Vue.use(BootstrapVue);
+Vue.component('paginate', Paginate)
 Vue.component('search-list', {
     name: "SearchList",
     template: `#search-list`,
@@ -114,15 +112,15 @@ Vue.component('search-list', {
         }
     },
     mounted() {
-        if (this.config.currentPage != null) {
-            this.currentPage = this.config.currentPage;
-        }
-
-        if (this.config.category != null) {
-            this.category = this.config.category;
-        }
-
-        this.getItems();
+        // if (this.config.currentPage != null) {
+        //     this.currentPage = this.config.currentPage;
+        // }
+        //
+        // if (this.config.category != null) {
+        //     this.category = this.config.category;
+        // }
+        console.log('fasdf')
+       // this.getItems();
     },
     computed: {
         totalRows() {
@@ -137,3 +135,64 @@ Vue.component('search-list', {
     }
 });
 
+let app = new Vue({
+    el: "#search-app",
+    delimiters: ['${', '}'],
+    data: {
+        handle: superFilterHandle,
+        params: {
+            sort: null,
+            fields: []
+        },
+        items: [],
+        config: []
+    },
+    methods: {
+        submitFilter() {
+            let data = {
+                handle: this.handle,
+                params: this.params,
+                config: this.config
+            };
+
+            data[csrfTokenName] = csrfTokenValue;
+            axios.post('/super-filter/filter', qs.stringify(data))
+                .then(({data}) => {
+                    this.items  = data.items;
+                    this.config = data.config;
+                });
+        },
+        submitSort() {
+
+        },
+        onPaginate(pageNum) {
+            this.config.currentPage = pageNum;
+
+            this.submitFilter();
+
+        },
+        getFields() {
+            let data = {
+                handle: this.handle,
+                params: this.params,
+                config: this.config
+            };
+
+            data[csrfTokenName] = csrfTokenValue;
+            axios.post('/super-filter/fields', qs.stringify(data))
+                .then(({data}) => {
+                    this.params = {...this.params, ...data.params};
+                    this.items  = data.items;
+                    this.config = data.config;
+                });
+        }
+    },
+    mounted() {
+        let parse = JSON.parse(superFilterParams);
+
+        this.params = {...this.params, ...parse};
+        this.config.currentPage = Number(superFilterCurrentPage);
+
+        this.getFields();
+    }
+});

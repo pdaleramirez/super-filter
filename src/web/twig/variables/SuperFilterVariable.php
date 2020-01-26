@@ -20,16 +20,36 @@ class SuperFilterVariable
 
     /**
      * @param $handle
+     * @return \Twig\Markup
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\base\InvalidConfigException
+     * @throws \Exception
      */
     public function setup($handle)
     {
-        Craft::$app->getView()->registerAssetBundle(VueAsset::class, 1);
+        Craft::$app->getView()->registerAssetBundle(VueAsset::class);
 
-        $params = Craft::$app->getRequest()->getQueryParams();
+        $config = SuperFilter::$app->searchTypes->getConfigById($handle);
+        $config['currentPage'] = Craft::$app->getRequest()->getPageNum();
+        $config['params'] = Craft::$app->getRequest()->getQueryParams();
 
-        SuperFilter::$app->searchTypes->setParams($params);
-        $this->searchSetupService = SuperFilter::$app->searchTypes->getSearchSetup($handle);
+        $this->searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
+
+        $prevPath = Craft::$app->getView()->getTemplatesPath();
+
+        $alias = Craft::getAlias('@superfilter/templates');
+
+        Craft::$app->getView()->setTemplatesPath($alias);
+
+        $entryHtml = Craft::$app->getView()->renderTemplate('setup', [
+            'handle' => $handle
+        ]);
+
+        Craft::$app->getView()->setTemplatesPath($prevPath);
+
+        return Template::raw($entryHtml);
     }
 
     public function getTemplate()
@@ -42,31 +62,19 @@ class SuperFilterVariable
     }
 
     /**
-     * @return \Twig\Markup|null
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\Exception
+     * @return \Twig\Markup
      */
     public function getItems()
     {
         $items   = $this->searchSetupService->getItems();
 
-        $template = $this->getTemplate();
-
-        $entryHtml = Craft::$app->getView()->renderTemplate($template . '/items', [
+        return $this->renderTemplate('items', [
             'items' => $items
         ]);
-
-        return Template::raw($entryHtml);
     }
 
     /**
      * @return \Twig\Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\InvalidConfigException
      * @throws Exception
      */
     public function getPaginateLinks()
@@ -75,47 +83,32 @@ class SuperFilterVariable
             throw new Exception('Need to call craft.superFilter.setup(\'handle\') to get results.');
         }
 
-        Craft::$app->getView()->registerAssetBundle(VueAsset::class, 1);
-
-        $alias = Craft::getAlias('@superfilter/templates');
-
-        Craft::$app->getView()->setTemplatesPath($alias);
-
-        $html = Craft::$app->getView()->renderTemplate('pagination', [
+        return $this->renderTemplate('pagination', [
             'pageInfo' => $this->searchSetupService->getLinks()
         ]);
-
-        return Template::raw($html);
     }
 
     public function displaySortOptions()
     {
         $sorts = $this->searchSetupService->getDisplaySortOptions();
-
-        $template = $this->getTemplate();
-
         $params = Craft::$app->getRequest()->getQueryParams();
         $selected = $params['sort'] ?? null;
 
-        $entryHtml = Craft::$app->getView()->renderTemplate($template . '/sorts', [
+        return $this->renderTemplate('sorts', [
             'sorts'    => $sorts,
             'selected' => $selected
         ]);
-
-        return Template::raw($entryHtml);
     }
 
+    /**
+     * @return \Twig\Markup
+     * @throws \yii\base\Exception
+     */
     public function displaySearchFields()
     {
-        $template = $this->getTemplate();
-
-        $params = Craft::$app->getRequest()->get();
-
-        $entryHtml = Craft::$app->getView()->renderTemplate($template . '/fields', [
-            'fields'   => $this->searchSetupService->getSearchFieldsHtml()
+        return $this->renderTemplate('fields', [
+            'fields'   => $this->searchSetupService->getSearchFieldsObjects()
         ]);
-
-        return Template::raw($entryHtml);
     }
 
     public function getSearchField($handle)
@@ -130,5 +123,20 @@ class SuperFilterVariable
     public function getSettings()
     {
         return SuperFilter::$app->getSettings();
+    }
+
+    private function renderTemplate($file, $variables = [])
+    {
+        $template = $this->getTemplate();
+
+        $config  = $this->searchSetupService->getConfig();
+
+        $options = $config['options'];
+
+        $html = Craft::$app->getView()->renderTemplate($template . '/' . $file, array_merge($variables, [
+            'options'  => $options
+        ]));
+
+        return Template::raw($html);
     }
 }

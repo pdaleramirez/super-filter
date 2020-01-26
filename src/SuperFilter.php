@@ -103,7 +103,8 @@ class SuperFilter extends Plugin
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function (RegisterUrlRulesEvent $event) {
             $event->rules["super-filter/show-list"] = 'super-filter/elements/get-elements';
-            //$event->rules['super-filter/filter'] = 'super-filter/super-filter/filter';
+            $event->rules['super-filter/filter']    = 'super-filter/elements/filter';
+            $event->rules['super-filter/fields']    = 'super-filter/elements/get-fields';
         });
 
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_TYPES, function (RegisterSearchTypeEvent $event) {

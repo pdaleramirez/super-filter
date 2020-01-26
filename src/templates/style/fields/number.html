@@ -1,1 +1,1 @@
-<input type="number" name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}]" value="{{ field.value() }}" />
+<input v-model="params.fields.{{ field.object.handle }}" type="number" name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}]" value="{{ field.value() }}" />

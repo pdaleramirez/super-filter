@@ -12,7 +12,7 @@ abstract class SearchField
 {
     protected $config;
     protected $value;
-
+    public $initValue = [];
     /**
      * @var $object Field
      */
