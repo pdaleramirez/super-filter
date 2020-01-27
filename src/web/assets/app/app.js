@@ -264,12 +264,16 @@ var app = new Vue({
   delimiters: ['${', '}'],
   data: {
     handle: superFilterHandle,
-    params: {
-      sort: null,
-      fields: []
-    },
     items: [],
-    config: []
+    links: {
+      totalPages: 1
+    },
+    config: {
+      params: {
+        sort: null,
+        fields: []
+      }
+    }
   },
   methods: {
     submitFilter: function submitFilter() {
@@ -277,14 +281,12 @@ var app = new Vue({
 
       var data = {
         handle: this.handle,
-        params: this.params,
         config: this.config
       };
       data[csrfTokenName] = csrfTokenValue;
-      axios.post('/super-filter/filter', qs.stringify(data)).then(function (_ref3) {
-        var data = _ref3.data;
-        _this3.items = data.items;
-        _this3.config = data.config;
+      axios.post('/super-filter/filter', qs.stringify(data)).then(function (response) {
+        _this3.items = response.data.items;
+        _this3.links = response.data.links;
       });
     },
     submitSort: function submitSort() {},
@@ -297,21 +299,21 @@ var app = new Vue({
 
       var data = {
         handle: this.handle,
-        params: this.params,
+        //params: this.params,
         config: this.config
       };
       data[csrfTokenName] = csrfTokenValue;
-      axios.post('/super-filter/fields', qs.stringify(data)).then(function (_ref4) {
-        var data = _ref4.data;
-        _this4.params = _objectSpread({}, _this4.params, {}, data.params);
-        _this4.items = data.items;
+      axios.post('/super-filter/fields', qs.stringify(data)).then(function (_ref3) {
+        var data = _ref3.data;
         _this4.config = data.config;
+        _this4.items = data.items;
+        _this4.links = data.links;
       });
     }
   },
   mounted: function mounted() {
     var parse = JSON.parse(superFilterParams);
-    this.params = _objectSpread({}, this.params, {}, parse);
+    this.config.params = _objectSpread({}, this.config.params, {}, parse);
     this.config.currentPage = Number(superFilterCurrentPage);
     this.getFields();
   }

@@ -43,9 +43,9 @@
 {% endif %}
 
 
-<paginate
+<paginate v-if="links.totalPages"
         v-model="config.currentPage"
-        :page-count="20"
+        :page-count="links.totalPages"
         :page-range="3"
         :margin-pages="2"
         :click-handler="onPaginate"

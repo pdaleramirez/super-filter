@@ -140,26 +140,30 @@ let app = new Vue({
     delimiters: ['${', '}'],
     data: {
         handle: superFilterHandle,
-        params: {
-            sort: null,
-            fields: []
-        },
         items: [],
-        config: []
+        links: {
+            totalPages: 1
+        },
+        config: {
+            params: {
+                sort: null,
+                fields: []
+            }
+        }
     },
     methods: {
         submitFilter() {
+
             let data = {
                 handle: this.handle,
-                params: this.params,
                 config: this.config
             };
 
             data[csrfTokenName] = csrfTokenValue;
             axios.post('/super-filter/filter', qs.stringify(data))
-                .then(({data}) => {
-                    this.items  = data.items;
-                    this.config = data.config;
+                .then((response) => {
+                    this.items  = response.data.items;
+                    this.links  = response.data.links;
                 });
         },
         submitSort() {
@@ -174,23 +178,23 @@ let app = new Vue({
         getFields() {
             let data = {
                 handle: this.handle,
-                params: this.params,
+                //params: this.params,
                 config: this.config
             };
 
             data[csrfTokenName] = csrfTokenValue;
             axios.post('/super-filter/fields', qs.stringify(data))
                 .then(({data}) => {
-                    this.params = {...this.params, ...data.params};
-                    this.items  = data.items;
                     this.config = data.config;
+                    this.items  = data.items;
+                    this.links  = data.links;
                 });
         }
     },
     mounted() {
         let parse = JSON.parse(superFilterParams);
 
-        this.params = {...this.params, ...parse};
+        this.config.params = {...this.config.params, ...parse};
         this.config.currentPage = Number(superFilterCurrentPage);
 
         this.getFields();

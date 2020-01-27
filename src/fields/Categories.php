@@ -111,7 +111,7 @@ class Categories extends ElementSearchField
                 $selected = true;
             }
             $checked = ($selected)? 'checked' : '';
-            $html.= '<li> <input v-model="params.fields.' . $this->object->handle . '" type="checkbox" ' . $checked . '  
+            $html.= '<li> <input v-model="config.params.fields.' . $this->object->handle . '" type="checkbox" ' . $checked . '  
                                  name="' . SuperFilter::$app->getSettings()->prefixParam . '[' . $this->object->handle . '][]" 
                                    value="' . $category->id . '" /> ' . $category->title;
             $children = $category->getChildren();

@@ -1,7 +1,7 @@
 {%- set hasOptgroups = false -%}
 <div class="field">
     {% if field.object.options %}
-        <select v-model="params.fields.{{ field.object.handle }}" name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}]" >
+        <select v-model="config.params.fields.{{ field.object.handle }}" name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}]" >
                 <option value="">{{ "None"|t  }}</option>
             {% for option in options %}
                 {% if option.optgroup is defined %}

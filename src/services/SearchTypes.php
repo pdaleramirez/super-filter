@@ -26,6 +26,10 @@ class SearchTypes extends Component
 
     protected $config;
     protected $items;
+
+    /**
+     * @var Paginate $links
+     */
     protected $links;
     protected $params;
 
@@ -342,7 +346,7 @@ class SearchTypes extends Component
             'pageSize'    => $config['options']['perPage']
         ]);
 
-        $this->links = Paginate::create($paginator);;
+        $this->links = Paginate::create($paginator);
         $this->items = $paginator->getPageResults();
     }
 

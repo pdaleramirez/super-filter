@@ -53,9 +53,11 @@ class ElementsController extends Controller
             }
         }
 
+       $config['params']['fields'] = $fields;
         return Json::encode([
-          'params' => ['fields' => $fields],
+        //  'params' => ['fields' => $fields],
           'config' => $config,
+          'links'  => $searchSetupService->getLinks(),
           'items'  => $searchSetupService->getItems()
         ]);
     }
@@ -68,7 +70,8 @@ class ElementsController extends Controller
 
         $config = $searchSetupService->getConfigById($handle);
 
-        $config['params'] = Craft::$app->getRequest()->getBodyParam('params');
+       //$config['params'] = Craft::$app->getRequest()->getBodyParam('params');
+
         $requestConfig = Craft::$app->getRequest()->getBodyParam('config');
 
         $config = array_merge($config, $requestConfig);
@@ -80,7 +83,7 @@ class ElementsController extends Controller
                 $fieldValue = is_string($field) ? trim($field) : $field;
 
                 if (is_string($field) && $fieldValue === '') {
-                    unset($config['params']['fields'][$handle]);
+                   unset($config['params']['fields'][$handle]);
                 }
             }
         }
@@ -89,7 +92,7 @@ class ElementsController extends Controller
 
         return Json::encode([
             'items'  => $searchSetupService->getItems(),
-            'config' => $config
+            'links'  => $searchSetupService->getLinks()
         ]);
     }
 }
