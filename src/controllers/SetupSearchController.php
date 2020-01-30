@@ -152,7 +152,8 @@ class SetupSearchController extends Controller
 
         return $this->asJson([
             'items' => $items,
-            'template' => $options['template'] ?? null
+            'template' => $options['template'] ?? null,
+            'initSort' => $options['initSort'] ?? null
         ]);
     }
 }

@@ -270,13 +270,24 @@ var app = new Vue({
     },
     config: {
       params: {
-        sort: null,
+        sort: 'title-asc',
         fields: []
       }
     }
   },
   methods: {
     submitFilter: function submitFilter() {
+      this.config.currentPage = 1;
+      this.getFilteredItems();
+    },
+    submitSort: function submitSort() {
+      this.getFilteredItems();
+    },
+    onPaginate: function onPaginate(pageNum) {
+      this.config.currentPage = pageNum;
+      this.getFilteredItems();
+    },
+    getFilteredItems: function getFilteredItems() {
       var _this3 = this;
 
       var data = {
@@ -288,11 +299,6 @@ var app = new Vue({
         _this3.items = response.data.items;
         _this3.links = response.data.links;
       });
-    },
-    submitSort: function submitSort() {},
-    onPaginate: function onPaginate(pageNum) {
-      this.config.currentPage = pageNum;
-      this.submitFilter();
     },
     getFields: function getFields() {
       var _this4 = this;

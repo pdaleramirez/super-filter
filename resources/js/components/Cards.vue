@@ -57,7 +57,7 @@
         data() {
             return {
                 selected: [],
-                options: [],
+                options: []
             };
         },
         methods: {

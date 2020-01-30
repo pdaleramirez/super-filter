@@ -275,7 +275,9 @@ class SearchTypes extends Component
         $config['items']       = [];
         $config['sorts']       = [];
         $config['currentPage'] = 1;
-        $config['params'] = [];
+        $config['params'] = [
+            'sort' => 'title-asc'
+        ];
 
         $config = array_merge($config, $options);
 

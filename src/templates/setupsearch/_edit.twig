@@ -145,9 +145,26 @@
 
                 <div class="field">
                     <div class="heading">
+                        <label>Initial Sort:</label>
+                    </div>
+                    <input type="hidden" name="options[initSort]" :value="initSort" />
+                    <div v-if="option.container.selected === index" v-for="(sort, index) in option.sorts">
+
+                        <select v-model="initSort">
+                            <template v-for="(item, key) in sort.options">
+                                <option :value="item.orderBy + '-asc'">${ item.name } ASC</option>
+                                <option :value="item.orderBy + '-desc'">${ item.name } DESC</option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="heading">
                         <label>Sort Fields:</label>
                     </div>
                     <div v-if="option.container.selected === index" v-for="(sort, index) in option.sorts">
+
                         <cards
                                :fields='sort.options' :selected-fields="sort.selected" :group="index" v-on:drag:fields="dragFields">
                             ${ option }
@@ -199,7 +216,8 @@
                     {value:'custom', label:'Add Custom'}
                 ],
                 sortOptions: null,
-                template: 'grid'
+                template: 'grid',
+                initSort: 'dateCreated-desc'
             },
             methods: {
                 installSampleData(event) {
@@ -238,6 +256,10 @@
 
                      if (response.data.template) {
                          this.template = response.data.template;
+                     }
+
+                     if (response.data.initSort) {
+                         this.initSort = response.data.initSort;
                      }
 
                      this.loading = false;
