@@ -162,9 +162,8 @@ class App extends Component
     public function getEntryTemplates()
     {
         return [
-          'table' => Craft::t('super-filter', 'Table'),
-          'list'  => Craft::t('super-filter', 'List'),
-          'grid'  => Craft::t('super-filter', 'Grid')
+          'vue'   => Craft::t('super-filter', 'Vue'),
+          'plain' => Craft::t('super-filter', 'Plain')
         ];
     }
 

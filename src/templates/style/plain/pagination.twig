@@ -1,5 +1,4 @@
 {% set currentPageUrl = pageInfo.getPageUrl( craft.app.request.pageNum () ) %}
-
 {% if pageInfo.prevUrl is not empty or pageInfo.nextUrl is not empty %}
     <nav aria-label="Page Navigation">
         <ul class="pagination justify-content-center">
@@ -41,16 +40,3 @@
         </ul>
     </nav>
 {% endif %}
-
-
-<paginate v-if="links.totalPages"
-        v-model="config.currentPage"
-        :page-count="links.totalPages"
-        :page-range="3"
-        :margin-pages="2"
-        :click-handler="onPaginate"
-        :prev-text="'Prev'"
-        :next-text="'Next'"
-        :container-class="'pagination'"
-        :page-class="'page-item'">
-</paginate>

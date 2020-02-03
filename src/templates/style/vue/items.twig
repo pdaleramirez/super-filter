@@ -1,0 +1,20 @@
+<ul>
+        <li v-for="item in items">
+            ${ item.title } - ${ item.dateCreated } - ${  item.superFilterImdbRating.value } - ${ item.superFilterShowTypes.value }
+
+            <div v-if="item.sproutExampleCategories.length">
+                <template v-for="category in item.sproutExampleCategories">
+                    ${ category.title }
+                </template>
+            </div>
+
+            <div v-if="item.sproutExampleAssets.length">
+                <template v-for="asset in item.sproutExampleAssets">
+                    <img :src="asset.url" />
+                </template>
+            </div>
+            <div v-else>
+                <a href=""><img src="https://via.placeholder.com/200x150.png?text=Image+Placeholder" /></a>
+            </div>
+        </li>
+</ul>

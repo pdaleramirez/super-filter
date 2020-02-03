@@ -1,7 +1,7 @@
 window.axios = require('axios');
-window.Vue = require('vue');
+window.Vue   = require('vue');
+window.qs    = require('qs');
 import Paginate from 'vuejs-paginate'
-let qs = require('qs');
 
 Vue.component('paginate', Paginate)
 Vue.component('search-list', {
@@ -132,74 +132,5 @@ Vue.component('search-list', {
 
             return Math.ceil(this.totalItems / limit);
         }
-    }
-});
-
-let app = new Vue({
-    el: "#search-app",
-    delimiters: ['${', '}'],
-    data: {
-        handle: superFilterHandle,
-        items: [],
-        links: {
-            totalPages: 1
-        },
-        config: {
-            params: {
-                sort: 'title-asc',
-                fields: []
-            }
-        }
-    },
-    methods: {
-        submitFilter() {
-            this.config.currentPage = 1;
-
-            this.getFilteredItems();
-        },
-        submitSort() {
-            this.getFilteredItems();
-        },
-        onPaginate(pageNum) {
-            this.config.currentPage = pageNum;
-
-            this.getFilteredItems();
-        },
-        getFilteredItems() {
-            let data = {
-                handle: this.handle,
-                config: this.config
-            };
-
-            data[csrfTokenName] = csrfTokenValue;
-            axios.post('/super-filter/filter', qs.stringify(data))
-                .then((response) => {
-                    this.items  = response.data.items;
-                    this.links  = response.data.links;
-                });
-        },
-        getFields() {
-            let data = {
-                handle: this.handle,
-                //params: this.params,
-                config: this.config
-            };
-
-            data[csrfTokenName] = csrfTokenValue;
-            axios.post('/super-filter/fields', qs.stringify(data))
-                .then(({data}) => {
-                    this.config = data.config;
-                    this.items  = data.items;
-                    this.links  = data.links;
-                });
-        }
-    },
-    mounted() {
-        let parse = JSON.parse(superFilterParams);
-
-        this.config.params = {...this.config.params, ...parse};
-        this.config.currentPage = Number(superFilterCurrentPage);
-
-        this.getFields();
     }
 });

@@ -1,0 +1,14 @@
+<form method="post">
+    {{ csrfInput() }}
+    {{ actionInput('super-filter/super-filter/filter') }}
+
+    {% for field in fields %}
+        <div class="form-group">
+            <label>{{ field.object.name }}</label>
+            <div class="input">
+                {{ field.html()|raw }}
+            </div>
+        </div>
+    {% endfor %}
+    <button type="submit">Filter</button> <button type="submit" name="reset" value="1">Clear</button>
+</form>

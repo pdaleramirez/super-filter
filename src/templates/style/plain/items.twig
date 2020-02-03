@@ -1,0 +1,15 @@
+<ul>
+    {% for item in items %}
+            <li>
+                    {{  item.title }} - {{ item.dateCreated.format('Y-m-d H:i:s') }} - {{ item.superFilterImdbRating }} - {{ item.superFilterShowTypes }}
+
+                {% set image  = item.sproutExampleAssets.first() %}
+                {# Display the thumbnail list #}
+
+                {% if image %}
+
+                    <img src="{{ image.url }}" alt="{{ image.title }}">
+                {% endif %}
+            </li>
+    {% endfor %}
+</ul>

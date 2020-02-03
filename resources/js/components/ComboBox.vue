@@ -69,7 +69,12 @@
                 this.showAutocompleteDropdown = true;
             },
             inputValue() {
-                this.showAutocompleteDropdown = true;
+                if (this.showAutocompleteDropdown === false) {
+                    this.showAutocompleteDropdown = true;
+                } else {
+                    this.showAutocompleteDropdown = false;
+                }
+
             },
             select(option) {
 

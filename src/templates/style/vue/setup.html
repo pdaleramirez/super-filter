@@ -1,0 +1,89 @@
+{% js at head %}
+
+window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
+    window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
+    window.superFilterHandle = "{{ handle }}";
+    window.superFilterParams = '{{ craft.app.request.getQueryParams()|json_encode()|raw }}';
+    window.superFilterCurrentPage = '{{ craft.app.request.getPageNum() }}';
+{% endjs %}
+
+{% do view.registerAssetBundle("pdaleramirez\\superfilter\\web\\assets\\VueAsset") %}
+
+{% js %}
+
+let app = new Vue({
+    el: "#search-app",
+    delimiters: ['${', '}'],
+    data: {
+        handle: superFilterHandle,
+        items: [],
+        initParams: {},
+        links: {
+            totalPages: 1
+        },
+        config: {
+            params: {
+                sort: null,
+                fields: []
+            }
+        }
+    },
+    methods: {
+        submitFilter() {
+            this.config.currentPage = 1;
+
+            this.getFilteredItems();
+        },
+        clearFilter() {
+            this.config.params = this.initParams;
+            console.log(this.config.params);
+        },
+        submitSort() {
+            this.getFilteredItems();
+        },
+        onPaginate(pageNum) {
+            this.config.currentPage = pageNum;
+
+            this.getFilteredItems();
+        },
+        getFilteredItems() {
+            let data = {
+                handle: this.handle,
+                config: this.config
+            };
+
+            data[csrfTokenName] = csrfTokenValue;
+            axios.post('/super-filter/filter', qs.stringify(data))
+                .then((response) => {
+                    this.items  = response.data.items;
+                    this.links  = response.data.links;
+                });
+        },
+        getFields() {
+            let data = {
+                handle: this.handle,
+                //params: this.params,
+                config: this.config
+            };
+
+            data[csrfTokenName] = csrfTokenValue;
+            axios.post('/super-filter/fields', qs.stringify(data))
+                .then(({data}) => {
+                    this.config = data.config;
+                    this.initParams = Object.assign({}, data.config.params);
+                    console.log(this.initParams);
+                    this.items  = data.items;
+                    this.links  = data.links;
+                });
+        }
+    },
+    mounted() {
+        let parse = JSON.parse(superFilterParams);
+
+        this.config.params = {...this.config.params, ...parse};
+        this.config.currentPage = Number(superFilterCurrentPage);
+
+        this.getFields();
+    }
+});
+{% endjs %}

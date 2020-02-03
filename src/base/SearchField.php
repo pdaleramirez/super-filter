@@ -72,4 +72,9 @@ abstract class SearchField
     {
         return $this->value;
     }
+
+    public function getFieldValue($element)
+    {
+        return $element->value;
+    }
 }

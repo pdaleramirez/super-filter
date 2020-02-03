@@ -127,9 +127,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-
-
-var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+window.qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 Vue.component('paginate', vuejs_paginate__WEBPACK_IMPORTED_MODULE_0___default.a);
 Vue.component('search-list', {
@@ -257,71 +255,6 @@ Vue.component('search-list', {
 
       return Math.ceil(this.totalItems / limit);
     }
-  }
-});
-var app = new Vue({
-  el: "#search-app",
-  delimiters: ['${', '}'],
-  data: {
-    handle: superFilterHandle,
-    items: [],
-    links: {
-      totalPages: 1
-    },
-    config: {
-      params: {
-        sort: 'title-asc',
-        fields: []
-      }
-    }
-  },
-  methods: {
-    submitFilter: function submitFilter() {
-      this.config.currentPage = 1;
-      this.getFilteredItems();
-    },
-    submitSort: function submitSort() {
-      this.getFilteredItems();
-    },
-    onPaginate: function onPaginate(pageNum) {
-      this.config.currentPage = pageNum;
-      this.getFilteredItems();
-    },
-    getFilteredItems: function getFilteredItems() {
-      var _this3 = this;
-
-      var data = {
-        handle: this.handle,
-        config: this.config
-      };
-      data[csrfTokenName] = csrfTokenValue;
-      axios.post('/super-filter/filter', qs.stringify(data)).then(function (response) {
-        _this3.items = response.data.items;
-        _this3.links = response.data.links;
-      });
-    },
-    getFields: function getFields() {
-      var _this4 = this;
-
-      var data = {
-        handle: this.handle,
-        //params: this.params,
-        config: this.config
-      };
-      data[csrfTokenName] = csrfTokenValue;
-      axios.post('/super-filter/fields', qs.stringify(data)).then(function (_ref3) {
-        var data = _ref3.data;
-        _this4.config = data.config;
-        _this4.items = data.items;
-        _this4.links = data.links;
-      });
-    }
-  },
-  mounted: function mounted() {
-    var parse = JSON.parse(superFilterParams);
-    this.config.params = _objectSpread({}, this.config.params, {}, parse);
-    this.config.currentPage = Number(superFilterCurrentPage);
-    this.getFields();
   }
 });
 

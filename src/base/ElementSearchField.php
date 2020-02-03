@@ -108,4 +108,9 @@ abstract class ElementSearchField extends SearchField
             'elements' => $elements
         ]);
     }
+
+    public function getFieldValue($element)
+    {
+        return $element->all();
+    }
 }

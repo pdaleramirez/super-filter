@@ -10,21 +10,7 @@ use pdaleramirez\superfilter\SuperFilter;
 
 class ElementsController extends Controller
 {
-      protected $allowAnonymous = ['get-elements', 'get-fields', 'filter'];
-
-    public function actionGetElements()
-    {
-        $params = Craft::$app->getRequest()->getBodyParams();
-
-        $items = SuperFilter::$app->config($params)->items();
-
-        $response = [
-            'items'  => $items,
-            'params' => SuperFilter::$app->getParams()
-        ];
-
-        return Json::encode($response);
-    }
+    protected $allowAnonymous = ['get-fields', 'filter'];
 
     public function actionGetFields()
     {
@@ -43,8 +29,6 @@ class ElementsController extends Controller
         $fields = [];
         if ($items) {
             foreach ($items as $item) {
-                //$field = Craft::$app->getFields()->getFieldById($item['id']);
-
                 $searchField = $searchSetupService->getSearchFieldObjectById($item['id']);
 
                 $handle = $searchField->getObject()->handle;
@@ -54,11 +38,11 @@ class ElementsController extends Controller
         }
 
        $config['params']['fields'] = $fields;
+
         return Json::encode([
-        //  'params' => ['fields' => $fields],
           'config' => $config,
           'links'  => $searchSetupService->getLinks(),
-          'items'  => $searchSetupService->getItems()
+          'items'  => $searchSetupService->getItemToArray()
         ]);
     }
 

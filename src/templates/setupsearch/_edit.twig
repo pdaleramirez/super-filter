@@ -84,13 +84,6 @@
         errors: setupElement is defined ? setupElement.getErrors('handle') : null
     }) }}
 
-    {{ forms.lightswitchField({
-        label: 'Enable Vue'|t('super-filter'),
-        id: 'enable-vue',
-        name: 'options[enableVue]',
-        on: options.enableVue is defined ? options.enableVue : false
-    }) }}
-
     <div class="field">
         <div class="heading">
             <label>Items per page</label>
@@ -143,21 +136,6 @@
 
                 </div>
 
-                <div class="field">
-                    <div class="heading">
-                        <label>Initial Sort:</label>
-                    </div>
-                    <input type="hidden" name="options[initSort]" :value="initSort" />
-                    <div v-if="option.container.selected === index" v-for="(sort, index) in option.sorts">
-
-                        <select v-model="initSort">
-                            <template v-for="(item, key) in sort.options">
-                                <option :value="item.orderBy + '-asc'">${ item.name } ASC</option>
-                                <option :value="item.orderBy + '-desc'">${ item.name } DESC</option>
-                            </template>
-                        </select>
-                    </div>
-                </div>
 
                 <div class="field">
                     <div class="heading">
@@ -169,6 +147,22 @@
                                :fields='sort.options' :selected-fields="sort.selected" :group="index" v-on:drag:fields="dragFields">
                             ${ option }
                         </cards>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="heading">
+                        <label>Initial Sort:</label>
+                    </div>
+                    <input type="hidden" name="options[initSort]" :value="initSort" />
+                    <div v-if="option.container.selected === index" v-for="(sort, index) in option.sorts">
+
+                        <select v-model="initSort">
+                            <template v-for="(item, key) in sort.selected">
+                                <option :value="item.orderBy + '-asc'">${ item.name } ASC</option>
+                                <option :value="item.orderBy + '-desc'">${ item.name } DESC</option>
+                            </template>
+                        </select>
                     </div>
                 </div>
 
@@ -210,10 +204,9 @@
                 group: null,
                 firstContainer: null,
                 options: [
-                    {value: 'table', label:'Table'},
-                    {value:'list', label:'List'},
-                    {value:'grid', label:'Grid'},
-                    {value:'custom', label:'Add Custom'}
+                    {value: 'vue', label:'Vue'},
+                    {value: 'plain', label:'Plain'},
+                    {value: 'custom', label:'Add Custom'}
                 ],
                 sortOptions: null,
                 template: 'grid',

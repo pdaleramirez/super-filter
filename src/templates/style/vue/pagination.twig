@@ -1,0 +1,11 @@
+<paginate v-if="links.totalPages"
+          v-model="config.currentPage"
+          :page-count="links.totalPages"
+          :page-range="3"
+          :margin-pages="2"
+          :click-handler="onPaginate"
+          :prev-text="'Prev'"
+          :next-text="'Next'"
+          :container-class="'pagination'"
+          :page-class="'page-item'">
+</paginate>

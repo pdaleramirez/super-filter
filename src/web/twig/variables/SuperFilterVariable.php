@@ -3,6 +3,9 @@
 namespace pdaleramirez\superfilter\web\twig\variables;
 
 use Craft;
+use craft\elements\db\CategoryQuery;
+use craft\elements\db\ElementQuery;
+use craft\elements\Entry;
 use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use Exception;
@@ -37,19 +40,18 @@ class SuperFilterVariable
 
         $this->searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
 
-        $prevPath = Craft::$app->getView()->getTemplatesPath();
+   //     $entry = Entry::find()->where(['slug' => 'superfilterattack-on-titan'])->one();
 
-        $alias = Craft::getAlias('@superfilter/templates');
-
-        Craft::$app->getView()->setTemplatesPath($alias);
-
-        $entryHtml = Craft::$app->getView()->renderTemplate('setup', [
-            'handle' => $handle
+//        /**
+//         * @var CategoryQuery $categoryQuery
+//         */
+//        $categoryQuery = $entry->getFieldValue('sproutExampleCategories');
+//        $categoryQuery = $entry->getFieldValue('sproutExampleAssets');
+//        Craft::dd($categoryQuery->all()[0]->toArray());
+        return $this->renderTemplate('setup', [
+            'handle' => $handle,
+            'options' => $config['options']
         ]);
-
-        Craft::$app->getView()->setTemplatesPath($prevPath);
-
-        return Template::raw($entryHtml);
     }
 
     public function getTemplate()
@@ -93,6 +95,16 @@ class SuperFilterVariable
         $sorts = $this->searchSetupService->getDisplaySortOptions();
         $params = Craft::$app->getRequest()->getQueryParams();
         $selected = $params['sort'] ?? null;
+
+        if ($selected == null) {
+            $config  = $this->searchSetupService->getConfig();
+
+            $initSort = $config['options']['initSort'] ?? null;
+
+            if ($initSort) {
+                $selected = $initSort;
+            }
+        }
 
         return $this->renderTemplate('sorts', [
             'sorts'    => $sorts,

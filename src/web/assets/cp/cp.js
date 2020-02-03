@@ -2224,7 +2224,11 @@ __webpack_require__.r(__webpack_exports__);
       this.showAutocompleteDropdown = true;
     },
     inputValue: function inputValue() {
-      this.showAutocompleteDropdown = true;
+      if (this.showAutocompleteDropdown === false) {
+        this.showAutocompleteDropdown = true;
+      } else {
+        this.showAutocompleteDropdown = false;
+      }
     },
     select: function select(option) {
       var _this = this;

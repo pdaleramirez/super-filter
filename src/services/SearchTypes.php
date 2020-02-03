@@ -8,6 +8,7 @@ use craft\base\Element;
 use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\db\Paginator;
+use craft\elements\db\ElementQuery;
 use craft\helpers\Json;
 use craft\web\twig\variables\Paginate;
 use Exception;
@@ -266,7 +267,11 @@ class SearchTypes extends Component
         return null;
     }
 
-
+    /**
+     * @param $options
+     * @return $this
+     * @throws \yii\base\Exception
+     */
     public function setSearchSetup($options)
     {
         $config = [];
@@ -275,11 +280,18 @@ class SearchTypes extends Component
         $config['items']       = [];
         $config['sorts']       = [];
         $config['currentPage'] = 1;
-        $config['params'] = [
-            'sort' => 'title-asc'
-        ];
+        $config['params'] = [];
 
         $config = array_merge($config, $options);
+
+        $sort = $config['params']['sort'] ?? null;
+
+        if ($sort == null) {
+
+            $initSort = $config['options']['initSort'] ?? null;
+
+            $config['params']['sort'] = $initSort ?? 'dateCreated-desc';
+        }
 
         $this->getPaginator($config);
 
@@ -330,6 +342,10 @@ class SearchTypes extends Component
         return $config;
     }
 
+    /**
+     * @param $config
+     * @throws \yii\base\Exception
+     */
     public function getPaginator($config)
     {
         $searchTypeRef = $config['element'];
@@ -360,6 +376,42 @@ class SearchTypes extends Component
     public function getItems()
     {
         return $this->items;
+    }
+
+    public function getItemToArray()
+    {
+        $elements = [];
+
+        if (count($this->items)> 0) {
+            foreach ($this->items as $key => $item) {
+                $elements[$key] = array_merge($item->toArray(), $this->formatItemFields($item));
+            }
+        }
+
+        return $elements;
+    }
+
+    private function formatItemFields($element)
+    {
+        $fieldValues = $element->getFieldValues();
+        $fields = [];
+
+        if (count($fieldValues) > 0) {
+            foreach ($fieldValues as $key => $value) {
+                if ($value instanceof ElementQuery) {
+                    $elements = $value->all();
+                    if (count($elements) > 0) {
+                        foreach ($elements as $elementKey => $element) {
+                            $fields[$key][$elementKey] = $element->toArray();
+                        }
+                    }
+                } else {
+                    $fields[$key] = $value;
+                }
+            }
+        }
+
+        return $fields;
     }
 
     public function getDisplaySortOptions()
