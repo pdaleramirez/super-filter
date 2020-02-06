@@ -2,7 +2,7 @@ window.axios = require('axios');
 window.Vue   = require('vue');
 window.qs    = require('qs');
 import Paginate from 'vuejs-paginate'
-
+Vue.use(require('vue-moment'));
 Vue.component('paginate', Paginate)
 Vue.component('search-list', {
     name: "SearchList",

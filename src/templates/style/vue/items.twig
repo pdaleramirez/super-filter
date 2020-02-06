@@ -1,14 +1,13 @@
 <ul>
         <li v-for="item in items">
-            ${ item.title } - ${ item.dateCreated } - ${  item.superFilterImdbRating.value } - ${ item.superFilterShowTypes.value }
-
+            ${ item.title } - ${ item.dateCreated | moment("MMMM Do YYYY") } - ${  item.superFilterImdbRating.value } - ${ item.superFilterShowTypes.value }
             <div v-if="item.sproutExampleCategories.length">
                 <template v-for="category in item.sproutExampleCategories">
                     ${ category.title }
                 </template>
             </div>
 
-            <div v-if="item.sproutExampleAssets.length">
+            <div v-if="item.exampleAssets.length">
                 <template v-for="asset in item.sproutExampleAssets">
                     <img :src="asset.url" />
                 </template>

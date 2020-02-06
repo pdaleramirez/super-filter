@@ -1,15 +1,34 @@
-<ul>
+
+{% if items %}
+    <div class="row">
     {% for item in items %}
-            <li>
-                    {{  item.title }} - {{ item.dateCreated.format('Y-m-d H:i:s') }} - {{ item.superFilterImdbRating }} - {{ item.superFilterShowTypes }}
+        <div class="col-sm-12 col-md-6 my-3">
+            <div class="row">
+                <div class="col-md-12 col-xl-4 text-center">
+                    {% set image  = item.exampleAssets.first() %}
+                    {# Display the thumbnail list #}
 
-                {% set image  = item.sproutExampleAssets.first() %}
-                {# Display the thumbnail list #}
+                    {% if image %}
+                        <img width="{{ image.width }}" height="{{ image.height }}" src="{{ image.url }}" alt="{{ image.title }}">
+                    {% else %}
+                        <a href=""><img src="https://via.placeholder.com/182x268.png?text=Image+Placeholder" /></a>
+                    {% endif %}
+                </div>
+                <div class="col-md-12 col-xl-8">
+                    <h2 class="my-0">{{  item.title }} ({{ item.superFilterReleaseDate }}) | {{ item.superFilterImdbRating }} star</h2>
+                    <dl>
+                        <dt><strong class="mt-0">Genre</strong> {{ item.superFilterGenre.select('title').column()|join(', ') }}</dt>
+                        <dt><strong>Type:</strong> {{ item.superFilterShowTypes }}</dt>
+                        <dt><strong>Guides:</strong> {{ item.superFilterGuides|map((value, index) => value.label)|join(', ') }}</dt>
+                    </dl>
 
-                {% if image %}
-
-                    <img src="{{ image.url }}" alt="{{ image.title }}">
-                {% endif %}
-            </li>
+                    <div class="description">
+                        {{ item.superFilterDescription }}
+                    </div>
+                    <p><small><strong>Tags:</strong> {{ item.superFilterShowTags.select('title').column()|join(', ') }}</small></p>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-</ul>
+    </div>
+{% endif %}

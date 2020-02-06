@@ -181,7 +181,7 @@ class SampleData extends Component
         $ids[] = $this->getFieldGenre();
         $ids[] = $this->getFieldShowTags();
         $ids[] = $this->getFieldShowTypes();
-        $ids[] = $this->getFieldReleaseDates();
+        $ids[] = $this->getFieldReleaseDate();
         $ids[] = $this->getFieldGuides();
         $ids[] = $this->getFieldImdbRating();
 
@@ -513,9 +513,9 @@ class SampleData extends Component
         return $this->saveField($config);
     }
 
-    private function getFieldReleaseDates()
+    private function getFieldReleaseDate()
     {
-        $handle = static::PREFIX . "ReleaseDates";
+        $handle = static::PREFIX . "ReleaseDate";
 
         $fieldByHandle = Craft::$app->getFields()->getFieldByHandle($handle);
 
@@ -532,7 +532,7 @@ class SampleData extends Component
         $config = [
             "type"    => Dropdown::class,
             "id"      => $fieldByHandle->id ?? null,
-            "name"    => "Release Dates",
+            "name"    => "Release Date",
             "handle"  => $handle,
             "groupId" => $this->fieldGroupId,
             'settings' => ['options' => $options]
