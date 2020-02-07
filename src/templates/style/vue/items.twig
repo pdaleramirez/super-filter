@@ -1,19 +1,43 @@
-<ul>
-        <li v-for="item in items">
-            ${ item.title } - ${ item.dateCreated | moment("MMMM Do YYYY") } - ${  item.superFilterImdbRating.value } - ${ item.superFilterShowTypes.value }
-            <div v-if="item.sproutExampleCategories.length">
-                <template v-for="category in item.sproutExampleCategories">
-                    ${ category.title }
-                </template>
-            </div>
+<div class="row" v-if="items">
+        <div class="col-sm-12 col-md-6 my-3" v-for="item in items">
+            <div class="row">
+                <div class="col-md-12 col-xl-4 text-center">
+                    <div v-if="item.exampleAssets.length">
+                        <template v-for="asset in item.sproutExampleAssets">
+                            <img :src="asset.url" />
+                        </template>
+                    </div>
+                    <div v-else>
+                        <a href=""><img src="https://via.placeholder.com/182x268.png?text=Image+Placeholder" /></a>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-8">
+                    <h2 class="my-0">${ item.title } (${ item.superFilterReleaseDate.label }) | ${ item.superFilterImdbRating.label } star</h2>
+                    <dl>
+                        <dt><strong class="mt-0">Genre:</strong>
+                            <template v-if="item.superFilterGenre.length" v-for="(element, index) in item.superFilterGenre">
+                                <span v-if="index != 0">, </span><span>${ element.title }</span>
+                            </template>
+                        </dt>
+                        <dt><strong>Type:</strong>
+                            ${ item.superFilterShowTypes.label }
+                        </dt>
+                        <dt><strong>Guides:</strong>
+                            <template v-if="item.superFilterGuides.length" v-for="(element, index) in item.superFilterGuides">
+                                <span v-if="index != 0">, </span><span v-if="element.label">${ element.label }</span>
+                            </template>
+                        </dt>
+                    </dl>
 
-            <div v-if="item.exampleAssets.length">
-                <template v-for="asset in item.sproutExampleAssets">
-                    <img :src="asset.url" />
-                </template>
+                    <div class="description">
+                        ${ item.superFilterDescription }
+                    </div>
+                    <p><small><strong>Tags:</strong>
+                            <template v-if="item.superFilterShowTags.length" v-for="(element, index) in item.superFilterShowTags">
+                                <span v-if="index != 0">, </span><span>${ element.title }</span>
+                            </template>
+                        </small></p>
+                </div>
             </div>
-            <div v-else>
-                <a href=""><img src="https://via.placeholder.com/200x150.png?text=Image+Placeholder" /></a>
-            </div>
-        </li>
-</ul>
+        </div>
+</div>

@@ -17,7 +17,7 @@
                 <div class="col-md-12 col-xl-8">
                     <h2 class="my-0">{{  item.title }} ({{ item.superFilterReleaseDate }}) | {{ item.superFilterImdbRating }} star</h2>
                     <dl>
-                        <dt><strong class="mt-0">Genre</strong> {{ item.superFilterGenre.select('title').column()|join(', ') }}</dt>
+                        <dt><strong class="mt-0">Genre:</strong> {{ item.superFilterGenre.select('title').column()|join(', ') }}</dt>
                         <dt><strong>Type:</strong> {{ item.superFilterShowTypes }}</dt>
                         <dt><strong>Guides:</strong> {{ item.superFilterGuides|map((value, index) => value.label)|join(', ') }}</dt>
                     </dl>

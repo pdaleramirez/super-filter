@@ -404,12 +404,16 @@ class SearchTypes extends Component
                         foreach ($elements as $elementKey => $element) {
                             $fields[$key][$elementKey] = $element->toArray();
                         }
+                    } else {
+                        $fields[$key] = [];
                     }
+
                 } else {
                     $fields[$key] = $value;
                 }
             }
         }
+
 
         return $fields;
     }
