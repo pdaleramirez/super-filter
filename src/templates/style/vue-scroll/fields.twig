@@ -1,0 +1,11 @@
+<form method="post">
+    {% for field in fields %}
+        <div class="form-group">
+            <label>{{ field.object.name }}</label>
+            <div class="input">
+                {{ field.html()|raw }}
+            </div>
+        </div>
+    {% endfor %}
+    <button @click="submitFilter" type="button">Filter</button> <button @click="clearFilter" type="button" name="reset" value="1">Clear</button>
+</form>

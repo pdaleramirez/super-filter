@@ -1,1 +1,7 @@
-{% include "style/fields/elementcheckbox" %}
+{% for element in elements %}
+    <div class="field">
+        <input v-model="config.params.fields.{{ field.object.handle }}" type="checkbox" {{ element.selected ? 'checked' : '' }}
+               value="{{ element.id }}"
+               name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}][]" /> {{ element.title }}
+    </div>
+{% endfor %}

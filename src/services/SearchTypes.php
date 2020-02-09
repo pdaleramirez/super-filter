@@ -365,7 +365,12 @@ class SearchTypes extends Component
         ]);
 
         $this->links = Paginate::create($paginator);
-        $this->items = $paginator->getPageResults();
+
+        if ($config['currentPage'] > $paginator->getTotalPages()) {
+            $this->items = [];
+        } else {
+            $this->items = $paginator->getPageResults();
+        }
     }
 
     public function getLinks()
@@ -442,7 +447,7 @@ class SearchTypes extends Component
         $searchFields = $this->getDisplaySearchFields();
 
         if (count($searchFields) > 0) {
-            foreach ($searchFields as $field) {
+            foreach ($searchFields as $field) {;
                 $fields[] = $this->getSearchFieldObjectById($field['id']);
             }
         }
@@ -513,7 +518,7 @@ class SearchTypes extends Component
         $template = $this->getTemplate();
         $searchField->setConfig(['template' => $template]);
 
-        $fields = $this->params[SuperFilter::$app->getSettings()->prefixParam] ?? null;
+        $fields = $this->config['params'][SuperFilter::$app->getSettings()->prefixParam] ?? null;
 
         if ($fields) {
 
@@ -560,7 +565,7 @@ class SearchTypes extends Component
         if ($template) {
             $alias = Craft::getAlias('@superfilter/templates');
 
-            if (!SuperFilter::$app->isEntryTemplateIn($template)) {
+            if (!SuperFilter::$app->isTemplateIn($template)) {
                 $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
 
                 Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);

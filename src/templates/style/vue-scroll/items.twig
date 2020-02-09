@@ -1,8 +1,7 @@
-<div v-if="loading" class="loader"></div>
-<div class="row" v-if="(!loading && items)">
-        <div class="col-sm-12 col-md-6 my-3" v-for="item in items">
+<div class="row">
+        <div class="col-sm-12 col-md-12 my-3" v-for="item in items">
             <div class="row">
-                <div class="col-md-12 col-xl-4 text-center">
+                <div class="col-md-12 col-xl-3 text-right">
                     <div v-if="item.exampleAssets.length">
                         <template v-for="asset in item.exampleAssets">
                             <img :src="asset.url" />
@@ -12,7 +11,7 @@
                         <a href=""><img src="https://via.placeholder.com/182x268.png?text=Image+Placeholder" /></a>
                     </div>
                 </div>
-                <div class="col-md-12 col-xl-8">
+                <div class="col-md-12 col-xl-9">
                     <h2 class="my-0">${ item.title } (${ item.superFilterReleaseDate.label }) | ${ item.superFilterImdbRating.label } star</h2>
                     <dl>
                         <dt><strong class="mt-0">Genre:</strong>

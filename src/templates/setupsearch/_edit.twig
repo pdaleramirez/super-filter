@@ -203,13 +203,9 @@
                 elements: null,
                 group: null,
                 firstContainer: null,
-                options: [
-                    {value: 'vue', label:'Vue'},
-                    {value: 'plain', label:'Plain'},
-                    {value: 'custom', label:'Add Custom'}
-                ],
+                options: [],
                 sortOptions: null,
-                template: 'grid',
+                template: 'plain',
                 initSort: 'dateCreated-desc'
             },
             methods: {
@@ -246,6 +242,23 @@
                 this.loading = true;
                 axios.post(url, qs.stringify(data)).then((response) => {
                      this.items = response.data.items;
+
+                     if (response.data.templateOptions) {
+
+                         let templateOptions = response.data.templateOptions;
+
+                         templateOptions = Object.keys(templateOptions).map(function(key) {
+                             return {
+                                 'label': templateOptions[key],
+                                 'value': key
+                             }
+                         });
+
+                         this.options = [...templateOptions, {
+                             value: 'custom',
+                             label: 'Custom'
+                         }];
+                     }
 
                      if (response.data.template) {
                          this.template = response.data.template;

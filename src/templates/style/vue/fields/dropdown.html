@@ -1,1 +1,21 @@
-{% include "style/fields/dropdown" %}
+{%- set hasOptgroups = false -%}
+<div class="field">
+    {% if field.object.options %}
+        <select v-model="config.params.fields.{{ field.object.handle }}" name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}]" >
+                <option value="">{{ "None"|t  }}</option>
+            {% for option in options %}
+                {% if option.optgroup is defined %}
+                        {% if hasOptgroups %}
+                                </optgroup>
+                        {% else %}
+                                {% set hasOptgroups = true %}
+                        {% endif %}
+                        <optgroup label="{{ option.optgroup }}">
+                {% else %}
+                        <option  {{ option.selected == true ? 'selected="selected"' : '' }}
+                                value="{{ option.value }}">{{ option.label }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    {% endif %}
+</div>

@@ -35,10 +35,6 @@
     transform: rotate(360deg);
   }
 }
-.test {
-  color: red;
-}
-
 .v-select {
   position: relative;
   font-family: inherit;

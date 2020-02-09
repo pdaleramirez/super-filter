@@ -1,1 +1,37 @@
-{% include "style/fields/categorycheckbox" %}
+{% macro recursiveCategory(category, value, object) %}
+    {% import _self as self %}
+    <li>
+        {% set selected = false %}
+
+        {%  if value is iterable %}
+            {% if category.id in value %}
+                {% set selected = true %}
+            {% endif %}
+        {% elseif value == category.id   %}
+            {% set selected = true %}
+        {% endif %}
+
+        <input
+               type="checkbox" {{ selected ? 'checked' : '' }}
+               name="{{ craft.superFilter.getSettings.prefixParam }}[{{ object.handle }}][]"
+               value="{{ category.id }}" /> {{ category.title }}
+
+        {% if category.children|length %}
+            <ul>
+                {% for child in category.children %}
+                    {{ self.recursiveCategory(child, value, object) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
+
+{% from _self import recursiveCategory %}
+
+{% if categories %}
+        <ul>
+            {% for category in categories %}
+                {{ recursiveCategory(category, value, object) }}
+            {% endfor %}
+        </ul>
+{% endif %}

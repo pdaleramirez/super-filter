@@ -1,1 +1,10 @@
-{% include "style/fields/elementdropdown" %}
+<div class="field">
+    {% if elements %}
+        <select v-model="config.params.fields.{{ field.object.handle }}" name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}][]" >
+                <option value="">{{ "None"|t  }}</option>
+            {% for element in elements %}
+                <option {{ element.selected == true ? 'selected="selected"' : '' }} value="{{ element.id }}">{{ element.title }}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
+</div>

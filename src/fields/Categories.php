@@ -88,6 +88,9 @@ class Categories extends ElementSearchField
         return Craft::$app->getView()->renderTemplate($template . '/fields/' . $inputTemplate, [
             'field' => $this,
             'elements' => $elements,
+            'categories' => $categories,
+            'value' => $this->value,
+            'object' => $this->object,
             'categoryHtml' => Template::raw($categoryHtml)
         ]);
     }

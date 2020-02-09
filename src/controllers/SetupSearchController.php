@@ -149,10 +149,11 @@ class SetupSearchController extends Controller
         }
 
         $items = SuperFilter::$app->searchTypes->getItemFormat($setup);
-
+        $templateOptions = SuperFilter::$app->getTemplateOptions();
         return $this->asJson([
             'items' => $items,
             'template' => $options['template'] ?? null,
+            'templateOptions' => $templateOptions,
             'initSort' => $options['initSort'] ?? null
         ]);
     }

@@ -4,7 +4,8 @@
     {% for item in items %}
         <div class="col-sm-12 col-md-6 my-3">
             <div class="row">
-                <div class="col-md-12 col-xl-4 text-center">
+                <div class="col-md-12 offset-lg-2"></div>
+                <div class="col-md-12 col-lg-5 text-right">
                     {% set image  = item.exampleAssets.first() %}
                     {# Display the thumbnail list #}
 
@@ -14,7 +15,7 @@
                         <a href=""><img src="https://via.placeholder.com/182x268.png?text=Image+Placeholder" /></a>
                     {% endif %}
                 </div>
-                <div class="col-md-12 col-xl-8">
+                <div class="col-md-12 col-lg-7">
                     <h2 class="my-0">{{  item.title }} ({{ item.superFilterReleaseDate }}) | {{ item.superFilterImdbRating }} star</h2>
                     <dl>
                         <dt><strong class="mt-0">Genre:</strong> {{ item.superFilterGenre.select('title').column()|join(', ') }}</dt>

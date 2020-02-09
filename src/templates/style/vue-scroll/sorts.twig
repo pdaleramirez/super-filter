@@ -1,0 +1,18 @@
+<h1>This is sort parent</h1>
+<form method="post">
+    <select v-model='config.params.sort' name="sort">
+        {% for item in sorts %}
+            {% set orderAsc = item.orderBy ~ '-asc' %}
+            <option {{ selected == orderAsc ? 'selected' : ''  }} value="{{ orderAsc }}">
+                {{  item.name }} Ascending
+            </option>
+
+            {% set orderDesc = item.orderBy ~ '-desc' %}
+            <option {{ selected == orderDesc ? 'selected' : ''  }} value="{{ orderDesc }}">
+                {{  item.name }} Descending
+            </option>
+        {% endfor %}
+    </select>
+
+    <button @click="submitSort" type="button">Sort</button>
+</form>

@@ -1,4 +1,5 @@
 <?php
+
 namespace pdaleramirez\superfilter\services;
 
 use craft\base\Component;
@@ -31,13 +32,13 @@ class App extends Component
 
     public function init()
     {
-        $this->sampleData  = new SampleData();
+        $this->sampleData = new SampleData();
         $this->searchTypes = new SearchTypes();
     }
 
     public function config($params)
-	{
-	    $this->params = $params;
+    {
+        $this->params = $params;
 
         $handle = $params['handle'];
 
@@ -81,12 +82,12 @@ class App extends Component
         $this->elementQuery = $elementQuery;
 
         if ($category == null && $categoryId != null) {
-           return [];
+            return [];
         }
 
         $currentPage = $params['currentPage'] ?? Craft::$app->getRequest()->getPageNum();
 
-        $paginatorParams =  [
+        $paginatorParams = [
             'currentPage' => $currentPage
         ];
 
@@ -114,9 +115,9 @@ class App extends Component
         }
 
         return $this;
-	}
+    }
 
-	public function items()
+    public function items()
     {
         return $this->elements;
     }
@@ -159,17 +160,18 @@ class App extends Component
         return $plugin->getSettings();
     }
 
-    public function getEntryTemplates()
+    public function getTemplateOptions()
     {
         return [
-          'vue'   => Craft::t('super-filter', 'Vue'),
-          'plain' => Craft::t('super-filter', 'Plain')
+            'vue' => Craft::t('super-filter', 'Vue'),
+            'vue-scroll' => Craft::t('super-filter', 'Vue Infinite Scroll'),
+            'plain' => Craft::t('super-filter', 'Plain')
         ];
     }
 
-    public function isEntryTemplateIn($value)
+    public function isTemplateIn($value)
     {
-        $keys = array_keys($this->getEntryTemplates());
+        $keys = array_keys($this->getTemplateOptions());
 
         return in_array($value, $keys);
     }

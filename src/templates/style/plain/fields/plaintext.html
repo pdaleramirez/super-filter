@@ -1,1 +1,2 @@
-{% include "style/fields/plaintext" %}
+<input type="text" name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}]" value="{{ field.value() }}" />
+
