@@ -183,6 +183,7 @@ class SuperFilterController extends Controller
 
             if (isset($bodyParams['reset'])) {
                 $bodyParams[$prefixParam] = [];
+                $bodyParams['reset'] = null;
             }
         }
 

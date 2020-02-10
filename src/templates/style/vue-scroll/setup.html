@@ -17,7 +17,6 @@ let app = new Vue({
     data: {
         handle: superFilterHandle,
         items: [],
-        initParams: {},
         links: {
             totalPages: 1
         },
@@ -33,71 +32,51 @@ let app = new Vue({
     },
     methods: {
         submitFilter() {
-            this.currentPage = 1;
-            this.config.currentPage = this.currentPage;
-
-            this.getFilteredItems();
+            this.reload();
         },
         clearFilter() {
-            this.config.params = this.initParams;
-            console.log(this.config.params);
+            let fields = this.config.params.fields;
+            for (let key in fields) {
+                if (Array.isArray(fields[key])) {
+                    this.config.params.fields[key] = [];
+                } else {
+                    this.config.params.fields[key] = "";
+                }
+            }
+            this.reload();
         },
         submitSort() {
-            this.getFilteredItems();
+            this.reload();
+        },
+        reload() {
+            this.currentPage = 1;
+            this.config.currentPage = this.currentPage;
+            this.items = [];
+            this.infiniteId+= 1;
         },
         infiniteHandler($state) {
             this.config.currentPage = this.currentPage;
-            let data = {
-                handle: this.handle,
-                config: this.config
-            };
 
-            data[csrfTokenName] = csrfTokenValue;
-
-            if (this.currentPage === 1) {
-                axios.post('/super-filter/fields', qs.stringify(data))
-                    .then(({data}) => {
-                        console.log(this.currentPage);
-                        if (data.items.length) {
-                            this.currentPage++;
-                            this.config = data.config;
-                            this.initParams = Object.assign({}, data.config.params);
-                            this.items.push(...data.items);
-
-                            $state.loaded();
-                        } else {
-                            $state.complete();
-                        }
-                    });
-            } else {
-                axios.post('/super-filter/filter', qs.stringify(data))
-                    .then(({data}) => {
-                        if (data.items.length) {
-                            this.currentPage++;
-                            this.items.push(...data.items);
-
-                            $state.loaded();
-                        } else {
-                            $state.complete();
-                        }
-                    });
-            }
+            this.filterItems($state);
         },
-        getFilteredItems() {
+        filterItems($state) {
             let data = {
                 handle: this.handle,
                 config: this.config
             };
 
             data[csrfTokenName] = csrfTokenValue;
-            this.loading = true;
+
             axios.post('/super-filter/filter', qs.stringify(data))
-                .then((response) => {
-                    this.items  = response.data.items;
-                    this.links  = response.data.links;
-                    this.loading = false;
-                    this.currentPage++;
-                    this.infiniteId += 1;
+                .then(({data}) => {
+                    if (data.items.length) {
+                        this.currentPage++;
+                        this.items.push(...data.items);
+
+                        $state.loaded();
+                    } else {
+                        $state.complete();
+                    }
                 });
         }
     },
@@ -106,6 +85,16 @@ let app = new Vue({
 
         this.config.params = {...this.config.params, ...parse};
         this.config.currentPage = Number(superFilterCurrentPage);
+        let data = {
+            handle: this.handle,
+            config: this.config
+        };
+
+        data[csrfTokenName] = csrfTokenValue;
+        axios.post('/super-filter/fields', qs.stringify(data))
+            .then(({data}) => {
+                this.config = data.config;
+            });
     }
 });
 {% endjs %}
