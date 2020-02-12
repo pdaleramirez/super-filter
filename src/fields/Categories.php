@@ -59,12 +59,12 @@ class Categories extends ElementSearchField
         }
     }
 
-
     /**
      * @return string
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getHtml()
     {

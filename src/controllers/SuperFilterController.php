@@ -99,26 +99,6 @@ class SuperFilterController extends Controller
         return $pluginSettings;
     }
 
-    public function actionTest()
-    {
-        $entry = Entry::findOne(304);
-        $cats = $entry->superFilterGenre->all();
-        Craft::dd($cats);
-        return null;
-    }
-
-    public function createCategoriesField()
-    {
-        $config["type"] = "craft\\fields\\Categories";
-        $config["groupId"] = 1;
-        $config["name"] = "Super Categories";
-        $config["handle"] = "superCategories";
-
-        $field = Craft::$app->getFields()->createField($config);
-
-        \Craft::dd($field);
-    }
-
     /**
      * @return string|null
      * @throws \Throwable

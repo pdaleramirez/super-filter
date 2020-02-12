@@ -28,7 +28,8 @@ let app = new Vue({
         },
         loading: false,
         currentPage: 1,
-        infiniteId: +new Date()
+        infiniteId: +new Date(),
+        query: ''
     },
     methods: {
         submitFilter() {
@@ -43,10 +44,16 @@ let app = new Vue({
                     this.config.params.fields[key] = "";
                 }
             }
+
             this.reload();
         },
         submitSort() {
             this.reload();
+        },
+        pushState() {
+            let queryString = (this.query !== '')? window.location.pathname + '?' + this.query : null;
+
+           window.history.pushState("/", "", queryString);
         },
         reload() {
             this.currentPage = 1;
@@ -77,13 +84,15 @@ let app = new Vue({
                     } else {
                         $state.complete();
                     }
+                    this.query = data.query;
+
+                    this.pushState();
                 });
         }
     },
     mounted() {
         let parse = JSON.parse(superFilterParams);
 
-        this.config.params = {...this.config.params, ...parse};
         this.config.currentPage = Number(superFilterCurrentPage);
         let data = {
             handle: this.handle,
@@ -94,6 +103,9 @@ let app = new Vue({
         axios.post('/super-filter/fields', qs.stringify(data))
             .then(({data}) => {
                 this.config = data.config;
+
+                this.config.params.fields = {...data.config.params.fields, ...parse.fields};
+                this.config.params.sort = parse.sort !== undefined ? parse.sort : data.config.params.sort;
             });
     }
 });

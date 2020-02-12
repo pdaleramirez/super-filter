@@ -12,6 +12,7 @@ use yii\db\QueryInterface;
 
 class Title extends SearchField
 {
+    public $initValue = '';
     public $object;
     public function __construct()
     {

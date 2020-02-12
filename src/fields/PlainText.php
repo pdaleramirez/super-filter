@@ -8,6 +8,7 @@ use pdaleramirez\superfilter\base\SearchField;
 
 class PlainText extends SearchField
 {
+    public $initValue = '';
     public function fieldType()
     {
         return PlainTextCraft::class;

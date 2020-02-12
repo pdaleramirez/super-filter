@@ -8,6 +8,7 @@ use pdaleramirez\superfilter\base\SearchField;
 
 class Number extends SearchField
 {
+    public $initValue = '';
     public function fieldType()
     {
         return NumberCraft::class;
