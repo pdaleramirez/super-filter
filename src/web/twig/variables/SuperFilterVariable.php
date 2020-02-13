@@ -42,19 +42,6 @@ class SuperFilterVariable
 
         $this->searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
 
-        $entry = Entry::find()->where(['slug' => 'superfilterattack-on-titan'])->one();
-
-//        /**
-//         * @var CategoryQuery $categoryQuery
-//         */
-//        //$categoryQuery = $entry->getFieldValue('sproutExampleCategories');
-//        $categoryQuery = $entry->getFieldValue('superFilterGuides');
-//
-//        /**
-//         * @var $categoryQuery MultiOptionsFieldData
-//         */
-//        $guide = $categoryQuery;
-//        //Craft::dd($guide);
         return $this->renderTemplate('setup', [
             'handle' => $handle,
             'options' => $config['options']

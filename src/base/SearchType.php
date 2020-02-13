@@ -5,11 +5,16 @@ namespace pdaleramirez\superfilter\base;
 use Craft;
 use craft\base\Component;
 use craft\elements\db\ElementQuery;
-use craft\elements\Entry;
 use pdaleramirez\superfilter\contracts\SearchTypeInterface;
 use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\SuperFilter;
 
+/**
+ * Class SearchType
+ * @package pdaleramirez\superfilter\base
+ * @property array container
+ * @property array fieldTypes
+ */
 abstract class SearchType extends Component implements SearchTypeInterface
 {
     /**
@@ -60,6 +65,9 @@ abstract class SearchType extends Component implements SearchTypeInterface
         }
     }
 
+    /**
+     * @return |null
+     */
     public function getContainer()
     {
         return null;
@@ -79,7 +87,6 @@ abstract class SearchType extends Component implements SearchTypeInterface
         $fieldObjects = $this->_getFields ?? $this->getFieldObjects();
 
         foreach ($fieldObjects as $sectionHandle => $item) {
-            //$fields[$sectionHandle] = $entryOptions['defaultSortOptions'];
             $fields[$sectionHandle]['label']    = $item['label'];
             $fields[$sectionHandle]['selected'] = [];
             $itemObjects = $item['fieldObjects'];
@@ -102,8 +109,8 @@ abstract class SearchType extends Component implements SearchTypeInterface
     }
 
     /**
-     * @return array|null
-     * @throws \yii\base\Exception
+     * @return |null
+     * @throws \Exception
      */
     protected function getFieldTypes()
     {

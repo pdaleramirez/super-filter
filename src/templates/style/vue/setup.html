@@ -26,7 +26,8 @@ let app = new Vue({
                 fields: []
             }
         },
-        loading: false
+        loading: true,
+        query: ''
     },
     methods: {
         submitFilter() {
@@ -48,6 +49,11 @@ let app = new Vue({
         submitSort() {
             this.getFilteredItems();
         },
+        pushState() {
+            let queryString = (this.query !== '')? window.location.pathname + '?' + this.query : null;
+
+            window.history.pushState("/", "", queryString);
+        },
         onPaginate(pageNum) {
             this.config.currentPage = pageNum;
 
@@ -62,16 +68,25 @@ let app = new Vue({
             data[csrfTokenName] = csrfTokenValue;
             this.loading = true;
             axios.post('/super-filter/filter', qs.stringify(data))
-                .then((response) => {
-                    this.items  = response.data.items;
-                    this.links  = response.data.links;
+                .then(({data}) => {
+                    this.items  = data.items;
+                    this.links  = data.links;
+                    this.query  = data.query;
                     this.loading = false;
+
+                    this.pushState();
                 });
         },
         getFields() {
+            let parse = JSON.parse(superFilterParams);
+
+            this.config.params.fields = parse.fields;
+            if (parse.sort !== undefined) {
+                this.config.params.sort   = parse.sort;
+            }
+
             let data = {
                 handle: this.handle,
-                //params: this.params,
                 config: this.config
             };
 
@@ -80,6 +95,10 @@ let app = new Vue({
             axios.post('/super-filter/fields', qs.stringify(data))
                 .then(({data}) => {
                     this.config = data.config;
+
+                    this.config.params.fields = {...data.config.params.fields, ...parse.fields};
+                    this.config.params.sort = parse.sort !== undefined ? parse.sort : data.config.params.sort;
+
                     this.items  = data.items;
                     this.links  = data.links;
                     this.loading = false;
@@ -87,9 +106,7 @@ let app = new Vue({
         }
     },
     mounted() {
-        let parse = JSON.parse(superFilterParams);
 
-        this.config.params = {...this.config.params, ...parse};
         this.config.currentPage = Number(superFilterCurrentPage);
 
         this.getFields();

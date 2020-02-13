@@ -21,6 +21,12 @@ class ElementsController extends Controller
 
         $config = $searchSetupService->getConfigById($handle);
 
+        $requestParams = Craft::$app->getRequest()->getBodyParam('config.params');
+
+        if ($requestParams) {
+            $config['params'] = $requestParams;
+        }
+
         $searchSetupService->setSearchSetup($config);
 
         $config  = $searchSetupService->getConfig();
@@ -55,8 +61,6 @@ class ElementsController extends Controller
 
         $config = $searchSetupService->getConfigById($handle);
 
-       //$config['params'] = Craft::$app->getRequest()->getBodyParam('params');
-
         $requestConfig = Craft::$app->getRequest()->getBodyParam('config');
 
         $config = array_merge($config, $requestConfig);
@@ -82,7 +86,7 @@ class ElementsController extends Controller
         }
 
         return Json::encode([
-            'items'  => $searchSetupService->getItems(),
+            'items'  => $searchSetupService->getItemToArray(),
             'links'  => $searchSetupService->getLinks(),
             'query'    => $query
         ]);

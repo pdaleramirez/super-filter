@@ -24,6 +24,7 @@ class SearchTypes extends Component
 {
     const EVENT_REGISTER_SEARCH_TYPES = 'defineSuperFilterSearchTypes';
     const EVENT_REGISTER_SEARCH_FIELD_TYPES = 'defineSuperFilterSearchFieldTypes';
+    const PAGE_SIZE = 25;
 
     protected $config;
     protected $items;
@@ -123,17 +124,21 @@ class SearchTypes extends Component
 
         if ($field) {
             foreach ($field as $handle => $item) {
-                foreach ($field[$handle]['options'] as $key => $attribute) {
-                    $id = $attribute['id'];
+                if (isset($field[$handle]['options'])) {
+                    foreach ($field[$handle]['options'] as $key => $attribute) {
+                        $id = $attribute['id'];
 
-                    $fieldObj = Craft::$app->getFields()->getFieldById($id);
+                        $fieldObj = Craft::$app->getFields()->getFieldById($id);
 
-                    if ($this->getSearchFieldByObj($fieldObj) == null) {
-                        unset($field[$handle]['options'][$key]);
+                        if ($this->getSearchFieldByObj($fieldObj) == null) {
+                            unset($field[$handle]['options'][$key]);
+                        }
                     }
-                }
 
-                array_unshift($field[$handle]['options'], ['name' => 'Title', 'id' => 'title']);
+                    array_unshift($field[$handle]['options'], ['name' => 'Title', 'id' => 'title']);
+                } else {
+                    $field[$handle]['options'][] =  ['name' => 'Title', 'id' => 'title'];
+                }
             }
 
             $items['items'] = (array) $field;
@@ -361,7 +366,7 @@ class SearchTypes extends Component
 
         $paginator = new Paginator($elementQuery, [
             'currentPage' => $config['currentPage'],
-            'pageSize'    => $config['options']['perPage']
+            'pageSize'    => $config['options']['perPage'] != '' ? $config['options']['perPage'] : static::PAGE_SIZE
         ]);
 
         $this->links = Paginate::create($paginator);

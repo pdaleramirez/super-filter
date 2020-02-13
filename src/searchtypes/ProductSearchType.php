@@ -3,21 +3,25 @@
 namespace pdaleramirez\superfilter\searchtypes;
 
 use Craft;
+use craft\commerce\elements\Product;
+use craft\commerce\Plugin;
 use craft\elements\Entry;
 use pdaleramirez\superfilter\base\SearchType;
 use pdaleramirez\superfilter\SuperFilter;
 
 /**
- * Class EntrySearchType
+ * Class ProductSearchType
  * @package pdaleramirez\superfilter\searchtypes
+ * @property array fields
+ * @property array fieldObjects
  */
-class EntrySearchType extends SearchType
+class ProductSearchType extends SearchType
 {
     private $_getFields = null;
 
     public function getElement()
     {
-        return Entry::class;
+        return Product::class;
     }
 
     /**
@@ -25,13 +29,13 @@ class EntrySearchType extends SearchType
      */
     public function getContainer(): array
     {
-        $sections = Craft::$app->getSections()->getAllSections();
+        $productTypes = Plugin::getInstance()->getProductTypes()->getAllProductTypes();
 
         $containers = [];
 
-        if (!empty($sections)) {
-            foreach ($sections as $section) {
-                $containers[$section->handle] = $section->name;
+        if (!empty($productTypes)) {
+            foreach ($productTypes as $productType) {
+                $containers[$productType->handle] = $productType->name;
             }
         }
 
@@ -60,7 +64,6 @@ class EntrySearchType extends SearchType
                 }
             }
         }
-
 
         return $fields;
     }
@@ -105,22 +108,15 @@ class EntrySearchType extends SearchType
      */
     private function getFieldObjects()
     {
-        $sections = Craft::$app->getSections()->getAllSections();
+        $productTypes = Plugin::getInstance()->getProductTypes()->getAllProductTypes();
 
-        if (!empty($sections)) {
-            foreach ($sections as $section) {
+        if (!empty($productTypes)) {
+            foreach ($productTypes as $productType) {
 
-                $entryTypes = $section->getEntryTypes();
-
-                if (count($entryTypes) > 0) {
-                    foreach ($entryTypes as $entryType) {
-                        $fieldObjects = $entryType->getFieldLayout()->getFields();
-                        $this->_getFields[$section->handle]['label'] = $section->name;
-                        $this->_getFields[$section->handle]['selected'] = [];
-                        $this->_getFields[$section->handle]['fieldObjects'] = $fieldObjects;
-
-                    }
-                }
+                $fieldObjects = $productType->getProductFieldLayout()->getFields();
+                $this->_getFields[$productType->handle]['label'] = $productType->name;
+                $this->_getFields[$productType->handle]['selected'] = [];
+                $this->_getFields[$productType->handle]['fieldObjects'] = $fieldObjects;
             }
         }
 
@@ -134,14 +130,14 @@ class EntrySearchType extends SearchType
     public function getQuery()
     {
         if ($this->query === null) {
-            $this->query = Entry::find();
+            $this->query = Product::find();
 
             $filter = $this->items;
 
             $sectionHandle = $filter['container'] ?? null;
 
             if ($sectionHandle) {
-                $query = $this->query->section($sectionHandle);
+                $query = $this->query->type($sectionHandle);
 
                 $this->query = $query;
             }

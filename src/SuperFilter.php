@@ -27,6 +27,7 @@ use pdaleramirez\superfilter\fields\Title;
 use pdaleramirez\superfilter\models\Settings;
 use pdaleramirez\superfilter\searchtypes\CategorySearchType;
 use pdaleramirez\superfilter\searchtypes\EntrySearchType;
+use pdaleramirez\superfilter\searchtypes\ProductSearchType;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\services\SearchTypes;
 use pdaleramirez\superfilter\web\twig\variables\SuperFilterVariable;
@@ -110,6 +111,7 @@ class SuperFilter extends Plugin
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_TYPES, function (RegisterSearchTypeEvent $event) {
             $event->searchTypes['entry']    = new EntrySearchType();
             $event->searchTypes['category'] = new CategorySearchType();
+            $event->searchTypes['product']  = new ProductSearchType();
         });
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_FIELD_TYPES, function (RegisterSearchFieldTypeEvent $event) {
             $event->searchFieldTypes[] = new Title();

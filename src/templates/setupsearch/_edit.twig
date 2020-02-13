@@ -94,19 +94,6 @@
         </div>
     </div>
 
-
-    {{ forms.selectField({
-        label: "Content Loading Type"|t('super-filter'),
-        id: 'content-loading-type',
-        name: 'options[contentLoadingType]',
-        instructions: "The type of content loading the search result be."|t('super-filter'),
-        options: [
-            { value: 'pagination', label: 'Pagination' },
-            { value: 'infinite-scroll', label: 'Infinite Scroll' }
-        ],
-        value: options.contentLoadingType is defined ? options.contentLoadingType : ''
-    }) }}
-
     <div id="field-setting" v-if="!loading">
         <div v-if="items && items.elements.items">
             <input type="hidden" name="items" :value="JSON.stringify(items)" />
