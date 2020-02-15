@@ -7,7 +7,7 @@ use craft\base\Model;
 
 class Settings extends Model
 {
-    public $name = null;
+    public $pluginNameNav = null;
     public $entryTemplate = null;
     public $prefixParam = 'fields';
     public $operator    = 'and';
@@ -23,12 +23,6 @@ class Settings extends Model
                 'url' => 'super-filter/settings/general',
                 'selected' => 'general',
                 'template' => 'super-filter/settings/general'
-            ],
-            'filter' => [
-                'label' => Craft::t('super-filter', 'Filter'),
-                'url' => 'super-filter/settings/filter',
-                'selected' => 'filter',
-                'template' => 'super-filter/settings/filter/index'
             ]
         ];
     }

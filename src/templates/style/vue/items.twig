@@ -2,9 +2,9 @@
 <div class="row" v-if="(!loading && items)">
         <div class="col-sm-12 col-md-6 my-3" v-for="item in items">
             <div class="row">
-                <div class="col-md-12 col-xl-4 text-center">
-                    <div v-if="item.exampleAssets.length">
-                        <template v-for="asset in item.exampleAssets">
+                <div class="col-md-12 col-xl-5 text-right">
+                    <div v-if="item.superFilterAssets != null && item.superFilterAssets.length > 0">
+                        <template v-for="asset in item.superFilterAssets">
                             <img :src="asset.url" />
                         </template>
                     </div>
@@ -12,7 +12,7 @@
                         <a href=""><img src="https://via.placeholder.com/182x268.png?text=Image+Placeholder" /></a>
                     </div>
                 </div>
-                <div class="col-md-12 col-xl-8">
+                <div class="col-md-12 col-xl-7">
                     <h2 class="my-0">${ item.title } (${ item.superFilterReleaseDate.label }) | ${ item.superFilterImdbRating.label } star</h2>
                     <dl>
                         <dt><strong class="mt-0">Genre:</strong>
@@ -22,11 +22,6 @@
                         </dt>
                         <dt><strong>Type:</strong>
                             ${ item.superFilterShowTypes.label }
-                        </dt>
-                        <dt><strong>Guides:</strong>
-                            <template v-if="item.superFilterGuides.length" v-for="(element, index) in item.superFilterGuides">
-                                <span v-if="index != 0">, </span><span v-if="element.label">${ element.label }</span>
-                            </template>
                         </dt>
                     </dl>
 

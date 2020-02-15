@@ -3,7 +3,7 @@
     {{ actionInput('super-filter/super-filter/filter') }}
 
     {% for field in fields %}
-        <div class="form-group">
+        <div class="form-group my-3">
             <label>{{ field.object.name }}</label>
             <div class="input">
                 {{ field.html()|raw }}

@@ -2,8 +2,8 @@
         <div class="col-sm-12 col-md-12 my-3" v-for="item in items">
             <div class="row">
                 <div class="col-md-12 col-xl-3 text-right">
-                    <div v-if="item.exampleAssets.length">
-                        <template v-for="asset in item.exampleAssets">
+                    <div v-if="item.superFilterAssets.length">
+                        <template v-for="asset in item.superFilterAssets">
                             <img :src="asset.url" />
                         </template>
                     </div>

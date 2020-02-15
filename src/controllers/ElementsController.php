@@ -61,6 +61,8 @@ class ElementsController extends Controller
 
         $config = $searchSetupService->getConfigById($handle);
 
+        $initSort = $config['options']['initSort'] ?? null;
+
         $requestConfig = Craft::$app->getRequest()->getBodyParam('config');
 
         $config = array_merge($config, $requestConfig);
@@ -82,6 +84,11 @@ class ElementsController extends Controller
         $query = '';
 
         if (!empty($config['params']['fields']) || !empty($config['params']['sort'])) {
+
+            if ($initSort && $initSort == $config['params']['sort']) {
+                unset($config['params']['sort']);
+            }
+
             $query = UrlHelper::buildQuery($config['params']);
         }
 

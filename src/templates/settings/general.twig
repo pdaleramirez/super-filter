@@ -29,56 +29,31 @@
 
             {{ forms.textField({
                 id: 'name',
-                label: 'Name',
-                name: 'settings[name]',
-                value: settings.name
+                label: 'Plugin Name Nav',
+                name: 'settings[pluginNameNav]',
+                value: settings.pluginNameNav
             }) }}
 
-            <input type="hidden" name="settings[entryTemplate]" :value="comboValue" />
-            <combo-box v-model="comboValue" :options="options"></combo-box>
+            {{ forms.textField({
+                id: 'prefixParam',
+                label: 'Search Prefix Parameter',
+                name: 'settings[prefixParam]',
+                value: settings.prefixParam
+            }) }}
 
-            <div class="field">
-                <button @click.prevent="installSampleData" class="btn submit">Install Example Data
-                    <i class="fa fa-spin fa-spinner" style="display: none"></i></button>
-            </div>
+            {{ forms.selectField({
+                label: "Category Group"|t('super-filter'),
+                name: 'settings[operator]',
+                options: [
+                    { value: 'and', label: 'And' },
+                    { value: 'or', label: 'Or' }
+                ],
+                value: settings.operator is defined ? settings.operator : null,
+                errors: errors['operator'] is defined ? errors['operator'] : null
+            }) }}
+
         </div>
     </div>
 
-    <script>
-
-        let app = new Vue({
-            el: "#settings-cp",
-            data: {
-                selected: null,
-                options: [
-                    {value: 'table', label:'Table'},
-                    {value:'list', label:'List'},
-                    {value:'grid', label:'Grid'},
-                    {value:'custom', label:'Add Custom'}
-                ],
-                comboValue: '{{ settings.entryTemplate }}'
-            },
-            methods: {
-                installSampleData(event) {
-                    let url = Craft.getActionUrl("super-filter/super-filter/install-sample-data");
-                    let data = {};
-
-                    data[csrfTokenName] = csrfTokenValue;
-
-                    let spinner = event.currentTarget.getElementsByTagName('i')[0];
-
-                    spinner.style.display = 'inline-block';
-
-                    axios.post(url, qs.stringify(data))
-                        .then(({data}) => {
-                            spinner.style.display = 'none';
-                        });
-                }
-            }
-        });
-    </script>
 {% endblock %}
-{% js %}
-
-{% endjs %}
 

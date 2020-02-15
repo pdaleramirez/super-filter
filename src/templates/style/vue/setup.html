@@ -50,7 +50,7 @@ let app = new Vue({
             this.getFilteredItems();
         },
         pushState() {
-            let queryString = (this.query !== '')? window.location.pathname + '?' + this.query : null;
+            let queryString = (this.query !== '')? window.location.pathname + '?' + this.query : window.location.pathname;
 
             window.history.pushState("/", "", queryString);
         },
@@ -101,6 +101,7 @@ let app = new Vue({
 
                     this.items  = data.items;
                     this.links  = data.links;
+
                     this.loading = false;
                 });
         }

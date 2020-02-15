@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-md-12 offset-lg-2"></div>
                 <div class="col-md-12 col-lg-5 text-right">
-                    {% set image  = item.exampleAssets.first() %}
+                    {% set image  = item.getFieldStatus('superFilterAssets') != null ? item.superFilterAssets.first() : null %}
                     {# Display the thumbnail list #}
 
                     {% if image %}
@@ -20,7 +20,6 @@
                     <dl>
                         <dt><strong class="mt-0">Genre:</strong> {{ item.superFilterGenre.select('title').column()|join(', ') }}</dt>
                         <dt><strong>Type:</strong> {{ item.superFilterShowTypes }}</dt>
-                        <dt><strong>Guides:</strong> {{ item.superFilterGuides|map((value, index) => value.label)|join(', ') }}</dt>
                     </dl>
 
                     <div class="description">

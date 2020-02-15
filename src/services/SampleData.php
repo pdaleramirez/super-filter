@@ -3,6 +3,7 @@ namespace pdaleramirez\superfilter\services;
 
 use craft\base\Component;
 use Craft;
+use craft\base\Element;
 use craft\elements\Category;
 use craft\elements\Entry;
 use craft\fields\Categories;
@@ -11,6 +12,8 @@ use craft\fields\Dropdown;
 use craft\fields\PlainText;
 use craft\fields\RadioButtons;
 use craft\fields\Tags;
+use craft\helpers\ElementHelper;
+use craft\helpers\UrlHelper;
 use craft\models\CategoryGroup;
 use craft\models\CategoryGroup_SiteSettings;
 use craft\models\EntryType;
@@ -40,8 +43,6 @@ class SampleData extends Component
         $this->tagGroupId  = $tagGroup->id;
         $this->tagGroupUid = $tagGroup->uid;
 
-        $this->createTags($tagGroup);
-
         $this->categoryGroupId  = $categoryGroup->id;
         $this->categoryGroupUid = $categoryGroup->uid;
 
@@ -57,8 +58,6 @@ class SampleData extends Component
 
                     $this->entryTypeId      = $entryType->id;
 
-                    $ids = $this->createGenres();
-
                     $this->generateEntries();
 
                     return $ids;
@@ -68,27 +67,6 @@ class SampleData extends Component
 
         return null;
     }
-
-    private function createTags()
-    {
-        $tags = ['Funny', 'Sexy', 'Dark', 'Apocalypse', 'Teen', 'Superhero', 'Hacking', 'Crime', 'Exciting', 'Survival'];
-
-        $ids = [];
-        foreach ($tags as $title) {
-            $slug = strtolower(static::PREFIX . $title);
-
-            $tagModel = TagElement::find()->where(['slug' => $slug])->one() ?? new TagElement();
-            $tagModel->title = $title;
-            $tagModel->slug  = $slug;
-            $tagModel->groupId = $this->tagGroupId;
-
-            Craft::$app->getElements()->saveElement($tagModel);
-            $ids[] = $tagModel->id;
-        }
-
-        return $ids;
-    }
-
 
     /**
      * @param Section $section
@@ -182,7 +160,6 @@ class SampleData extends Component
         $ids[] = $this->getFieldShowTags();
         $ids[] = $this->getFieldShowTypes();
         $ids[] = $this->getFieldReleaseDate();
-        $ids[] = $this->getFieldGuides();
         $ids[] = $this->getFieldImdbRating();
 
         return $ids;
@@ -286,37 +263,6 @@ class SampleData extends Component
         return $tagGroup;
     }
 
-    /**
-     * @return array
-     * @throws \Throwable
-     * @throws \craft\errors\ElementNotFoundException
-     * @throws \yii\base\Exception
-     */
-    private function createGenres()
-    {
-        $slugs = ['Action', 'Adventure', 'Fantasy', 'Sci-Fi'];
-
-        $ids = [];
-
-        foreach ($slugs as $title) {
-            $slug = strtolower(static::PREFIX . $title);
-
-            $element = Category::find()->where(['slug' => $slug])->one() ?? new Category();
-
-            if ($element->id == null) {
-                $element->title   = $title;
-                $element->slug    = $slug;
-                $element->groupId = $this->categoryGroupId;
-
-                Craft::$app->getElements()->saveElement($element);
-            }
-
-            $ids[] = $element->id;
-        }
-
-        return $ids;
-    }
-
     private function generateEntries()
     {
         $entries = [
@@ -325,22 +271,20 @@ class SampleData extends Component
                 'fields' => [
                     'Genre' => ['action', 'adventure'],
                     'Description' => 'This is arrow description',
-                    'ShowTags' => ['superhero', 'crime', 'exciting', 'survival'],
+                    'ShowTags' => ['superhero', 'exciting', 'survival'],
                     'ShowTypes' => 'tv-series',
-                    'ReleaseDates' => 2012,
-                    'Guides' => ['Comic Book', 'Police Detective'],
+                    'ReleaseDate' => 2012,
                     'ImdbRating' => 6
                 ]
             ],
             'scorpion' => [
                 'title' => 'Scorpion',
                 'fields' => [
-                    'Genre' => ['action'],
+                    'Genre' => ['action', "Crime"],
                     'Description' => 'This is scorpion description',
-                    'ShowTags' => ['crime', 'hacking'],
+                    'ShowTags' => ['hacking'],
                     'ShowTypes' => 'tv-series',
-                    'ReleaseDates' => 2014,
-                    'Guides' => ['Exciting US Programmes'],
+                    'ReleaseDate' => 2014,
                     'ImdbRating' => 7
                 ]
             ],
@@ -351,16 +295,169 @@ class SampleData extends Component
                     'Description' => 'This is attack on titan description',
                     'ShowTags' => ['dark', 'violent'],
                     'ShowTypes' => 'anime',
-                    'ReleaseDates' => 2017,
-                    'Guides' => ['Anime Action', 'Binge Worthy'],
+                    'ReleaseDate' => 2017,
                     'ImdbRating' => 8
+                ]
+            ],
+            'deadpool' => [
+                'title' => 'Deadpool',
+                'fields' => [
+                    'Genre' => ['action', 'adventure', 'comedy'],
+                    'Description' => 'A wisecracking mercenary gets experimented on and becomes immortal but ugly, and sets out to track down the man who ruined his looks.',
+                    'ShowTags' => ['dark', 'violent'],
+                    'ShowTypes' => 'films',
+                    'ReleaseDate' => 2016,
+                    'ImdbRating' => 8
+                ]
+            ],
+            'it' => [
+                'title' => 'IT',
+                'fields' => [
+                    'Genre' => ['Horror'],
+                    'Description' => 'In the summer of 1989, a group of bullied kids band together to destroy a shape-shifting monster, which disguises itself as a clown and preys on the children of Derry, their small Maine town.',
+                    'ShowTags' => ['dark', 'scary'],
+                    'ShowTypes' => 'films',
+                    'ReleaseDate' => 2017,
+                    'ImdbRating' => 7
+                ]
+            ],
+            'Terrorism Close Calls' => [
+                'title' => 'Terrorism Close Calls',
+                'fields' => [
+                    'Genre' => ['Crime'],
+                    'Description' => 'The war on terror is everywhere and anywhere. In this series, we learn about the deadly terrorist attacks that almost happened or were not as deadly as planned.',
+                    'ShowTags' => ['Provocative'],
+                    'ShowTypes' => 'documentaries',
+                    'ReleaseDate' => 2018,
+                    'ImdbRating' => 5
+                ]
+            ],
+            'World War Z' => [
+                'title' => 'World War Z',
+                'fields' => [
+                    'Genre' => ['Action', 'Adventure', 'Horror'],
+                    'Description' => 'Former United Nations employee Gerry Lane traverses the world in a race against time to stop a zombie pandemic that is toppling armies and governments and threatens to destroy humanity itself.',
+                    'ShowTags' => ['Violent', 'Scary'],
+                    'ShowTypes' => 'films',
+                    'ReleaseDate' => 2013,
+                    'ImdbRating' => 7
+                ]
+            ],
+            'Kengan Ashura' => [
+                'title' => 'Kengan Ashura',
+                'fields' => [
+                    'Genre' => ['Action'],
+                    'Description' => 'Kazuo Yamashita is an ordinary fifty-six year old man who one day is summoned by the chairman of his company and hired as a manager of a gladiator.',
+                    'ShowTags' => ['Violent', 'Exciting'],
+                    'ShowTypes' => 'anime',
+                    'ReleaseDate' => 2019,
+                    'ImdbRating' => 8
+                ]
+            ],
+            'Dirty Money' => [
+                'title' => 'Dirty Money',
+                'fields' => [
+                    'Genre' => ['Social and Cultural'],
+                    'Description' => 'A Netflix Original Series documenting various stories about exposing the greed, corruption, and crime spreading through the global economy.',
+                    'ShowTags' => ['Provocative', 'Cerebral'],
+                    'ShowTypes' => 'documentaries',
+                    'ReleaseDate' => 2018,
+                    'ImdbRating' => 8
+                ]
+            ],
+            'Conspiracy' => [
+                'title' => 'Conspiracy',
+                'fields' => [
+                    'Genre' => ['Political'],
+                    'Description' => 'History presents us with an accepted view of past events but there are often dissenting voices.',
+                    'ShowTags' => ['Provocative', 'Scandalous'],
+                    'ShowTypes' => 'documentaries',
+                    'ReleaseDate' => 2015,
+                    'ImdbRating' => 6
+                ]
+            ],
+            'House of cards' => [
+                'title' => 'House of cards',
+                'fields' => [
+                    'Genre' => ['Drama', 'Political'],
+                    'Description' => 'A Congressman works with his equally conniving wife to exact revenge on the people who betrayed him.',
+                    'ShowTags' => ['Dark', 'Cerebral'],
+                    'ShowTypes' => 'tv-series',
+                    'ReleaseDate' => 2013,
+                    'ImdbRating' => 8
+                ]
+            ],
+            'Man of Steel' => [
+                'title' => 'Man of Steel',
+                'fields' => [
+                    'Genre' => ['Action', 'Adventure', 'Sci-Fi'],
+                    'Description' => 'An alien child is evacuated from his dying world and sent to Earth to live among humans. His peace is threatened, when survivors of his home planet invade Earth.',
+                    'ShowTags' => ['Exciting', 'Superhero'],
+                    'ShowTypes' => 'films',
+                    'ReleaseDate' => 2013,
+                    'ImdbRating' => 7
+                ]
+            ],
+            'Gods of Egypt' => [
+                'title' => 'Gods of Egypt',
+                'fields' => [
+                    'Genre' => ['Action', 'Adventure', 'Fantasy'],
+                    'Description' => 'Mortal hero Bek teams with the god Horus in an alliance against Set, the merciless god of darkness, who has usurped Egypt\'s throne, plunging the once peaceful and prosperous empire.',
+                    'ShowTags' => ['Exciting'],
+                    'ShowTypes' => 'films',
+                    'ReleaseDate' => 2016,
+                    'ImdbRating' => 5
+                ]
+            ],
+            'Merlin' => [
+                'title' => 'Merlin',
+                'fields' => [
+                    'Genre' => ['Action', 'Adventure', 'Fantasy'],
+                    'Description' => 'These are the brand new adventures of Merlin, the legendary sorcerer as a young man, when he was just a servant to young Prince Arthur on the royal court of Camelot, who has soon become his best friend, and turned Arthur into a great king and a legend.',
+                    'ShowTags' => ['Exciting', 'Suspenseful'],
+                    'ShowTypes' => 'tv-series',
+                    'ReleaseDate' => 2012,
+                    'ImdbRating' => 7
+                ]
+            ],
+            'Out of Thin Air' => [
+                'title' => 'Out of Thin Air',
+                'fields' => [
+                    'Genre' => ['Crime', 'Suspenseful'],
+                    'Description' => 'Iceland, 1976. Six suspects confess to two violent crimes.',
+                    'ShowTags' => ['Chilling'],
+                    'ShowTypes' => 'documentaries',
+                    'ReleaseDate' => 2017,
+                    'ImdbRating' => 6
+                ]
+            ],
+            'The Great Gatsby' => [
+                'title' => 'The Great Gatsby',
+                'fields' => [
+                    'Genre' => ['Social and Cultural', 'Drama', 'Romance'],
+                    'Description' => 'A writer and wall street trader, Nick, finds himself drawn to the past and lifestyle of his millionaire neighbor, Jay Gatsby.',
+                    'ShowTags' => ['Scandalous'],
+                    'ShowTypes' => 'films',
+                    'ReleaseDate' => 2013,
+                    'ImdbRating' => 7
+                ]
+            ],
+            'The Kissing Booth' => [
+                'title' => 'The Kissing Booth',
+                'fields' => [
+                    'Genre' => ['Comedy', 'Romance'],
+                    'Description' => 'A high school student is forced to confront her secret crush at a kissing booth.',
+                    'ShowTags' => ['quirky'],
+                    'ShowTypes' => 'films',
+                    'ReleaseDate' => 2018,
+                    'ImdbRating' => 6
                 ]
             ],
         ];
 
         foreach ($entries as $slug => $entry) {
 
-            $slug = static::PREFIX . $slug;
+            $slug = ElementHelper::createSlug(static::PREFIX . $slug);
 
             $element = Entry::find()->where(['slug' => $slug])->one() ?? new Entry();
 
@@ -379,10 +476,18 @@ class SampleData extends Component
                 if ($fieldElement) {
                     $fieldIds = [];
                     foreach ($field as $fieldSlug) {
-                        $elementSlug = strtolower(static::PREFIX . $fieldSlug);
+                        $elementSlug = ElementHelper::createSlug(static::PREFIX . $fieldSlug);
 
-                        $elementObj = $fieldElement::find()->where(['slug' => $elementSlug])->one();
-                        if ($elementObj) {
+                        $elementObj = $fieldElement['element']::find()->where(['slug' => $elementSlug])->one();
+                        if (!$elementObj) {
+                            $fieldElementObj          = new $fieldElement['element'];
+                            $fieldElementObj->title   = ucwords($fieldSlug);
+                            $fieldElementObj->slug    = $elementSlug;
+                            $fieldElementObj->groupId = $fieldElement['groupId'];
+                            Craft::$app->getElements()->saveElement($fieldElementObj);
+
+                            $fieldIds[] = $fieldElementObj->id;
+                        } else {
                             $fieldIds[] = $elementObj->id;
                         }
                     }
@@ -395,6 +500,9 @@ class SampleData extends Component
 
             Craft::$app->getElements()->saveElement($element);
 
+            if ($element->hasErrors()) {
+                Craft::dd($element->getErrors());
+            }
         }
     }
 
@@ -403,13 +511,13 @@ class SampleData extends Component
          if (in_array($handle, [
            'Genre'
             ])) {
-            return Category::class;
+            return ['element' => Category::class, 'groupId' => $this->categoryGroupId];
          }
 
          if (in_array($handle, [
            'ShowTags'
             ])) {
-            return TagElement::class;
+            return ['element' => TagElement::class, 'groupId' => $this->tagGroupId];
          }
 
          return false;
@@ -522,7 +630,7 @@ class SampleData extends Component
         $options = [];
 
         // @bug if value is not type cast string it throws an error
-        for ($i=2011; $i<=2019; $i++) {
+        for ($i=2011; $i<=2025; $i++) {
             $options[] = [
                 'label' => $i,
                 'value' => (string) $i
@@ -533,35 +641,6 @@ class SampleData extends Component
             "type"    => Dropdown::class,
             "id"      => $fieldByHandle->id ?? null,
             "name"    => "Release Date",
-            "handle"  => $handle,
-            "groupId" => $this->fieldGroupId,
-            'settings' => ['options' => $options]
-        ];
-
-        return $this->saveField($config);
-    }
-
-    private function getFieldGuides()
-    {
-        $handle = static::PREFIX . "Guides";
-
-        $fieldByHandle = Craft::$app->getFields()->getFieldByHandle($handle);
-
-        $guides = [ 'Violent Programmes', 'Exciting US Programmes', 'Netflix Originals',
-            'Binge Worthy', 'Critically Acclaimed', 'Comic Book', 'Police Detective', 'Anime Action' ];
-
-        $options = [];
-        foreach ($guides as $guide) {
-            $options[] = [
-                'label' => $guide,
-                'value' => $guide
-            ];
-        }
-
-        $config = [
-            "type"    => Checkboxes::class,
-            "id"      => $fieldByHandle->id ?? null,
-            "name"    => "Guides",
             "handle"  => $handle,
             "groupId" => $this->fieldGroupId,
             'settings' => ['options' => $options]

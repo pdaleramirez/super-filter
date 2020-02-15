@@ -26,7 +26,6 @@ let app = new Vue({
                 fields: []
             }
         },
-        loading: false,
         currentPage: 1,
         infiniteId: +new Date(),
         query: ''
@@ -51,7 +50,7 @@ let app = new Vue({
             this.reload();
         },
         pushState() {
-            let queryString = (this.query !== '')? window.location.pathname + '?' + this.query : null;
+            let queryString = (this.query !== '')? window.location.pathname + '?' + this.query : window.location.pathname;
 
            window.history.pushState("/", "", queryString);
         },
@@ -85,7 +84,7 @@ let app = new Vue({
                         $state.complete();
                     }
                     this.query = data.query;
-
+                    console.log(this.query);
                     this.pushState();
                 });
         }

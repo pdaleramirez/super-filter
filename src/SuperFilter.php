@@ -19,10 +19,13 @@ use craft\web\View;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\fields\Categories;
+use pdaleramirez\superfilter\fields\Checkboxes;
 use pdaleramirez\superfilter\fields\Dropdown;
 use pdaleramirez\superfilter\fields\Entries;
 use pdaleramirez\superfilter\fields\Number;
 use pdaleramirez\superfilter\fields\PlainText;
+use pdaleramirez\superfilter\fields\RadioButtons;
+use pdaleramirez\superfilter\fields\Tags;
 use pdaleramirez\superfilter\fields\Title;
 use pdaleramirez\superfilter\models\Settings;
 use pdaleramirez\superfilter\searchtypes\CategorySearchType;
@@ -120,12 +123,18 @@ class SuperFilter extends Plugin
             $event->searchFieldTypes[] = new Categories();
             $event->searchFieldTypes[] = new Entries();
             $event->searchFieldTypes[] = new Dropdown();
+            $event->searchFieldTypes[] = new Tags();
+            $event->searchFieldTypes[] = new RadioButtons();
         });
     }
 
     public function getCpNavItem()
     {
         $parent = parent::getCpNavItem();
+
+        if (!empty(trim($this->getSettings()->pluginNameNav))) {
+            $parent['label'] = $this->getSettings()->pluginNameNav;
+        }
 
         $parent['subnav']['setup-search'] = [
             'label' => Craft::t('super-filter', 'Setup Search'),
