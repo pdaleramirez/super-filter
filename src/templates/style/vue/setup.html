@@ -38,6 +38,7 @@ let app = new Vue({
             this.getFilteredItems();
         },
         clearFilter() {
+            this.config.currentPage = 1;
             let fields = this.config.params.fields;
             for (let key in fields) {
                 if (Array.isArray(fields[key])) {

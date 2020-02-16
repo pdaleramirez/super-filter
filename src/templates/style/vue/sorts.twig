@@ -1,5 +1,5 @@
 <form method="post">
-    <select v-model='config.params.sort' name="sort">
+    Sort: <select v-model='config.params.sort' name="sort">
         {% for item in sorts %}
             {% set orderAsc = item.orderBy ~ '-asc' %}
             <option {{ selected == orderAsc ? 'selected' : ''  }} value="{{ orderAsc }}">
@@ -12,6 +12,4 @@
             </option>
         {% endfor %}
     </select>
-
-    <button @click="submitSort" type="button">Sort</button>
 </form>

@@ -52,8 +52,33 @@
                 errors: errors['operator'] is defined ? errors['operator'] : null
             }) }}
 
+            <div class="field">
+                <button @click.prevent="installSampleData" class="btn submit">Install Example Data
+                    <i class="fa fa-spin fa-spinner" style="display: none"></i></button>
+            </div>
         </div>
     </div>
 
 {% endblock %}
+{% js %}
+    let app = new Vue({
+        el: "#settings-cp",
+        data: {
 
+        },
+        methods: {
+            installSampleData(event) {
+                let url = Craft.getActionUrl("super-filter/super-filter/install-sample-data");
+                let data = {};
+                data[csrfTokenName] = csrfTokenValue;
+                let spinner = event.currentTarget.getElementsByTagName('i')[0];
+
+                spinner.style.display = 'inline-block';
+                axios.post(url, qs.stringify(data))
+                    .then(({data}) => {
+                        spinner.style.display = 'none';
+                    });
+            }
+        }
+    });
+{% endjs %}

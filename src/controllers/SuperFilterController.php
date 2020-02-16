@@ -111,7 +111,7 @@ class SuperFilterController extends Controller
 
         SuperFilter::$app->sampleData->generateSampleData();
 
-        return Json::encode(['result' => 'temp']);
+        return Json::encode(['success' => true]);
     }
 
     public function actionEdit($setupId = null, SetupSearch $setupElement = null)
