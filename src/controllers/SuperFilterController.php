@@ -162,7 +162,8 @@ class SuperFilterController extends Controller
             }
 
             if (isset($bodyParams['reset'])) {
-                return $this->redirect(Craft::$app->getRequest()->getPathInfo());
+                $bodyParams[$prefixParam] = [];
+                $bodyParams['reset'] = null;
             }
         }
 

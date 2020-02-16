@@ -523,7 +523,7 @@ class SearchTypes extends Component
         $template = $this->getTemplate();
         $searchField->setConfig(['template' => $template]);
 
-        $fields = $this->config['params'][SuperFilter::$app->getSettings()->prefixParam] ?? null;
+        $fields = $this->config['params']['fields'] ?? null;
 
         if ($fields) {
 
@@ -593,7 +593,7 @@ class SearchTypes extends Component
     {
         $query = $searchType->getQuery();
 
-        $fields = $searchType->params[SuperFilter::$app->getSettings()->prefixParam] ?? null;
+        $fields = $searchType->params['fields'] ?? null;
 
         $related = null;
         $searchQuery = null;

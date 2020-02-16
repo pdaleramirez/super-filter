@@ -3,6 +3,8 @@
 window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
     window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
     window.superFilterHandle = "{{ handle }}";
+    {% set params = craft.app.request.getQueryParams() %}
+    {% set params = params|merge({fields: craft.app.request.getQueryParam(craft.superFilter.settings.prefixParam)}) %}
     window.superFilterParams = '{{ craft.app.request.getQueryParams()|json_encode()|raw }}';
     window.superFilterCurrentPage = '{{ craft.app.request.getPageNum() }}';
 {% endjs %}
@@ -50,7 +52,7 @@ let app = new Vue({
             this.getFilteredItems();
         },
         pushState() {
-            let queryString = (this.query !== '')? window.location.pathname + '?' + this.query : window.location.pathname;
+            let queryString = (this.query !== '') ? window.location.pathname + '?' + this.query : window.location.pathname;
 
             window.history.pushState("/", "", queryString);
         },
@@ -69,9 +71,9 @@ let app = new Vue({
             this.loading = true;
             axios.post('/super-filter/filter', qs.stringify(data))
                 .then(({data}) => {
-                    this.items  = data.items;
-                    this.links  = data.links;
-                    this.query  = data.query;
+                    this.items = data.items;
+                    this.links = data.links;
+                    this.query = data.query;
                     this.loading = false;
 
                     this.pushState();
@@ -80,15 +82,21 @@ let app = new Vue({
         getFields() {
             let parse = JSON.parse(superFilterParams);
 
-            this.config.params.fields = parse.fields;
-            if (parse.sort !== undefined) {
-                this.config.params.sort   = parse.sort;
-            }
-
             let data = {
                 handle: this.handle,
-                config: this.config
+                config: {
+                    params: {
+                        sort: null,
+                        fields: []
+                    }
+                }
             };
+
+            data.config.params.fields = parse.fields;
+
+            if (parse.sort !== undefined) {
+                data.config.params.sort = parse.sort;
+            }
 
             data[csrfTokenName] = csrfTokenValue;
             this.loading = true;
@@ -99,11 +107,20 @@ let app = new Vue({
                     this.config.params.fields = {...data.config.params.fields, ...parse.fields};
                     this.config.params.sort = parse.sort !== undefined ? parse.sort : data.config.params.sort;
 
-                    this.items  = data.items;
-                    this.links  = data.links;
+                    this.items = data.items;
+                    this.links = data.links;
 
                     this.loading = false;
                 });
+        }
+    },
+    watch: {
+        'config.params': {
+            handler(val){
+                console.log('watch');
+                this.getFilteredItems();
+            },
+            deep: true
         }
     },
     mounted() {

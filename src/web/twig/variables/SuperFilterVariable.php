@@ -40,6 +40,12 @@ class SuperFilterVariable
         $config['currentPage'] = Craft::$app->getRequest()->getPageNum();
         $config['params'] = Craft::$app->getRequest()->getQueryParams();
 
+        $fieldParam = Craft::$app->getRequest()->getQueryParam(SuperFilter::$app->getSettings()->prefixParam);
+
+        if ($fieldParam) {
+            $config['params']['fields'] = $fieldParam;
+        }
+
         $this->searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
 
         return $this->renderTemplate('setup', [

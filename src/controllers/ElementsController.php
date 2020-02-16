@@ -1,4 +1,5 @@
 <?php
+
 namespace pdaleramirez\superfilter\controllers;
 
 use craft\db\Paginator;
@@ -29,7 +30,7 @@ class ElementsController extends Controller
 
         $searchSetupService->setSearchSetup($config);
 
-        $config  = $searchSetupService->getConfig();
+        $config = $searchSetupService->getConfig();
 
         $items = $config['items']['items'] ?? null;
 
@@ -44,12 +45,13 @@ class ElementsController extends Controller
             }
         }
 
-       $config['params']['fields'] = $fields;
+        $config['params']['fields'] = $fields;
 
         return Json::encode([
-          'config' => $config,
-          'links'  => $searchSetupService->getLinks(),
-          'items'  => $searchSetupService->getItemToArray()
+            'config' => $config,
+            'links' => $searchSetupService->getLinks(),
+            'items' => $searchSetupService->getItemToArray(),
+            'query' => ''
         ]);
     }
 
@@ -74,7 +76,7 @@ class ElementsController extends Controller
                 $fieldValue = is_string($field) ? trim($field) : $field;
 
                 if (is_string($field) && $fieldValue === '') {
-                   unset($config['params']['fields'][$handle]);
+                    unset($config['params']['fields'][$handle]);
                 }
             }
         }
@@ -89,13 +91,19 @@ class ElementsController extends Controller
                 unset($config['params']['sort']);
             }
 
+            if (!empty(SuperFilter::$app->getSettings()->prefixParam)) {
+                $config['params'][SuperFilter::$app->getSettings()->prefixParam] = $config['params']['fields'];
+                unset($config['params']['fields']);
+            }
+
             $query = UrlHelper::buildQuery($config['params']);
+
         }
 
         return Json::encode([
-            'items'  => $searchSetupService->getItemToArray(),
-            'links'  => $searchSetupService->getLinks(),
-            'query'    => $query
+            'items' => $searchSetupService->getItemToArray(),
+            'links' => $searchSetupService->getLinks(),
+            'query' => $query
         ]);
     }
 }

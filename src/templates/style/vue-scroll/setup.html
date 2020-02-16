@@ -3,7 +3,9 @@
 window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
     window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
     window.superFilterHandle = "{{ handle }}";
-    window.superFilterParams = '{{ craft.app.request.getQueryParams()|json_encode()|raw }}';
+    {% set params = craft.app.request.getQueryParams() %}
+    {% set params = params|merge({fields: craft.app.request.getQueryParam(craft.superFilter.settings.prefixParam)}) %}
+    window.superFilterParams = '{{ params|json_encode()|raw }}';
     window.superFilterCurrentPage = '{{ craft.app.request.getPageNum() }}';
 {% endjs %}
 
@@ -28,6 +30,7 @@ let app = new Vue({
         },
         currentPage: 1,
         infiniteId: +new Date(),
+        firstLoad: true,
         query: ''
     },
     methods: {
@@ -61,11 +64,18 @@ let app = new Vue({
             this.infiniteId+= 1;
         },
         infiniteHandler($state) {
+
             this.config.currentPage = this.currentPage;
 
-            this.filterItems($state);
+            if (this.firstLoad === true) {
+                this.initialLoad($state);
+                this.firstLoad = false;
+            } else {
+                this.filterItems($state);
+            }
         },
         filterItems($state) {
+
             let data = {
                 handle: this.handle,
                 config: this.config
@@ -84,28 +94,73 @@ let app = new Vue({
                         $state.complete();
                     }
                     this.query = data.query;
-                    console.log(this.query);
+
                     this.pushState();
+                });
+        },
+        initialLoad($state) {
+            let parse = JSON.parse(superFilterParams);
+
+            let data = {
+                handle: this.handle,
+                config: {
+                    params: {
+                        sort: null,
+                        fields: []
+                    }
+                }
+            };
+
+            data.config.params.fields = parse.fields;
+
+            if (parse.sort !== undefined) {
+                data.config.params.sort = parse.sort;
+            }
+
+            data[csrfTokenName] = csrfTokenValue;
+            axios.post('/super-filter/fields', qs.stringify(data))
+                .then(({data}) => {
+                    this.config = data.config;
+                    this.config.params.fields = {...data.config.params.fields, ...parse.fields};
+                    this.config.params.sort = parse.sort !== undefined ? parse.sort : data.config.params.sort;
+
+                    if (data.items.length) {
+                        this.currentPage++;
+                        this.items.push(...data.items);
+
+                        $state.loaded();
+                    } else {
+                        $state.complete();
+                    }
+                    this.query = data.query;
+
+                    this.pushState();
+                    this.loading = false;
+                });
+        },
+        initLoad() {
+            let parse = JSON.parse(superFilterParams);
+
+            this.config.currentPage = Number(superFilterCurrentPage);
+            let data = {
+                handle: this.handle,
+                config: this.config
+            };
+
+            data[csrfTokenName] = csrfTokenValue;
+            axios.post('/super-filter/fields', qs.stringify(data))
+                .then(({data}) => {
+                    this.config = data.config;
+
+                    this.config.params.fields = {...data.config.params.fields, ...parse.fields};
+
+                    this.config.params.sort = parse.sort !== undefined ? parse.sort : data.config.params.sort;
+                    this.loading = false;
                 });
         }
     },
     mounted() {
-        let parse = JSON.parse(superFilterParams);
 
-        this.config.currentPage = Number(superFilterCurrentPage);
-        let data = {
-            handle: this.handle,
-            config: this.config
-        };
-
-        data[csrfTokenName] = csrfTokenValue;
-        axios.post('/super-filter/fields', qs.stringify(data))
-            .then(({data}) => {
-                this.config = data.config;
-
-                this.config.params.fields = {...data.config.params.fields, ...parse.fields};
-                this.config.params.sort = parse.sort !== undefined ? parse.sort : data.config.params.sort;
-            });
     }
 });
 {% endjs %}

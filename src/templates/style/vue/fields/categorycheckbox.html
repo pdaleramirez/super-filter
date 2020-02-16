@@ -13,7 +13,7 @@
 
         <input v-model="config.params.fields.{{ object.handle }}"
                type="checkbox" {{ selected ? 'checked' : '' }}
-               name="{{ craft.superFilter.getSettings.prefixParam }}[{{ object.handle }}][]"
+               name="{{ craft.superFilter.settings.prefixParam }}[{{ object.handle }}][]"
                value="{{ category.id }}" /> {{ category.title }}
 
         {% if category.children|length %}
