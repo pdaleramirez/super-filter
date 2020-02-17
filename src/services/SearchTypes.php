@@ -568,7 +568,7 @@ class SearchTypes extends Component
         $template = $options['template'] ?? null;
 
         if ($template) {
-            $alias = Craft::getAlias('@superfilter/templates');
+            $alias = Craft::getAlias('@superfilterModule/templates');
 
             if (!SuperFilter::$app->isTemplateIn($template)) {
                 $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
@@ -577,7 +577,6 @@ class SearchTypes extends Component
 
             } else {
                 Craft::$app->getView()->setTemplatesPath($alias);
-                $template = 'style/' . $template;
             }
         }
 

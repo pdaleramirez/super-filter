@@ -1,6 +1,6 @@
 {
     "name": "pdaleramirez/super-filter",
-    "description": "Search elements with filter using Vue JS",
+    "description": "A Craft CMS 3 plugin that lets you build your search page with search filters from your element fields and filter element entries by categories, tags, element relations and other fields.",
     "type": "craft-plugin",
     "version": "1.0.0",
     "keywords": [
@@ -11,8 +11,8 @@
         "search filter"
     ],
     "support": {
-        "docs": "https://github.com/Dale Ramirez/super-filter/blob/master/README.md",
-        "issues": "https://github.com/Dale Ramirez/super-filter/issues"
+        "docs": "https://github.com/pdaleramirez/super-filter/blob/master/README.md",
+        "issues": "https://github.com/pdaleramirez/super-filter/issues"
     },
     "license": "MIT",
     "authors": [
@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.4.0"
+        "craftcms/cms": "^3.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -34,7 +34,7 @@
         "handle": "super-filter",
         "hasCpSettings": false,
         "hasCpSection": false,
-        "changelogUrl": "https://raw.githubusercontent.com/Dale Ramirez/super-filter/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/pdaleramirez/super-filter/master/CHANGELOG.md",
         "class": "pdaleramirez\\superfilter\\SuperFilter"
     }
 }

@@ -19,7 +19,6 @@ use craft\web\View;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\fields\Categories;
-use pdaleramirez\superfilter\fields\Checkboxes;
 use pdaleramirez\superfilter\fields\Dropdown;
 use pdaleramirez\superfilter\fields\Entries;
 use pdaleramirez\superfilter\fields\Number;
@@ -85,6 +84,7 @@ class SuperFilter extends Plugin
 
         Craft::setAlias('@superfilter', $this->getBasePath());
         Craft::setAlias('@superfilterResources', dirname(__DIR__).'/resources/lib');
+        Craft::setAlias('@superfilterModule', dirname(__DIR__));
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $event->sender->set('superFilter', SuperFilterVariable::class);
