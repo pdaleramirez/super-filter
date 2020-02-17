@@ -8,6 +8,7 @@ use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
+use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 
 class ElementsController extends Controller
@@ -96,7 +97,7 @@ class ElementsController extends Controller
                 unset($config['params']['fields']);
             }
 
-            $query = UrlHelper::buildQuery($config['params']);
+            $query = App::buildQuery($config['params']);
 
         }
 

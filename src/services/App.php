@@ -175,4 +175,25 @@ class App extends Component
 
         return in_array($value, $keys);
     }
+
+    public static function buildQuery(array $params): string
+    {
+        if (empty($params)) {
+            return '';
+        }
+        // build the query string
+        $query = http_build_query($params);
+        if ($query === '') {
+            return '';
+        }
+        // Decode the param names and a few select chars in param values
+        $params = [];
+        foreach (explode('&', $query) as $param) {
+            list($n, $v) = array_pad(explode('=', $param, 2), 2, '');
+            $n = urldecode($n);
+            $v = str_replace(['%2F', '%7B', '%7D'], ['/', '{', '}'], $v);
+            $params[] = "$n=$v";
+        }
+        return implode('&', $params);
+    }
 }
