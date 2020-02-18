@@ -31,31 +31,41 @@ To install the plugin, follow these instructions.
 - Title - to easily identify your setup.
 - Handle - needed to initialize search setup.
 - Items per page - number of entries on page content load or pagination.
+- Template Override Folder - the folder of the templates that you'll override to modify html's. 
+The items.twig must be copied to this folder to modify element attributes.
+- Base Template - if no template is found on the template override folder it will fallback to base pre built templates.
+    
 - Element - the element type of the items or entries to be displayed.
 - Container - section, group or product type for an element.
 - Sort Fields - drag fields to selected column to be displayed on sorting template for sorting elements.
 - Initial Sort - the default sort query on page load.
 - Search Fields - drag fields to selected column to be displayed on search field template for filtering elements.
-- Template Folder - the folder of the templates that you'll modify to get element attributes or modify html's.
 
   
 ## Using Super Filter  
-  
-1. Open the super-filer plugin folder and choose a folder (vue, vue-scroll and plain) in `templates` to copy to your 
-Craft site templates folder.
+     
+1. Use super filter twig function to display search sections on your page. There are 5 twig function to be called
+on your page template.     
+    - `craft.superFilter.setup('handle')` - requires 1 parameter which is the handle of search set up entry. This should be 
+    the first function to be added to the template or the order of declaration should be above all other super filter twig function.
+        - Template filename: `setup.twig`
+        
+    - `craft.superFilter.displaySearchFields()` - displays the search filter fields html.
+         - Template filename: `fields.twig` and individual form input html in `fields/*` folder.
+         
+    - `craft.superFilter.displaySortOptions()` - displays the sorting field dropdown html.
+        - Template filename: `sorts.twig`
+        
+    - `craft.superFilter.items()` - displays the element entries or filtered element entries.
+        - Template filename: `items.twig`
+        
+    - `craft.superFilter.getPaginateLinks()` - displays element entries pagination or the infinite scroll trigger.
+         - Template filename: `pagination.twig`
+     
+2. To override a template or templates of the twig function from the selected base pre-built style templates. You can create the twig file 
+or open the super-filter plugin folder and copy a template or templates to the site template override folder path you specified on your configuration
+
   ![styles](resources/img/template-styles.jpg) 
-
-2. Edit your Search Setup entry and input the path of the newly copied folder on the Template Folder input.
-3. Use super filter twig function to display search sections on your page. There are 5 twig function to be called
-on your page template.
-- `craft.superFilter.setup('handle')` - requires 1 parameter which is the handle of search set up entry. This should be 
-the first function to be added to the template or the order of declaration should be above all other super filter twig function.
-- `craft.superFilter.displaySearchFields()` - displays the search filter fields html.
-- `craft.superFilter.displaySortOptions()` - displays the sorting field dropdown html.
-- `craft.superFilter.items()` - displays the element entries or filtered element entries.
-- `craft.superFilter.getPaginateLinks()` - displays element entries pagination or the infinite scroll trigger.
-
-To modify the html of the twig function. You can edit twig templates you copied on step 2. 
 
 If you choose a template style that has Vue.js make sure to wrap it with a div id of **search-app**
 
@@ -76,4 +86,4 @@ The page template should look like this:
 </div>
 ```
 
-Brought to you by [Dale Ramirez](https://github.com/pdaleramirez)
+Contact me for inquiries or if you require more customization. <dalefirstpage@gmail.com>
