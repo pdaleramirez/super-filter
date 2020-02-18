@@ -8,7 +8,6 @@ use craft\base\Model;
 class Settings extends Model
 {
     public $pluginNameNav = null;
-    public $entryTemplate = null;
     public $prefixParam = 'fields';
     public $operator    = 'and';
 

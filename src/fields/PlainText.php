@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\fields;
 use Craft;
 use craft\fields\PlainText as PlainTextCraft;
 use pdaleramirez\superfilter\base\SearchField;
+use pdaleramirez\superfilter\SuperFilter;
 
 class PlainText extends SearchField
 {
@@ -14,11 +15,18 @@ class PlainText extends SearchField
         return PlainTextCraft::class;
     }
 
+    /**
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\Exception
+     */
     public function getHtml()
     {
-        $template = $this->config['template'];
+        $template = SuperFilter::$app->searchTypes->getTemplate('fields/plaintext');
 
-        return Craft::$app->getView()->renderTemplate($template . '/fields/plaintext',
+        return Craft::$app->getView()->renderTemplate($template,
             [
                'field' => $this
             ]);

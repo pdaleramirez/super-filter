@@ -160,7 +160,7 @@ class App extends Component
         return $plugin->getSettings();
     }
 
-    public function getTemplateOptions()
+    public function getBaseTemplates()
     {
         return [
             'vue' => Craft::t('super-filter', 'Vue'),
@@ -169,9 +169,23 @@ class App extends Component
         ];
     }
 
+    public function getBaseTemplateOptions()
+    {
+        $options = [];
+        $i = 0;
+        foreach ($this->getBaseTemplates() as $key => $label) {
+            $options[$i]['label'] = $label;
+            $options[$i]['value'] = $key;
+
+            $i++;
+        }
+
+        return $options;
+    }
+
     public function isTemplateIn($value)
     {
-        $keys = array_keys($this->getTemplateOptions());
+        $keys = array_keys($this->getBaseTemplates());
 
         return in_array($value, $keys);
     }

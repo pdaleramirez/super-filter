@@ -7,6 +7,7 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\fields\Categories as CraftCategories;
 use craft\helpers\ElementHelper;
+use pdaleramirez\superfilter\SuperFilter;
 use yii\db\QueryInterface;
 
 abstract class ElementSearchField extends SearchField
@@ -99,11 +100,11 @@ abstract class ElementSearchField extends SearchField
 
     public function getHtml()
     {
-        $template = $this->config['template'];
-
         $elements = $this->getElements();
 
-        return Craft::$app->getView()->renderTemplate($template . '/fields/elementcheckbox', [
+        $template = SuperFilter::$app->searchTypes->getTemplate('fields/elementcheckbox');
+
+        return Craft::$app->getView()->renderTemplate($template, [
             'field' => $this,
             'elements' => $elements
         ]);

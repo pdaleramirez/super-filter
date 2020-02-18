@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\fields;
 use Craft;
 use craft\fields\RadioButtons as RadioButtonsField;
 use pdaleramirez\superfilter\base\OptionSearchField;
+use pdaleramirez\superfilter\SuperFilter;
 
 class RadioButtons extends OptionSearchField
 {
@@ -15,9 +16,9 @@ class RadioButtons extends OptionSearchField
 
     public function getHtml()
     {
-        $template = $this->config['template'];
+        $template = SuperFilter::$app->searchTypes->getTemplate('fields/radiobuttons');
 
-        return Craft::$app->getView()->renderTemplate($template . '/fields/radiobuttons',
+        return Craft::$app->getView()->renderTemplate($template,
             [
                 'field' => $this,
                 'options' => $this->getOptions()

@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\fields;
 use Craft;
 use craft\fields\Number as NumberCraft;
 use pdaleramirez\superfilter\base\SearchField;
+use pdaleramirez\superfilter\SuperFilter;
 
 class Number extends SearchField
 {
@@ -16,9 +17,9 @@ class Number extends SearchField
 
     public function getHtml()
     {
-        $template = $this->config['template'];
+        $template = SuperFilter::$app->searchTypes->getTemplate('fields/number');
 
-        return Craft::$app->getView()->renderTemplate($template . '/fields/number', [
+        return Craft::$app->getView()->renderTemplate($template, [
             'field' => $this
         ]);
     }

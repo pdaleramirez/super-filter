@@ -23,9 +23,10 @@ class SearchTypeTest extends Unit
     {
         $searchType = Stub::make(EntrySearchType::class,
             [
-                'getElement' => Entry::class, 'getContainer' => ['shows' => 'Shows', 'movies' => 'Movies'],
+                'getElement' => Entry::class,
+                'getContainer' => ['shows' => 'Shows', 'movies' => 'Movies'],
                 'getSorts' => ['selected' => null, 'options' => ['description', 'rating']],
-                'getFields' => ['selected' => null, 'options' => ['description', 'rating']],
+                'getFields' => null,
             ]
         );
 
@@ -36,10 +37,9 @@ class SearchTypeTest extends Unit
             'handle' => 'entry',
             'container' => [
                 'items' => ['shows' => 'Shows', 'movies' => 'Movies'],
-                'selected' => null
+                'selected' => 'shows'
             ],
-            'sorts' => ['selected' => null, 'options' => ['description', 'rating']],
-            'items' => ['selected' => null, 'options' => ['description', 'rating']]
+            'sorts' => ['selected' => null, 'options' => ['description', 'rating']]
         ];
 
         $this->assertEquals($expected, $items);

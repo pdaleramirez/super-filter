@@ -102,18 +102,23 @@ class SearchTypes extends Component
          *
          */
         $className = $searchType->getElement();
-        $element = new $className;
+
         $container = $searchType->getContainer();
         $sort = $searchType->getSorts();
         $field = $searchType->getFields();
 
-        $items['label']  = $element->displayName();
-        $items['handle'] = $element->refHandle();
+        $items['label']  = $className::displayName();
+        $items['handle'] = $className::refHandle();
 
         $items['container'] = null;
 
         $selectedContainer = $selected['container'] ?? null;
+
         if ($container) {
+            if ($selectedContainer == null && count($container) > 0) {
+                $selectedContainer = array_key_first($container);
+            }
+
             $items['container']['items'] = $container;
             $items['container']['selected'] = $selectedContainer;
         }
@@ -516,13 +521,9 @@ class SearchTypes extends Component
      * @param SearchField $searchField
      * @param $handle
      * @return SearchField
-     * @throws \yii\base\Exception
      */
     public function setSearchFieldAttributes(SearchField $searchField, $handle)
     {
-        $template = $this->getTemplate();
-        $searchField->setConfig(['template' => $template]);
-
         $fields = $this->config['params']['fields'] ?? null;
 
         if ($fields) {
@@ -545,8 +546,13 @@ class SearchTypes extends Component
         $element = $items['elements']['items'][$elementHandle];
 
         $container = $element['container']['selected'];
-        $sorts = $element['sorts'][$container]['selected'];
-        $items = $element['items'][$container]['selected'];
+
+        $sorts = null;
+
+        if ($container) {
+            $sorts = $element['sorts'][$container]['selected'];
+            $items = $element['items'][$container]['selected'];
+        }
 
         return [
             'container' => $container,
@@ -555,32 +561,38 @@ class SearchTypes extends Component
         ];
     }
 
+
     /**
-     * @return string|null
+     * @param string $filename
+     * @return |null
      * @throws \yii\base\Exception
      */
-    public function getTemplate()
+    public function getTemplate(string $filename)
     {
         $config  = $this->getConfig();
 
         $options = $config['options'];
 
-        $template = $options['template'] ?? null;
+        $template     = $options['template'] ?? null;
+        $baseTemplate = $options['baseTemplate'] ?? null;
 
         if ($template) {
-            $alias = Craft::getAlias('@superfilterModule/templates');
 
-            if (!SuperFilter::$app->isTemplateIn($template)) {
-                $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
+            $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
 
-                Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);
+            Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);
 
-            } else {
-                Craft::$app->getView()->setTemplatesPath($alias);
+            $siteTemplate = $template . '/' . $filename;
+            if (Craft::$app->getView()->doesTemplateExist($siteTemplate)) {
+                return $siteTemplate;
             }
         }
 
-        return $template;
+        $builtin = Craft::getAlias('@superfilterModule/templates');
+
+        Craft::$app->getView()->setTemplatesPath($builtin);
+
+        return $baseTemplate . '/' . $filename;
     }
 
     /**

@@ -32,6 +32,7 @@ class SetupSearch extends Element
     public $elementSearchType;
     public $options;
     public $items;
+    public $baseTemplate;
 
     /**
      * @inheritdoc
@@ -136,6 +137,8 @@ class SetupSearch extends Element
             $record->id = $this->id;
         }
 
+        $this->options['template'] = rtrim($this->options['template'], '/');
+
         $record->handle = $this->handle;
         $record->elementSearchType = $this->elementSearchType;
         $record->items       = $this->items;
@@ -177,7 +180,8 @@ class SetupSearch extends Element
     {
         $rules = parent::rules();
 
-        $rules[] = [['elementSearchType'], 'required'];
+        $rules[] = [['elementSearchType', 'handle', 'options'], 'required'];
+        $rules[] = ['options', 'validateOptions'];
         $rules[] = [
             ['handle'],
             HandleValidator::class
@@ -194,10 +198,22 @@ class SetupSearch extends Element
         return $rules;
     }
 
-//    public function getSearchType()
-//    {
-//        return SuperFilter::$app->searchTypes->getSearchTypeByElement($this);
-//    }
+    public function validateOptions()
+    {
+        if (trim($this->options['perPage']) === 0 || trim($this->options['perPage']) === '') {
+            $this->addError('options.perPage', 'Per Page input is required.');
+        } else {
+            $perPage = (int) $this->options['perPage'];
+
+            if (!is_int($perPage) || $perPage <= 0) {
+                $this->addError('options.perPage', 'Items per page should be a valid number.');
+            }
+        }
+
+        if (trim($this->options['template']) === '') {
+            $this->addError('options.template', 'Template override path is required.');
+        }
+    }
 
     public function options()
     {

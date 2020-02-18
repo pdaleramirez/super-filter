@@ -68,8 +68,6 @@ class Categories extends ElementSearchField
      */
     public function getHtml()
     {
-        $template = $this->config['template'];
-
         $elements = $this->getElements();
 
         $limit = $this->object->branchLimit;
@@ -85,7 +83,9 @@ class Categories extends ElementSearchField
         $html = '';
         $categoryHtml = $this->getCategoriesHtml($categories, $html);
 
-        return Craft::$app->getView()->renderTemplate($template . '/fields/' . $inputTemplate, [
+        $template = SuperFilter::$app->searchTypes->getTemplate('fields/' . $inputTemplate);
+
+        return Craft::$app->getView()->renderTemplate($template, [
             'field' => $this,
             'elements' => $elements,
             'categories' => $categories,

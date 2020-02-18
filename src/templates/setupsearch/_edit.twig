@@ -70,7 +70,6 @@
         name: 'title',
         value: setupElement is defined ? setupElement.title : null,
         autofocus: true,
-        first: true,
         errors: setupElement is defined ? setupElement.getErrors('title') : null
     }) }}
 
@@ -80,19 +79,54 @@
         name: 'handle',
         value: setupElement is defined ? setupElement.handle : null,
         autofocus: true,
-        first: true,
         errors: setupElement is defined ? setupElement.getErrors('handle') : null
     }) }}
 
-    <div class="field">
-        <div class="heading">
-            <label>Items per page</label>
-        </div>
-        <div class="input">
-            <input class="text" type="number" name="options[perPage]" placeholder="25"
-                   value="{{ options.perPage is defined ? options.perPage : ''  }}" />
-        </div>
-    </div>
+
+{#    <div class="field">#}
+{#        <div class="heading">#}
+{#            <label>Items per page</label>#}
+{#        </div>#}
+{#        <div class="input {{ setupElement.getErrors('options.perPage') ? 'errors' : '' }}">#}
+{#            <input class="text" type="number" name="options[perPage]" placeholder="25"#}
+{#                   value="{{ options.perPage is defined ? options.perPage : ''  }}" />#}
+{#            {% if setupElement.getErrors('options.perPage') is not empty %}#}
+{#                <ul class="errors">#}
+{#                    <li> {{ setupElement.getErrors('options.perPage')[0] }}</li>#}
+{#                </ul>#}
+{#            {% endif %}#}
+{#        </div>#}
+{#    </div>#}
+
+    {{ forms.textField({
+        label: "Items per page"|t('super-filter'),
+        id: 'perPage',
+        type: 'number',
+        name: 'options[perPage]',
+        value: options.perPage is defined ? options.perPage : null,
+        autofocus: true,
+        size: 3,
+        errors: options.perPage is defined ? setupElement.getErrors('options.perPage') : null
+    }) }}
+
+    {{ forms.selectField({
+        label: "Base Template"|t('super-filter'),
+        name: 'options[baseTemplate]',
+        options: baseTemplateOptions,
+        value: options.baseTemplate is defined ? options.baseTemplate : null,
+        errors: setupElement is defined ? setupElement.getErrors('baseTemplate') : null
+    }) }}
+
+    {{ forms.textField({
+        label: "Template Override Folder"|t('super-filter'),
+        instructions: 'The folder path in your craft site template. The items.twig must be copied over to this folder to modify element attributes.',
+        id: 'template',
+        name: 'options[template]',
+        value: options.template is defined ? options.template : null,
+        autofocus: true,
+        size: 55,
+        errors: setupElement is defined ? setupElement.getErrors('options.template') : null
+    }) }}
 
     <div id="field-setting" v-if="!loading">
         <div v-if="items && items.elements.items">
@@ -166,17 +200,9 @@
                 </div>
             </div>
         </div>
-
-        <div class="field">
-            <div class="heading">
-                <label>Template Folder:</label>
-            </div>
-            <input type="hidden" name="options[template]" :value="template" />
-            <combo-box v-model="template" :options="options"></combo-box>
-        </div>
-
-
     </div>
+
+
 
     <script>
 
@@ -229,27 +255,6 @@
                 this.loading = true;
                 axios.post(url, qs.stringify(data)).then((response) => {
                      this.items = response.data.items;
-
-                     if (response.data.templateOptions) {
-
-                         let templateOptions = response.data.templateOptions;
-
-                         templateOptions = Object.keys(templateOptions).map(function(key) {
-                             return {
-                                 'label': templateOptions[key],
-                                 'value': key
-                             }
-                         });
-
-                         this.options = [...templateOptions, {
-                             value: 'custom',
-                             label: 'Custom'
-                         }];
-                     }
-
-                     if (response.data.template) {
-                         this.template = response.data.template;
-                     }
 
                      if (response.data.initSort) {
                          this.initSort = response.data.initSort;

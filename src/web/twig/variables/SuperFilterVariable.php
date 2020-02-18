@@ -54,15 +54,6 @@ class SuperFilterVariable
         ]);
     }
 
-    public function getTemplate()
-    {
-        if ($this->template == null) {
-            $this->template = $this->searchSetupService->getTemplate();
-        }
-
-        return $this->template;
-    }
-
     /**
      * @return \Twig\Markup
      */
@@ -139,13 +130,13 @@ class SuperFilterVariable
 
     private function renderTemplate($file, $variables = [])
     {
-        $template = $this->getTemplate();
+        $template = SuperFilter::$app->searchTypes->getTemplate($file);
 
         $config  = $this->searchSetupService->getConfig();
 
         $options = $config['options'];
 
-        $html = Craft::$app->getView()->renderTemplate($template . '/' . $file, array_merge($variables, [
+        $html = Craft::$app->getView()->renderTemplate($template, array_merge($variables, [
             'options'  => $options
         ]));
 

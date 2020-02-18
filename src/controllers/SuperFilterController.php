@@ -43,10 +43,6 @@ class SuperFilterController extends Controller
          */
         $settings = $plugin->getSettings();
 
-        if (empty($settings->entryTemplate)) {
-            $settings->entryTemplate = App::DEFAULT_TEMPLATE;
-        }
-
         $selectedSidebarItem = Craft::$app->getRequest()->getSegment(3) ?? 'general';
 
         $templatePath = 'super-filter/settings/' . $selectedSidebarItem;

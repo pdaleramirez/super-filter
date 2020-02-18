@@ -52,10 +52,11 @@ class SetupSearchController extends Controller
         $baseUrl = UrlHelper::actionUrl('/');
 
         return $this->renderTemplate('super-filter/setupsearch/_edit', [
-            'setupElement' => $setupElement,
-            'baseUrl' => $baseUrl,
-            'options' => $options,
-            'items' => $items,
+            'setupElement'    => $setupElement,
+            'baseUrl'         => $baseUrl,
+            'options'         => $options,
+            'items'           => $items,
+            'baseTemplateOptions'   => SuperFilter::$app->getBaseTemplateOptions(),
             'continueEditingUrl' => 'super-filter/setup-search/edit/{id}'
         ]);
     }
@@ -88,6 +89,7 @@ class SetupSearchController extends Controller
         $setupElement->items = $items;
 
         $setupElement->options = Craft::$app->getRequest()->getBodyParam('options');
+
         $setupElement->elementSearchType = Craft::$app->getRequest()->getBodyParam('elementSearchType');
 
         if (!Craft::$app->getElements()->saveElement($setupElement)) {
@@ -150,7 +152,7 @@ class SetupSearchController extends Controller
 
         $items = SuperFilter::$app->searchTypes->getItemFormat($setup);
 
-        $templateOptions = SuperFilter::$app->getTemplateOptions();
+        $templateOptions = SuperFilter::$app->getBaseTemplates();
 
         return $this->asJson([
             'items' => $items,

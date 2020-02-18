@@ -6,6 +6,7 @@ use Craft;
 use craft\elements\db\ElementQuery;
 use craft\fields\PlainText as PlainTextCraft;
 use pdaleramirez\superfilter\base\SearchField;
+use pdaleramirez\superfilter\SuperFilter;
 use phpDocumentor\Reflection\Types\Static_;
 use stdClass;
 use yii\db\QueryInterface;
@@ -38,9 +39,9 @@ class Title extends SearchField
 
     public function getHtml()
     {
-        $template = $this->config['template'];
+        $template = SuperFilter::$app->searchTypes->getTemplate('fields/plaintext');
 
-        return Craft::$app->getView()->renderTemplate($template . '/fields/plaintext',
+        return Craft::$app->getView()->renderTemplate($template,
             [
                'field' => $this
             ]);
