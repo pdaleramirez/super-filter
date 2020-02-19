@@ -114,7 +114,9 @@ class SuperFilter extends Plugin
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_TYPES, function (RegisterSearchTypeEvent $event) {
             $event->searchTypes['entry']    = new EntrySearchType();
             $event->searchTypes['category'] = new CategorySearchType();
-            $event->searchTypes['product']  = new ProductSearchType();
+            if (Craft::$app->getPlugins()->isPluginEnabled('commerce')) {
+                $event->searchTypes['product']  = new ProductSearchType();
+            }
         });
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_FIELD_TYPES, function (RegisterSearchFieldTypeEvent $event) {
             $event->searchFieldTypes[] = new Title();
