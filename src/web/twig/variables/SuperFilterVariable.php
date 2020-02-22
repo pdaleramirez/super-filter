@@ -25,14 +25,12 @@ class SuperFilterVariable
 
     /**
      * @param $handle
+     * @param array $preFilter
      * @return \Twig\Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
-     * @throws \Exception
      */
-    public function setup($handle)
+    public function setup($handle, array $preFilter = [])
     {
         Craft::$app->getView()->registerAssetBundle(VueAsset::class);
 
@@ -45,11 +43,19 @@ class SuperFilterVariable
         if ($fieldParam) {
             $config['params']['fields'] = $fieldParam;
         }
+        if (count($preFilter) > 0) {
+            if (isset($config['params']['fields'])) {
+                $config['params']['fields'] = array_merge($config['params']['fields'], $preFilter);
+            } else {
+                $config['params']['fields'] = $preFilter;
+            }
+        }
 
         $this->searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
 
         return $this->renderTemplate('setup', [
             'handle' => $handle,
+            'params' => $config['params'],
             'options' => $config['options']
         ]);
     }

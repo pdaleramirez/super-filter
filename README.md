@@ -86,4 +86,14 @@ The page template should look like this:
 </div>
 ```
 
+## Customization
+- Pre-filter - If you want your items to load with pre defined filters you can pass a json key value pair in the `craft.superFilter.setup`
+twig function second parameter e.g.
+```
+{{ craft.superFilter.setup('searchList', {
+    superFilterImdbRating: 8,
+    superFilterGenre: [13]
+}) }}
+```
+
 Contact me for inquiries or if you require more customization. <dalefirstpage@gmail.com>
