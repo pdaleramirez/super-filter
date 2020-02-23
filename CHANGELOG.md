@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 - Initial release
 
-## 1.0.2 - 2020-02-20
+## 1.0.2 - 2020-02-22
 - Allows setup template to input pre defined filtered items to display, by adding `craft.superFilter.setup` 
 second parameter to get pre filtered items on the item list display.
+
+## 1.0.2.1 - 2020-02-23
+- Fixed product element getting wrong sort options
