@@ -74,7 +74,7 @@ class ProductSearchType extends SearchType
      */
     public function getSorts()
     {
-        $entryOptions = SuperFilter::$app->searchTypes->getSortOptions(Entry::sortOptions());
+        $entryOptions = SuperFilter::$app->searchTypes->getSortOptions(Product::sortOptions());
 
         $fields = [];
 
