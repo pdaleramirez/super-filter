@@ -369,6 +369,12 @@ class SearchTypes extends Component
 
         $elementQuery = $this->elementQuery($searchType);
 
+        $siteId = $config['params']['siteId'] ?? null;
+
+        if ($siteId) {
+            $elementQuery->siteId($siteId);
+        }
+
         $paginator = new Paginator($elementQuery, [
             'currentPage' => $config['currentPage'],
             'pageSize'    => $config['options']['perPage'] != '' ? $config['options']['perPage'] : static::PAGE_SIZE

@@ -51,6 +51,12 @@ class SuperFilterVariable
             }
         }
 
+        $currentSite = Craft::$app->sites->getCurrentSite();
+        $primarySite = Craft::$app->sites->getPrimarySite();
+        if ($currentSite !== null && $currentSite->id !== $primarySite->id) {
+            $config['params']['siteId'] = $currentSite->id;
+        }
+
         $this->searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
 
         return $this->renderTemplate('setup', [

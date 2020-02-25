@@ -23,7 +23,8 @@ let app = new Vue({
         config: {
             params: {
                 sort: null,
-                fields: []
+                fields: [],
+                siteId: null
             }
         },
         loading: true,
@@ -95,6 +96,10 @@ let app = new Vue({
 
             if (parse.sort !== undefined) {
                 data.config.params.sort = parse.sort;
+            }
+
+            if (parse.siteId !== undefined) {
+                data.config.params.siteId = parse.siteId;
             }
 
             data[csrfTokenName] = csrfTokenValue;

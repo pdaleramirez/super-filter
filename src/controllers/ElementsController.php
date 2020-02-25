@@ -97,6 +97,11 @@ class ElementsController extends Controller
                 unset($config['params']['fields']);
             }
 
+            // Does not need to be in the url
+            if (isset($config['params']['siteId'])) {
+                unset($config['params']['siteId']);
+            }
+
             $query = App::buildQuery($config['params']);
 
         }
