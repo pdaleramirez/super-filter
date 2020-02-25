@@ -21,7 +21,7 @@ class SuperFilterVariable
      * @var $searchSetupService SearchTypes
      */
     private $searchSetupService;
-    private $template;
+    private $prevTemplate;
 
     /**
      * @param $handle
@@ -33,6 +33,8 @@ class SuperFilterVariable
     public function setup($handle, array $preFilter = [])
     {
         Craft::$app->getView()->registerAssetBundle(VueAsset::class);
+
+        $this->prevTemplate = Craft::$app->view->getTemplatesPath();
 
         $config = SuperFilter::$app->searchTypes->getConfigById($handle);
         $config['currentPage'] = Craft::$app->getRequest()->getPageNum();
@@ -153,5 +155,10 @@ class SuperFilterVariable
         ]));
 
         return Template::raw($html);
+    }
+
+    public function close()
+    {
+        Craft::$app->view->setTemplatesPath($this->prevTemplate);
     }
 }

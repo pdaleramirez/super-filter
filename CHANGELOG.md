@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.4 - 2020-02-25
+- Fixed issue cannot find included templates after super filter twig function is called by adding close twig function.
 
 ## 1.0.3 - 2020-02-25
 - Added support for multi-site by filtering items based on the current site.

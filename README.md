@@ -61,7 +61,7 @@ on your page template.
         
     - `craft.superFilter.getPaginateLinks()` - displays element entries pagination or the infinite scroll trigger.
          - Template filename: `pagination.twig`
-     
+    - `craft.superFilter.close() ` - needed to close the search page to reset templates path. So if you have included template after the super filter twig functions you will need this.
 2. To override a template or templates of the twig function from the selected base pre-built style templates. You can create the twig file 
 or open the super-filter plugin folder and copy a template or templates to the site template override folder path you specified on your configuration
 
@@ -81,6 +81,7 @@ The page template should look like this:
             {{ craft.superFilter.displaySortOptions() }}
             {{ craft.superFilter.items() }}
             {{ craft.superFilter.getPaginateLinks() }}
+            {{ craft.superFilter.close() }}
         </div>
     </div>
 </div>
