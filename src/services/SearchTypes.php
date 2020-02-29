@@ -15,6 +15,7 @@ use Exception;
 use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\base\SearchType;
 use pdaleramirez\superfilter\elements\SetupSearch;
+use pdaleramirez\superfilter\events\ItemArrayEvent;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\fields\Title;
@@ -24,6 +25,7 @@ class SearchTypes extends Component
 {
     const EVENT_REGISTER_SEARCH_TYPES = 'defineSuperFilterSearchTypes';
     const EVENT_REGISTER_SEARCH_FIELD_TYPES = 'defineSuperFilterSearchFieldTypes';
+    const EVENT_ITEM_ARRAY = 'itemToArray';
     const PAGE_SIZE = 25;
 
     protected $config;
@@ -34,6 +36,10 @@ class SearchTypes extends Component
      */
     protected $links;
     protected $params;
+    /**
+     * @var SearchType $searchType
+     */
+    protected $searchType;
 
     /**
      * @return array|SearchType[]
@@ -387,6 +393,8 @@ class SearchTypes extends Component
         } else {
             $this->items = $paginator->getPageResults();
         }
+
+        $this->searchType = $searchType;
     }
 
     public function getLinks()
@@ -401,15 +409,27 @@ class SearchTypes extends Component
 
     public function getItemToArray()
     {
-        $elements = [];
+        $items = [];
 
         if (count($this->items)> 0) {
             foreach ($this->items as $key => $item) {
-                $elements[$key] = array_merge($item->toArray(), $this->formatItemFields($item));
+                $items[$key] = array_merge($item->toArray(), $this->formatItemFields($item));
+
+                $event = new ItemArrayEvent([
+                    'element'   => $item,
+                    'item'      => null,
+                    'searchType' => $this->searchType
+                ]);
+
+                $this->trigger(static::EVENT_ITEM_ARRAY, $event);
+
+                if ($event->item !== null) {
+                    $items[$key] = array_merge($items[$key], $event->item);
+                }
             }
         }
 
-        return $elements;
+        return $items;
     }
 
     private function formatItemFields($element)

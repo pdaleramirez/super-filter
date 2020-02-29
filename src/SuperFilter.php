@@ -16,6 +16,7 @@ use craft\base\Plugin;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
+use pdaleramirez\superfilter\events\ItemArrayEvent;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\fields\Categories;
@@ -127,6 +128,13 @@ class SuperFilter extends Plugin
             $event->searchFieldTypes[] = new Dropdown();
             $event->searchFieldTypes[] = new Tags();
             $event->searchFieldTypes[] = new RadioButtons();
+        });
+
+        Event::on(SearchTypes::class, SearchTypes::EVENT_ITEM_ARRAY, function (ItemArrayEvent $event) {
+            if (Craft::$app->getPlugins()->isPluginEnabled('commerce') == true
+                && $event->searchType instanceof ProductSearchType) {
+                $event->item['variants'] = $event->element->getVariants();
+            }
         });
     }
 
