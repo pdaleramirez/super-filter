@@ -96,5 +96,15 @@ twig function second parameter e.g.
     superFilterGenre: [13]
 }) }}
 ```
+- Item results modification - Call item event hook that allows you to modify the search and item results from an ajax results.
+E.g.
+```
+Event::on(SearchTypes::class, SearchTypes::EVENT_ITEM_ARRAY, function (ItemArrayEvent $event) {
+    if (Craft::$app->getPlugins()->isPluginEnabled('commerce') == true
+        && $event->searchType instanceof ProductSearchType) {
+        $event->item['variants'] = $event->element->getVariants();
+    }
+});
+```
 
 Contact me for inquiries or if you require more customization. <dalefirstpage@gmail.com>
