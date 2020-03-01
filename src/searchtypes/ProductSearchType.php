@@ -137,7 +137,7 @@ class ProductSearchType extends SearchType
             $sectionHandle = $filter['container'] ?? null;
 
             if ($sectionHandle) {
-                $query = $this->query->type($sectionHandle)->with('variants');
+                $query = $this->query->type($sectionHandle);
 
                 $this->query = $query;
             }
