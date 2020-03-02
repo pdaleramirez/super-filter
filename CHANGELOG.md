@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.5.1 - 2020-03-02
+- Removed with variants to allow getVariants call to different siteIds.
+
 ## 1.0.5 - 2020-02-29
 - Created item event hook that allows plugin customization to modify the search and item results from ajax.
 
