@@ -38,15 +38,23 @@ let app = new Vue({
         },
         clearFilter() {
             this.config.currentPage = 1;
+
+          let parse = JSON.parse(superFilterParams);
+
+          if (parse.preFilter !== undefined) {
+            this.config.params.fields = parse.preFilter;
+          } else {
             let fields = this.config.params.fields;
             for (let key in fields) {
-                if (Array.isArray(fields[key])) {
-                    this.config.params.fields[key] = [];
-                } else {
-                    this.config.params.fields[key] = "";
-                }
+              if (Array.isArray(fields[key])) {
+                this.config.params.fields[key] = [];
+              } else {
+                this.config.params.fields[key] = "";
+              }
             }
-            this.getFilteredItems();
+          }
+
+          this.getFilteredItems();
         },
         submitSort() {
             this.getFilteredItems();
@@ -69,6 +77,7 @@ let app = new Vue({
 
             data[csrfTokenName] = csrfTokenValue;
             this.loading = true;
+
             axios.post('/super-filter/filter', qs.stringify(data))
                 .then(({data}) => {
                     this.items = data.items;
@@ -87,7 +96,8 @@ let app = new Vue({
                 config: {
                     params: {
                         sort: null,
-                        fields: []
+                        fields: [],
+                        siteId: "*"
                     }
                 }
             };
@@ -121,7 +131,7 @@ let app = new Vue({
     watch: {
         'config.params': {
             handler(val){
-                console.log('watch');
+                this.config.currentPage = 1;
                 this.getFilteredItems();
             },
             deep: true

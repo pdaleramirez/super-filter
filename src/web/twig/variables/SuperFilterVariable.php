@@ -51,6 +51,8 @@ class SuperFilterVariable
             } else {
                 $config['params']['fields'] = $preFilter;
             }
+
+			$config['params']['preFilter'] = $preFilter;
         }
 
         $currentSite = Craft::$app->sites->getCurrentSite();

@@ -128,4 +128,13 @@ class Categories extends ElementSearchField
 
         return $html;
     }
+
+	public function getRelated($value)
+	{
+		$elementType = static::elementType();
+
+		$elements = $elementType::findAll($value);
+
+		return array_merge(['and'], $elements);
+	}
 }
