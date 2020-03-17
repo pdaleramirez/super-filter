@@ -245,7 +245,7 @@
                 }
             },
             mounted() {
-                let url = "{{ baseUrl }}super-filter/setup-search/setup-options";
+                let url = "{{ setupUrl }}";
 
                 {% set data = setupId != 'new' ? '{ id:' ~ setupId ~ '}' : '{}' %}
 

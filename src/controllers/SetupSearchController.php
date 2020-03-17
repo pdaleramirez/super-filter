@@ -49,11 +49,11 @@ class SetupSearchController extends Controller
             $items = Json::decodeIfJson($items);
         }
 
-        $baseUrl = UrlHelper::actionUrl('/');
+        $setupUrl = UrlHelper::actionUrl('super-filter/setup-search/setup-options');
 
         return $this->renderTemplate('super-filter/setupsearch/_edit', [
             'setupElement'    => $setupElement,
-            'baseUrl'         => $baseUrl,
+            'setupUrl'        => $setupUrl,
             'options'         => $options,
             'items'           => $items,
             'baseTemplateOptions'   => SuperFilter::$app->getBaseTemplateOptions(),

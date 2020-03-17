@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.6.1 - 2020-03-17
+- Changed set up option action url in the cp
+
 ## 1.0.6 - 2020-03-15
 - Default category element search to and operator
 - Passed pre-filter variables in the setup template.
