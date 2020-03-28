@@ -96,6 +96,12 @@ twig function second parameter e.g.
     superFilterGenre: [13]
 }) }}
 ```
+- Formatting Date attributes - The plugin supports  https://www.npmjs.com/package/vue-moment so you can easily format your date.
+In your `items.twig` you can call the date attribute like this:
+```
+${ item.dateCreated | moment("dddd, MMMM Do YYYY")  }
+```
+
 - Item results modification - Call item event hook that allows you to modify the search and item results from an ajax results.
 E.g.
 ```
