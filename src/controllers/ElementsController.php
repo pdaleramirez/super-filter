@@ -92,7 +92,7 @@ class ElementsController extends Controller
                 unset($config['params']['sort']);
             }
 
-            if (!empty(SuperFilter::$app->getSettings()->prefixParam)) {
+            if ($fields !== null && !empty(SuperFilter::$app->getSettings()->prefixParam)) {
                 $config['params'][SuperFilter::$app->getSettings()->prefixParam] = $config['params']['fields'];
                 unset($config['params']['fields']);
             }
