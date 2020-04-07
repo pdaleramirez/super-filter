@@ -87,13 +87,31 @@ The page template should look like this:
 </div>
 ```
 
+## Recommendation
+- It is recommended to initialize the calling of attributes and field attributes for your items or elements
+to optimize loading performance. Add the attributes or field handles on the second parameter of the setup twig variable
+E.g.
+```
+{{ craft.superFilter.setup('searchList', {
+  attributes: ['title', 'superFilterGenre', 'dateCreated']
+}) }}
+```
+in your items.twig only the initialized attributes and field values are displayed. It will be called like this
+```
+${ item.title }
+${ item.superFilterGenre }
+${ item.dateCreated }
+```
+
 ## Customization
 - Pre-filter - If you want your items to load with pre defined filters you can pass a json key value pair in the `craft.superFilter.setup`
 twig function second parameter e.g.
 ```
 {{ craft.superFilter.setup('searchList', {
-    superFilterImdbRating: 8,
-    superFilterGenre: [13]
+    filter: {
+      superFilterImdbRating: 8,
+      superFilterGenre: [13]
+    }
 }) }}
 ```
 - Formatting Date attributes - The plugin supports  https://www.npmjs.com/package/vue-moment so you can easily format your date.

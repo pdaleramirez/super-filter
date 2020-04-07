@@ -25,12 +25,12 @@ class SuperFilterVariable
 
     /**
      * @param $handle
-     * @param array $preFilter
+     * @param array $options
      * @return \Twig\Markup
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function setup($handle, array $preFilter = [])
+    public function setup($handle, array $options = [])
     {
         Craft::$app->getView()->registerAssetBundle(VueAsset::class);
 
@@ -45,6 +45,23 @@ class SuperFilterVariable
         if ($fieldParam) {
             $config['params']['fields'] = $fieldParam;
         }
+
+        if (count($options) > 0) {
+        	$keys = array_keys($options);
+
+        	if (!in_array('filter', $keys) && !in_array('attributes', $keys)) {
+        		$message = "Parameter options format should have filter or attribute keys 
+        		E.g. 
+				{
+				  filter: { superFilterImdbRating: 6 },
+				  attributes: ['title', 'superFilterGenre', 'dateCreated']
+				}
+    ";
+        		throw new \yii\base\Exception($message);
+			}
+		}
+
+		$preFilter = $options['filter'] ?? [];
         if (count($preFilter) > 0) {
             if (isset($config['params']['fields'])) {
                 $config['params']['fields'] = array_merge($config['params']['fields'], $preFilter);
@@ -66,7 +83,8 @@ class SuperFilterVariable
         return $this->renderTemplate('setup', [
             'handle' => $handle,
             'params' => $config['params'],
-            'options' => $config['options']
+            'options' => $config['options'],
+			'itemAttributes' => $options['attributes'] ?? []
         ]);
     }
 

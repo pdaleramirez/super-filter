@@ -7,6 +7,7 @@ use craft\base\Component;
 use craft\base\Element;
 use craft\base\Field;
 use craft\base\FieldInterface;
+use craft\base\Serializable;
 use craft\db\Paginator;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Json;
@@ -20,6 +21,9 @@ use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
 use pdaleramirez\superfilter\fields\Title;
 use pdaleramirez\superfilter\SuperFilter;
+use yii\base\Arrayable;
+use craft\helpers\DateTimeHelper;
+use craft\helpers\Db;
 
 class SearchTypes extends Component
 {
@@ -40,7 +44,7 @@ class SearchTypes extends Component
      * @var SearchType $searchType
      */
     protected $searchType;
-
+	protected $itemAttributes = [];
     /**
      * @return array|SearchType[]
      */
@@ -407,13 +411,60 @@ class SearchTypes extends Component
         return $this->items;
     }
 
-    public function getItemToArray()
+	public function setItemAttributes(array $itemAttributes = [])
+	{
+		$this->itemAttributes = $itemAttributes;
+	}
+
+	public function serializeValue($value)
+	{
+		// If the object explicitly defines its savable value, use that
+		if ($value instanceof Serializable) {
+			return $value->serialize();
+		}
+
+		// If it's "arrayable", convert to array
+		if ($value instanceof Arrayable) {
+			return $value->toArray();
+		}
+
+		// Only DateTime objects and ISO-8601 strings should automatically be detected as dates
+		if ($value instanceof \DateTime || DateTimeHelper::isIso8601($value)) {
+			return Db::prepareDateForDb($value);
+		}
+
+		return $value;
+	}
+
+	public function getItemToArray()
     {
         $items = [];
 
         if (count($this->items)> 0) {
+			/**
+			 * @var Element $item
+			 */
             foreach ($this->items as $key => $item) {
-                $items[$key] = array_merge($item->toArray(), $this->formatItemFields($item));
+				if (count($this->itemAttributes) > 0) {
+					foreach ($this->itemAttributes as $attribute) {
+						$attributeValue = $item->{$attribute};
+
+						if ($attributeValue instanceof ElementQuery) {
+							$elements = $attributeValue->all();
+							if (count($elements) > 0) {
+								foreach ($elements as $elementKey => $element) {
+									$items[$key][$attribute][$elementKey] = $element->toArray();
+								}
+							} else {
+								$items[$key][$attribute] = [];
+							}
+						} else {
+							$items[$key][$attribute] = $this->serializeValue($item->{$attribute});
+						}
+					}
+				} else {
+                	$items[$key] = array_merge($item->toArray(), $this->formatItemFields($item));
+				}
 
                 $event = new ItemArrayEvent([
                     'element'   => $item,
@@ -435,6 +486,7 @@ class SearchTypes extends Component
     private function formatItemFields($element)
     {
         $fieldValues = $element->getFieldValues();
+
         $fields = [];
 
         if (count($fieldValues) > 0) {
@@ -665,8 +717,7 @@ class SearchTypes extends Component
             $searchOperator = $operator == 'and' ? ' ' : ' OR ';
             $query->search(implode($searchOperator, $searchQuery));
         }
-
-
+;
         if ($related) {
             $query->relatedTo(array_merge([$operator], $related));
         }

@@ -4,6 +4,7 @@ window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
     window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
     window.superFilterHandle = "{{ handle }}";
     window.superFilterParams = '{{ params|json_encode()|raw }}';
+    window.superFilterItemAttributes = '{{ itemAttributes|json_encode()|raw }}';
     window.superFilterCurrentPage = '{{ craft.app.request.getPageNum() }}';
 {% endjs %}
 
@@ -27,7 +28,9 @@ let app = new Vue({
                 siteId: null
             }
         },
+        itemAttributes: superFilterItemAttributes,
         currentPage: 1,
+        loading: true,
         infiniteId: +new Date(),
         firstLoad: true,
         query: ''
@@ -83,11 +86,12 @@ let app = new Vue({
 
             let data = {
                 handle: this.handle,
-                config: this.config
+                config: this.config,
+                itemAttributes: this.itemAttributes
             };
 
             data[csrfTokenName] = csrfTokenValue;
-
+            this.loading = true;
             axios.post('/super-filter/filter', qs.stringify(data))
                 .then(({data}) => {
                     if (data.items.length) {
@@ -101,6 +105,7 @@ let app = new Vue({
                     this.query = data.query;
 
                     this.pushState();
+                  this.loading = false;
                 });
         },
         initialLoad($state) {
@@ -113,7 +118,8 @@ let app = new Vue({
                         sort: null,
                         fields: []
                     }
-                }
+                },
+                itemAttributes: this.itemAttributes
             };
 
             data.config.params.fields = parse.fields;
@@ -125,7 +131,7 @@ let app = new Vue({
             if (parse.siteId !== undefined) {
                 data.config.params.siteId = parse.siteId;
             }
-
+            this.loading = true;
             data[csrfTokenName] = csrfTokenValue;
             axios.post('/super-filter/fields', qs.stringify(data))
                 .then(({data}) => {

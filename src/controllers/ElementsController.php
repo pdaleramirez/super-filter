@@ -18,7 +18,7 @@ class ElementsController extends Controller
     public function actionGetFields()
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
-
+		$this->setItemAttributes();
         $searchSetupService = SuperFilter::$app->searchTypes;
 
         $config = $searchSetupService->getConfigById($handle);
@@ -56,10 +56,24 @@ class ElementsController extends Controller
         ]);
     }
 
+	private function setItemAttributes()
+	{
+		$searchSetupService = SuperFilter::$app->searchTypes;
+		$itemAttributes = Craft::$app->getRequest()->getBodyParam('itemAttributes');
+
+		if ($itemAttributes !== null) {
+			$itemAttributes = Json::decode($itemAttributes);
+
+			if ($itemAttributes) {
+				$searchSetupService->setItemAttributes($itemAttributes);
+			}
+		}
+	}
+
     public function actionFilter()
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
-
+		$this->setItemAttributes();
         $searchSetupService = SuperFilter::$app->searchTypes;
 
         $config = $searchSetupService->getConfigById($handle);

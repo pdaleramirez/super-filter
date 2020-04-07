@@ -4,6 +4,7 @@ window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
     window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
     window.superFilterHandle = "{{ handle }}";
     window.superFilterParams = '{{ params|json_encode()|raw }}';
+    window.superFilterItemAttributes = '{{ itemAttributes|json_encode()|raw }}';
     window.superFilterCurrentPage = '{{ craft.app.request.getPageNum() }}';
 {% endjs %}
 
@@ -27,6 +28,7 @@ let app = new Vue({
                 siteId: null
             }
         },
+        itemAttributes: superFilterItemAttributes,
         loading: true,
         query: ''
     },
@@ -70,9 +72,11 @@ let app = new Vue({
             this.getFilteredItems();
         },
         getFilteredItems() {
+
             let data = {
                 handle: this.handle,
-                config: this.config
+                config: this.config,
+                itemAttributes: this.itemAttributes
             };
 
             data[csrfTokenName] = csrfTokenValue;
@@ -89,6 +93,7 @@ let app = new Vue({
                 });
         },
         getFields() {
+
             let parse = JSON.parse(superFilterParams);
 
             let data = {
@@ -99,7 +104,8 @@ let app = new Vue({
                         fields: [],
                         siteId: "*"
                     }
-                }
+                },
+                itemAttributes: this.itemAttributes
             };
 
             data.config.params.fields = parse.fields;
@@ -114,6 +120,7 @@ let app = new Vue({
 
             data[csrfTokenName] = csrfTokenValue;
             this.loading = true;
+
             axios.post('/super-filter/fields', qs.stringify(data))
                 .then(({data}) => {
                     this.config = data.config;
@@ -126,15 +133,6 @@ let app = new Vue({
 
                     this.loading = false;
                 });
-        }
-    },
-    watch: {
-        'config.params': {
-            handler(val){
-                this.config.currentPage = 1;
-                this.getFilteredItems();
-            },
-            deep: true
         }
     },
     mounted() {
