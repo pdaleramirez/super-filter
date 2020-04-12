@@ -33,20 +33,7 @@ class ElementsController extends Controller
 
         $config = $searchSetupService->getConfig();
 
-        $items = $config['items']['items'] ?? null;
-
-        $fields = [];
-        if ($items) {
-            foreach ($items as $item) {
-                $searchField = $searchSetupService->getSearchFieldObjectById($item['id']);
-
-                $handle = $searchField->getObject()->handle;
-
-                $fields[$handle] = $searchField->initValue;
-            }
-        }
-
-        $config['params']['fields'] = $fields;
+        $config['params']['fields'] =  $searchSetupService->getInitFields($config);
 
         return Json::encode([
             'config' => $config,

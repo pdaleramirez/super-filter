@@ -717,7 +717,7 @@ class SearchTypes extends Component
             $searchOperator = $operator == 'and' ? ' ' : ' OR ';
             $query->search(implode($searchOperator, $searchQuery));
         }
-;
+
         if ($related) {
             $query->relatedTo(array_merge([$operator], $related));
         }
@@ -728,4 +728,22 @@ class SearchTypes extends Component
 
         return $query;
     }
+
+	public function getInitFields($config)
+	{
+		$items = $config['items']['items'] ?? null;
+
+		$fields = [];
+		if ($items) {
+			foreach ($items as $item) {
+				$searchField = $this->getSearchFieldObjectById($item['id']);
+
+				$handle = $searchField->getObject()->handle;
+
+				$fields[$handle] = $searchField->initValue;
+			}
+		}
+
+		return $fields;
+	}
 }

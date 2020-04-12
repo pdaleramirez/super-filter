@@ -2,7 +2,7 @@
     "name": "pdaleramirez/super-filter",
     "description": "A Craft CMS 3 plugin that lets you build your search page with search filters from your element fields and filter element entries by categories, tags, element relations and other fields.",
     "type": "craft-plugin",
-    "version": "1.1.1",
+    "version": "1.1.3",
     "keywords": [
         "craft",
         "cms",
