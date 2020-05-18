@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.4 - 2020-04-18
+- Remove vue asset bundle call on variable setup method.
+
 ## 1.1.3 - 2020-04-12
 - Fixed vue setup template clear filter with pre-defined is passed.
 

@@ -32,8 +32,6 @@ class SuperFilterVariable
      */
     public function setup($handle, array $options = [])
     {
-        Craft::$app->getView()->registerAssetBundle(VueAsset::class);
-
         $this->prevTemplate = Craft::$app->view->getTemplatesPath();
 
         $config = SuperFilter::$app->searchTypes->getConfigById($handle);
