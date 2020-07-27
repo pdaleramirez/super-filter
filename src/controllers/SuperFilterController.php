@@ -163,7 +163,9 @@ class SuperFilterController extends Controller
             }
         }
 
-        $url = UrlHelper::urlWithParams(Craft::$app->request->getAbsoluteUrl(), $bodyParams);
+        $baseUrl = Craft::$app->request->getHostInfo() . '/' . Craft::$app->request->getPathInfo();
+
+        $url = UrlHelper::urlWithParams($baseUrl, $bodyParams);
 
         return $this->redirect($url);
     }
