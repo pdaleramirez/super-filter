@@ -95,7 +95,6 @@ class ElementsController extends Controller
 
             if ($fields !== null && !empty(SuperFilter::$app->getSettings()->prefixParam)) {
                 $config['params'][SuperFilter::$app->getSettings()->prefixParam] = $config['params']['fields'];
-                unset($config['params']['fields']);
             }
 
             // Does not need to be in the url

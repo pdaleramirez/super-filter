@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.6 - 2020-08-02
+- Fixed js push state not working
+
 ## 1.1.5 - 2020-07-27
 - Remove plain pagination on filter submission
 
