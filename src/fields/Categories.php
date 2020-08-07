@@ -100,7 +100,7 @@ class Categories extends ElementSearchField
      * @param $html
      * @return string
      */
-    public function getCategoriesHtml($categories, &$html)
+    public function getCategoriesHtml(array $categories, &$html)
     {
         $html.= '<ul>';
         foreach ($categories as $category) {
@@ -120,7 +120,7 @@ class Categories extends ElementSearchField
             $children = $category->getChildren();
 
             if ($children) {
-                $this->getCategoriesHtml($children, $html);
+                $this->getCategoriesHtml($children->all(), $html);
             }
             $html.= '</li>';
         }
