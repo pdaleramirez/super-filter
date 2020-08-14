@@ -16,6 +16,7 @@ use Exception;
 use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\base\SearchType;
 use pdaleramirez\superfilter\elements\SetupSearch;
+use pdaleramirez\superfilter\events\ElementQueryEvent;
 use pdaleramirez\superfilter\events\ItemArrayEvent;
 use pdaleramirez\superfilter\events\RegisterSearchFieldTypeEvent;
 use pdaleramirez\superfilter\events\RegisterSearchTypeEvent;
@@ -30,6 +31,7 @@ class SearchTypes extends Component
     const EVENT_REGISTER_SEARCH_TYPES = 'defineSuperFilterSearchTypes';
     const EVENT_REGISTER_SEARCH_FIELD_TYPES = 'defineSuperFilterSearchFieldTypes';
     const EVENT_ITEM_ARRAY = 'itemToArray';
+    const EVENT_ELEMENT_QUERY = 'elementQuery';
     const PAGE_SIZE = 25;
 
     protected $config;
@@ -384,6 +386,16 @@ class SearchTypes extends Component
         if ($siteId) {
             $elementQuery->siteId($siteId);
         }
+
+        $queryEvent = new ElementQueryEvent([
+        	'query' => $elementQuery
+		]);
+
+        $this->trigger(static::EVENT_ELEMENT_QUERY, $queryEvent);
+
+        if ($queryEvent->query !== null) {
+			$elementQuery = $queryEvent->query;
+		}
 
         $paginator = new Paginator($elementQuery, [
             'currentPage' => $config['currentPage'],
