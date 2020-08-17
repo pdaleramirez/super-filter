@@ -138,7 +138,7 @@ let app = new Vue({
         .then(({data}) => {
           this.config = data.config;
           this.config.params.fields = {...data.config.params.fields, ...parse.fields};
-          this.config.params.sort = parse.sort !== undefined ? parse.sort : data.config.params.sort;
+          this.config.params.sort = data.config.params.sort;
 
           if (data.items.length) {
             this.currentPage++;

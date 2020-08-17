@@ -125,7 +125,7 @@ let app = new Vue({
           this.config = data.config;
 
           this.config.params.fields = {...data.config.params.fields, ...parse.fields};
-          this.config.params.sort = parse.sort !== undefined ? parse.sort : data.config.params.sort;
+          this.config.params.sort = data.config.params.sort;
 
           this.items = data.items;
           this.links = data.links;
@@ -137,9 +137,9 @@ let app = new Vue({
   mounted() {
 
     this.config.currentPage = Number(superFilterCurrentPage);
-    console.log('pre filter');
+
     let parse = JSON.parse(superFilterParams);
-    console.log(parse.preFilter);
+
     this.getFields();
   }
 });
