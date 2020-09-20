@@ -9,7 +9,7 @@
             </div>
             <draggable :swapThreshold="1" class="list-group fld-tabcontent" :list="options" :group="group">
                 <div
-                        class="fld-field"
+                        class="fld-field fld-element"
                         v-for="(element, index) in options"
                         :key="element.name"
                 >
@@ -26,7 +26,7 @@
             </div>
             <draggable :swapThreshold="1" class="list-group fld-tabcontent" :list="selected" :group="group" @change="log">
                 <div
-                        class="fld-field"
+                        class="fld-field fld-element"
                         v-for="(element, index) in selected"
                         :key="element.name"
                 >
