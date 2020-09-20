@@ -3,7 +3,8 @@
 Build your search page with search filters from your element fields and filter element entries by categories, tags, element relations, products (Craft Commerce) and other fields. 
 Easily setup your search page by using twig variable functions, back-end coding not needed.
 Supports Vue.js with pre-built styles. 
-  
+
+Demo: https://www.mamalit.com/vue-pagination
 ![Screenshot](resources/img/super-filter-quick-demo.gif)  
   
 ## Requirements  
