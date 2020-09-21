@@ -12,6 +12,7 @@
 /build/*
 /yarn-error.log
 /resources/node_modules/*
+/resources/package-lock.json
 
 # MISC FILES
 .cache
