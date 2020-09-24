@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.8 - 2020-09-24
+- Added variants setting to remove variants attribute in product search results.
+
 ## 1.1.76 - 2020-09-20
 - Added fld-element for field setup UI.
 

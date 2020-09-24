@@ -10,6 +10,7 @@ class Settings extends Model
     public $pluginNameNav = null;
     public $prefixParam = 'fields';
     public $operator    = 'and';
+    public $variants    = true;
 
     public function getSettingsNavItems(): array
     {

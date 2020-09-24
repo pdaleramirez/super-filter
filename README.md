@@ -88,6 +88,16 @@ The page template should look like this:
 </div>
 ```
 
+### Craft Commerce
+If you are using craft commerce and don't want to return the default `variants` attribute on search results.
+You can add a `super-filter.php` setting file in the config folder with this value.
+```
+return [
+  'variants' => false
+];
+
+```
+
 ## Recommendation
 - It is recommended to initialize the calling of attributes and field attributes for your items or elements
 to optimize loading performance. Add the attributes or field handles on the second parameter of the setup twig variable

@@ -133,7 +133,10 @@ class SuperFilter extends Plugin
         Event::on(SearchTypes::class, SearchTypes::EVENT_ITEM_ARRAY, function (ItemArrayEvent $event) {
             if (Craft::$app->getPlugins()->isPluginEnabled('commerce') == true
                 && $event->searchType instanceof ProductSearchType) {
-                $event->item['variants'] = $event->element->getVariants();
+
+				if ($this->getSettings()->variants === true) {
+					$event->item['variants'] = $event->element->getVariants();
+				}
             }
         });
     }
