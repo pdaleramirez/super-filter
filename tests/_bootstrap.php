@@ -1,15 +1,7 @@
 <?php
 
 use craft\test\TestSetup;
-
 ini_set('date.timezone', 'UTC');
-
-
-error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', CRAFT_STORAGE_PATH.'/logs/phperrors.log');
-ini_set('display_errors', 1);
-
 
 // Use the current installation of Craft
 define('CRAFT_STORAGE_PATH', __DIR__ . DIRECTORY_SEPARATOR . '_craft' . DIRECTORY_SEPARATOR . 'storage');
