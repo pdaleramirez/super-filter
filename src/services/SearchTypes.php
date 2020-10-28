@@ -244,7 +244,19 @@ class SearchTypes extends Component
                     $defaultSortOptions[$count]['orderBy'] = $sortOption['orderBy'];
                 }
 
-                $attribute = str_replace('field_', '', $sortOption['orderBy']) ?? null;
+                $orderBy = $sortOption['orderBy'];
+
+                if (is_callable($orderBy)) {
+                    $attribute = function($dir) use ($orderBy) {
+                        return str_replace('field_', '', $orderBy($dir));
+                    };
+                }
+                else if (is_string($orderBy)) {
+                    $attribute = str_replace('field_', '', $orderBy);
+                }
+                else {
+                    $attribute = null;
+                }
 
                 $sortOptions[] = $attribute;
             }
