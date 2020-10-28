@@ -248,7 +248,14 @@ class SearchTypes extends Component
 
                 if (is_callable($orderBy)) {
                     $attribute = function($dir) use ($orderBy) {
-                        return str_replace('field_', '', $orderBy($dir));
+                        $var = $orderBy($dir);
+
+                        if (is_array($var)) {
+                            return str_replace('field_', '', $var);
+                        }
+
+                        // yii/db/ExpressionInterface
+                        return $var;
                     };
                 }
                 else if (is_string($orderBy)) {
