@@ -52,6 +52,17 @@
                 errors: errors['operator'] is defined ? errors['operator'] : null
             }) }}
 
+            {{ forms.selectField({
+                label: "Category Relationship Operator"|t('super-filter'),
+                name: 'settings[categoryOperator]',
+                options: [
+                    { value: 'and', label: 'And' },
+                    { value: 'or', label: 'Or' }
+                ],
+                value: settings.operator is defined ? settings.categoryOperator : null,
+                errors: errors['categoryOperator'] is defined ? errors['categoryOperator'] : null
+            }) }}
+
             <div class="field">
                 <button @click.prevent="installSampleData" class="btn submit">Install Example Data
                     <i class="fa fa-spin fa-spinner" style="display: none"></i></button>

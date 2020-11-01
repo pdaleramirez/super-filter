@@ -135,6 +135,9 @@ class Categories extends ElementSearchField
 
 		$elements = $elementType::findAll($value);
 
-		return array_merge(['and'], $elements);
+        $operator = SuperFilter::$app->getSettings()->categoryOperator;
+        $operator = strtolower($operator);
+
+		return array_merge([$operator], $elements);
 	}
 }
