@@ -537,7 +537,8 @@ class SampleData extends Component
             'handle'  => $handle,
             'multiline'   => true,
             "initialRows" => 4,
-            "columnType"  => "text"
+            "columnType"  => "text",
+            "searchable" => true
         ];
 
         return $this->saveField($config);
@@ -593,6 +594,7 @@ class SampleData extends Component
             "handle"  => $handle,
             "groupId" => $this->fieldGroupId,
             'optgroups' => true,
+            "searchable" => true,
             'settings' => [
                     'options' => [
                     [
@@ -643,7 +645,8 @@ class SampleData extends Component
             "name"    => "Release Date",
             "handle"  => $handle,
             "groupId" => $this->fieldGroupId,
-            'settings' => ['options' => $options]
+            'settings' => ['options' => $options],
+            "searchable" => true
         ];
 
         return $this->saveField($config);
@@ -670,7 +673,8 @@ class SampleData extends Component
             "name"    => "Imdb Rating",
             "handle"  => $handle,
             "groupId" => $this->fieldGroupId,
-            'settings' => ['options' => $options]
+            'settings' => ['options' => $options],
+            "searchable" => true
         ];
 
         return $this->saveField($config);
