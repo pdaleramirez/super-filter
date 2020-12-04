@@ -24,6 +24,7 @@ use pdaleramirez\superfilter\fields\Dropdown;
 use pdaleramirez\superfilter\fields\Entries;
 use pdaleramirez\superfilter\fields\Number;
 use pdaleramirez\superfilter\fields\PlainText;
+use pdaleramirez\superfilter\fields\PriceRange;
 use pdaleramirez\superfilter\fields\RadioButtons;
 use pdaleramirez\superfilter\fields\Tags;
 use pdaleramirez\superfilter\fields\Title;
@@ -128,6 +129,7 @@ class SuperFilter extends Plugin
             $event->searchFieldTypes[] = new Dropdown();
             $event->searchFieldTypes[] = new Tags();
             $event->searchFieldTypes[] = new RadioButtons();
+            $event->searchFieldTypes[] = new PriceRange();
         });
 
         Event::on(SearchTypes::class, SearchTypes::EVENT_ITEM_ARRAY, function (ItemArrayEvent $event) {

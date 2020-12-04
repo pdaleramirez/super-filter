@@ -17,7 +17,13 @@ abstract class SearchField
      * @var $object Field
      */
     protected $object;
-
+    public $custom = false;
+    
+    public function getKey()
+    {
+        return static::class;
+    }
+    
     public function setConfig($config)
     {
         $this->config = $config;

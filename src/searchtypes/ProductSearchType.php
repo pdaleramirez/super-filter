@@ -63,6 +63,9 @@ class ProductSearchType extends SearchType
                     $fields[$sectionHandle]['options'][$key]['id']   = $fieldObject->id;
                 }
             }
+            $last = count($itemObjects);
+            $fields[$sectionHandle]['options'][$last]['name'] = "Price Range";
+            $fields[$sectionHandle]['options'][$last]['id']   = "range";
         }
 
         return $fields;

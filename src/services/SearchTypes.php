@@ -74,6 +74,19 @@ class SearchTypes extends Component
 
         return $event->searchFieldTypes;
     }
+    
+    public function getCustomSearchFieldType($type)
+    {
+        $searchFields = $this->getAllSearchFieldTypes();
+        
+        foreach ($searchFields as $searchField) {
+            if ($searchField->custom === true && $searchField->getKey() === $type) {
+                return $searchField;
+            }
+        }
+        
+        return null;
+    }
 
     /**
      * @param SetupSearch|null $setupSearch
@@ -144,11 +157,13 @@ class SearchTypes extends Component
                 if (isset($field[$handle]['options'])) {
                     foreach ($field[$handle]['options'] as $key => $attribute) {
                         $id = $attribute['id'];
+                        
+                        if (is_int($id)) {
+                            $fieldObj = Craft::$app->getFields()->getFieldById($id);
 
-                        $fieldObj = Craft::$app->getFields()->getFieldById($id);
-
-                        if ($this->getSearchFieldByObj($fieldObj) == null) {
-                            unset($field[$handle]['options'][$key]);
+                            if ($this->getSearchFieldByObj($fieldObj) == null) {
+                                unset($field[$handle]['options'][$key]);
+                            }
                         }
                     }
 
@@ -586,11 +601,10 @@ class SearchTypes extends Component
     public function getSearchFieldObjectById($id, $handle = false)
     {
         $fieldObj = null;
-        if (is_string($id) && $id == 'title') {
-            $searchField = new Title();
-            $this->setSearchFieldAttributes($searchField, 'title');
+        if (is_string($id) && ($customField = SuperFilter::$app->searchTypes->getCustomSearchFieldType($id)) !== null) {
+            $this->setSearchFieldAttributes($customField, $id);
 
-            return $searchField;
+            return $customField;
         }
 
         if ($handle == true) {

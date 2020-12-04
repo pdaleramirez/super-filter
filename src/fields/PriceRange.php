@@ -3,15 +3,14 @@
 namespace pdaleramirez\superfilter\fields;
 
 use Craft;
+use craft\commerce\elements\db\ProductQuery;
 use craft\elements\db\ElementQuery;
-use craft\fields\PlainText as PlainTextCraft;
 use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\SuperFilter;
-use phpDocumentor\Reflection\Types\Static_;
 use stdClass;
 use yii\db\QueryInterface;
 
-class Title extends SearchField
+class PriceRange extends SearchField
 {
     public $initValue = '';
     public $object;
@@ -20,13 +19,13 @@ class Title extends SearchField
     public function __construct()
     {
         $this->object = new stdClass;
-        $this->object->name   = 'Title';
-        $this->object->handle = 'title';
+        $this->object->name   = 'Price Range';
+        $this->object->handle = 'range';
     }
 
     public function getKey()
     {
-        return 'title';
+        return 'range';
     }
 
     public function fieldType()
@@ -41,7 +40,10 @@ class Title extends SearchField
      */
     public function getQueryParams(QueryInterface $query, $value)
     {
-        return $query->search("title:*$value*");
+        /**
+         * @var ProductQuery $query
+         */
+        return $query->andWhere(['between', 'defaultPrice', 30, 80]);
     }
 
     public function getHtml()

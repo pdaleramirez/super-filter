@@ -34,7 +34,7 @@ modules:
         superFilter:
           class: '\pdaleramirez\superfilter\SuperFilter'
           handle: super-filter
-      cleanup: true
-      transaction: true
+      cleanup: false
+      transaction: false
       dbSetup: {clean: false, setupCraft: false}
       fullMock: false]
