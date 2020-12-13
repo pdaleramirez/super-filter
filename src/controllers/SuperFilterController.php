@@ -155,6 +155,14 @@ class SuperFilterController extends Controller
                 if (is_string($field) && $fieldValue === '') {
                     unset($bodyParams[$prefixParam][$handle]);
                 }
+                
+                if (is_array($field)) {
+                    foreach ($field as $key => $value) {
+                        if ($value === '') {
+                            unset($bodyParams[$prefixParam][$handle][$key]);
+                        }
+                    }
+                }
             }
 
             if (isset($bodyParams['reset'])) {

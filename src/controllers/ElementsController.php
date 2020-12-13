@@ -80,6 +80,14 @@ class ElementsController extends Controller
                 if (is_string($field) && $fieldValue === '') {
                     unset($config['params']['fields'][$handle]);
                 }
+
+                if (is_array($field)) {
+                    foreach ($field as $key => $value) {
+                        if ($value === '') {
+                            unset($config['params']['fields'][$handle][$key]);
+                        }
+                    }
+                }
             }
         }
 

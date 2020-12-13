@@ -1,0 +1,12 @@
+
+<template v-if="config.params.fields.{{ field.object.handle }}">
+<small>Min</small> <input type="text" 
+                          name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}][min]"
+                          v-model="config.params.fields.{{ field.object.handle }}.min"
+                          size="2" value="{{ field.value().min ?? null }}" />
+
+<small>Max</small> <input type="text" 
+                          name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}][max]"
+                          v-model="config.params.fields.{{ field.object.handle }}.max"
+                          size="2" value="{{ field.value().max ?? null }}" />
+</template>

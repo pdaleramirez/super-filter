@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\fields;
 use Craft;
 use craft\commerce\elements\db\ProductQuery;
 use craft\elements\db\ElementQuery;
+use craft\helpers\Json;
 use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\SuperFilter;
 use stdClass;
@@ -12,20 +13,21 @@ use yii\db\QueryInterface;
 
 class PriceRange extends SearchField
 {
-    public $initValue = '';
+    public $initValue = ['min' => '', 'max' => ''];
     public $object;
     public $custom = true;
+    const KEY = 'superFilterPriceRange';
     
     public function __construct()
     {
         $this->object = new stdClass;
-        $this->object->name   = 'Price Range';
-        $this->object->handle = 'range';
+        $this->object->name = 'Price Range';
+        $this->object->handle = static::KEY;
     }
 
     public function getKey()
     {
-        return 'range';
+        return static::KEY;;
     }
 
     public function fieldType()
@@ -40,19 +42,32 @@ class PriceRange extends SearchField
      */
     public function getQueryParams(QueryInterface $query, $value)
     {
+        $min = $value['min'] ?? null;
+        $max = $value['max'] ?? null;
         /**
          * @var ProductQuery $query
          */
-        return $query->andWhere(['between', 'defaultPrice', 30, 80]);
+        
+        if ($min !== null && $max !== null) {
+            return $query->andWhere(['between', 'defaultPrice', $min, $max]);
+        }
+        
+        if ($min !== null && $max === null) {
+            return $query->andWhere(['>=', 'defaultPrice', $min]);
+        }        
+        
+        if ($min === null && $max !== null) {
+            return $query->andWhere(['<=', 'defaultPrice', $max]);
+        }
     }
 
     public function getHtml()
     {
-        $template = SuperFilter::$app->searchTypes->getTemplate('fields/plaintext');
+        $template = SuperFilter::$app->searchTypes->getTemplate('fields/pricerange');
 
         return Craft::$app->getView()->renderTemplate($template,
             [
-               'field' => $this
+                'field' => $this
             ]);
     }
 }

@@ -120,11 +120,13 @@ let app = new Vue({
       data[csrfTokenName] = csrfTokenValue;
       this.loading = true;
 
+
       axios.post('/super-filter/fields', qs.stringify(data))
         .then(({data}) => {
           this.config = data.config;
 
           this.config.params.fields = {...data.config.params.fields, ...parse.fields};
+
           this.config.params.sort = data.config.params.sort;
 
           this.items = data.items;

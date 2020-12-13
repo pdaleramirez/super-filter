@@ -7,6 +7,7 @@ use craft\commerce\elements\Product;
 use craft\commerce\Plugin;
 use craft\elements\Entry;
 use pdaleramirez\superfilter\base\SearchType;
+use pdaleramirez\superfilter\fields\PriceRange;
 use pdaleramirez\superfilter\SuperFilter;
 
 /**
@@ -65,7 +66,7 @@ class ProductSearchType extends SearchType
             }
             $last = count($itemObjects);
             $fields[$sectionHandle]['options'][$last]['name'] = "Price Range";
-            $fields[$sectionHandle]['options'][$last]['id']   = "range";
+            $fields[$sectionHandle]['options'][$last]['id']   = PriceRange::KEY;
         }
 
         return $fields;

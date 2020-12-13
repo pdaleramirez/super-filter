@@ -601,16 +601,21 @@ class SearchTypes extends Component
     public function getSearchFieldObjectById($id, $handle = false)
     {
         $fieldObj = null;
-        if (is_string($id) && ($customField = SuperFilter::$app->searchTypes->getCustomSearchFieldType($id)) !== null) {
+
+        if (($customField = SuperFilter::$app->searchTypes->getCustomSearchFieldType($id))) {
             $this->setSearchFieldAttributes($customField, $id);
 
             return $customField;
         }
-
+        
         if ($handle == true) {
             $fieldObj = Craft::$app->getFields()->getFieldByHandle($id);
         } else {
             $fieldObj = Craft::$app->getFields()->getFieldById($id);
+        }
+        
+        if ($fieldObj === null) {
+          throw new Exception('Field id not found: ' . $id);
         }
 
         return  $this->getSearchFieldByObj($fieldObj);
