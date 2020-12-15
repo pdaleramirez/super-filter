@@ -44,8 +44,16 @@ let app = new Vue({
       let fields = this.config.params.fields;
       for (let key in fields) {
         if (Array.isArray(fields[key])) {
+  
           this.config.params.fields[key] = [];
-        } else {
+  
+        } if (typeof this.config.params.fields[key] === 'object' && typeof this.config.params.fields[key] !== null) {
+  
+          for (let index in this.config.params.fields[key]) {
+            this.config.params.fields[key][index] = ""
+          }
+  
+       } else {
           this.config.params.fields[key] = "";
         }
       }

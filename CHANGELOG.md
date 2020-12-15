@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.3 - 2020-12-x
+- Added Price Range field that added ability for product search type to filter default price between minimum and maximum values. ([#3](https://github.com/pdaleramirez/super-filter/issues/3))
+
 ## 1.2.1 - 2020-11-1
 - Added category operator setting that allows user to choose the relationship between category field values. ([#14]( https://github.com/pdaleramirez/super-filter/issues/14))
 
