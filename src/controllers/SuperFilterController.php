@@ -169,6 +169,17 @@ class SuperFilterController extends Controller
                 $bodyParams[$prefixParam] = [];
                 $bodyParams['reset'] = null;
             }
+
+            $querySort = Craft::$app->request->getQueryParam('sort');
+            if ($querySort) {
+                $bodyParams = array_merge(['sort' => $querySort], $bodyParams);
+            }
+        }
+        
+        $sort = $bodyParams['sort'] ?? null;
+        $queryFields = Craft::$app->request->getQueryParam('fields');
+        if ($sort !== null && $queryFields !== null) {
+            $bodyParams = array_merge([$prefixParam => $queryFields], $bodyParams);
         }
 
         $baseUrl = Craft::$app->request->getHostInfo() . '/' . Craft::$app->request->getPathInfo();

@@ -4,7 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.3 - 2020-12-x
+## 1.3.1 - 2021-01-17
+- Fixed an issue when submitting a filter with plain template, it doesn't combine sorting and filtering items.
+
+## 1.3.0 - 2020-12-16
 - Added Price Range field that added ability for product search type to filter default price between minimum and maximum values. ([#3](https://github.com/pdaleramirez/super-filter/issues/3))
 
 ## 1.2.1 - 2020-11-1
