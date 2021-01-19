@@ -74,17 +74,17 @@ class SearchTypes extends Component
 
         return $event->searchFieldTypes;
     }
-    
+
     public function getCustomSearchFieldType($type)
     {
         $searchFields = $this->getAllSearchFieldTypes();
-        
+
         foreach ($searchFields as $searchField) {
             if ($searchField->custom === true && $searchField->getKey() === $type) {
                 return $searchField;
             }
         }
-        
+
         return null;
     }
 
@@ -157,7 +157,7 @@ class SearchTypes extends Component
                 if (isset($field[$handle]['options'])) {
                     foreach ($field[$handle]['options'] as $key => $attribute) {
                         $id = $attribute['id'];
-                        
+
                         if (is_int($id)) {
                             $fieldObj = Craft::$app->getFields()->getFieldById($id);
 
@@ -422,7 +422,8 @@ class SearchTypes extends Component
         }
 
         $queryEvent = new ElementQueryEvent([
-        	'query' => $elementQuery
+        	'query' => $elementQuery,
+			'searchType' => $searchType
 		]);
 
         $this->trigger(static::EVENT_ELEMENT_QUERY, $queryEvent);
@@ -607,13 +608,13 @@ class SearchTypes extends Component
 
             return $customField;
         }
-        
+
         if ($handle == true) {
             $fieldObj = Craft::$app->getFields()->getFieldByHandle($id);
         } else {
             $fieldObj = Craft::$app->getFields()->getFieldById($id);
         }
-        
+
         if ($fieldObj === null) {
           throw new Exception('Field id not found: ' . $id);
         }

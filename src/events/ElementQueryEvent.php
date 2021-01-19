@@ -6,5 +6,6 @@ use yii\base\Event;
 
 class ElementQueryEvent extends Event
 {
-    public $query      = null;
+    public $query = null;
+	public $searchType = null;
 }
