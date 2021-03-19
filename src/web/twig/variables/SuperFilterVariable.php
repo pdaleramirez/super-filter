@@ -48,8 +48,8 @@ class SuperFilterVariable
         	$keys = array_keys($options);
 
         	if (!in_array('filter', $keys) && !in_array('attributes', $keys)) {
-        		$message = "Parameter options format should have filter or attribute keys 
-        		E.g. 
+                $message = "Parameter options format should have filter or attribute keys
+        		E.g.
 				{
 				  filter: { superFilterImdbRating: 6 },
 				  attributes: ['title', 'superFilterGenre', 'dateCreated']
@@ -75,6 +75,11 @@ class SuperFilterVariable
         if ($currentSite !== null && $currentSite->id !== $primarySite->id) {
             $config['params']['siteId'] = $currentSite->id;
         }
+
+        $optionSiteId = $options['siteId'] ?? null;
+        if ($optionSiteId !== null) {
+			$config['params']['siteId'] = $optionSiteId;
+		}
 
         $this->searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
 

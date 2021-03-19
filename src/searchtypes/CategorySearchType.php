@@ -91,7 +91,7 @@ class CategorySearchType extends SearchType
 
             $filter = $this->items;
 
-            $groupHandle = $filter['container']['selected'] ?? null;
+            $groupHandle = $filter['container'] ?? null;
 
             if ($groupHandle) {
                 $query = $this->query->group($groupHandle);
