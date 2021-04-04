@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.3.2 - 2021-04-04
+- Added searchType var to EVENT_ELEMENT_QUERY eventAdded searchType var to EVENT_ELEMENT_QUERY event.
+- Fixed category element search type.
+- Added siteId option on filter setup
+
 ## 1.3.1 - 2021-01-17
 - Fixed an issue when submitting a filter with plain template, it doesn't combine sorting and filtering items.
 
