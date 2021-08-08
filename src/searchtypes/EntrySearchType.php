@@ -47,11 +47,13 @@ class EntrySearchType extends SearchType
         $fields = [];
 
         $fieldObjects = $this->_getFields ?? $this->getFieldObjects();
+        
 		if ($fieldObjects !== null) {
 			foreach ($fieldObjects as $sectionHandle => $item) {
 				$fields[$sectionHandle]['label'] = $item['label'];
 				$fields[$sectionHandle]['selected'] = [];
-				$itemObjects = $item['fieldObjects'];
+				
+				$itemObjects = $this->getSupportedFields($item['fieldObjects']);
 
 				if (count($itemObjects) > 0) {
 					foreach ($itemObjects as $key => $fieldObject) {
@@ -77,7 +79,7 @@ class EntrySearchType extends SearchType
         $fields = [];
 
         $fieldObjects = $this->_getFields ?? $this->getFieldObjects();
-
+ 
 		if ($fieldObjects !== null) {
 
 			foreach ($fieldObjects as $sectionHandle => $item) {
@@ -99,7 +101,7 @@ class EntrySearchType extends SearchType
 					$sortFields);
 			}
 		}
-
+    
         return $fields;
     }
 

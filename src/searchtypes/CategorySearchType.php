@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\searchtypes;
 use Craft;
 use craft\elements\Category;
 use pdaleramirez\superfilter\base\SearchType;
+use pdaleramirez\superfilter\SuperFilter;
 
 class CategorySearchType extends SearchType
 {
@@ -41,6 +42,8 @@ class CategorySearchType extends SearchType
         if (!empty($groups)) {
             foreach ($groups as $group) {
                 $fieldObjects = $group->getFieldLayout()->getFields();
+
+                $fieldObjects = $this->getSupportedFields($fieldObjects);
                 $fields[$group->handle]['label'] = $group->name;
                 $fields[$group->handle]['selected'] = [];
                 $fields[$group->handle]['options'] = [];
@@ -62,6 +65,7 @@ class CategorySearchType extends SearchType
      */
     public function getSorts()
     {
+        $categoryOptions = SuperFilter::$app->searchTypes->getSortOptions(Category::sortOptions());
         $groups = Craft::$app->getCategories()->getAllGroups();
 
         $fields = [];
@@ -72,15 +76,23 @@ class CategorySearchType extends SearchType
                 $fields[$group->handle]['label'] = $group->name;
                 $fields[$group->handle]['selected'] = [];
                 $fields[$group->handle]['options'] = [];
+
+                $sortFields = [];
                 if (count($fieldObjects) > 0) {
                     foreach ($fieldObjects as $key => $fieldObject) {
-                        $fields[$group->handle]['options'][$key]['name'] = $fieldObject->name;
-                        $fields[$group->handle]['options'][$key]['orderBy'] = $fieldObject->handle;
+                        
+                        if (in_array($fieldObject->handle, $categoryOptions['sortOptions'])) {
+                            $sortFields[$key]['name'] = $fieldObject->name;
+                            $sortFields['orderBy'] = $fieldObject->handle;
+                        }
+
+                        $fields[$group->handle]['options'] = array_merge($categoryOptions['defaultSortOptions'],
+                            $sortFields);
                     }
                 }
             }
         }
-
+       
         return (array)$fields;
     }
 

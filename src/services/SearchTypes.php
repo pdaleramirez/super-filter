@@ -797,4 +797,17 @@ class SearchTypes extends Component
 
 		return $fields;
 	}
+
+    /**
+     * @return array
+     */
+    public function getAllSearchFieldTypeClasses()
+    {
+        $classes = [];
+        foreach ($this->getAllSearchFieldTypes() as $field) {
+            $classes[] = $field->fieldType();
+        }
+
+        return $classes;
+    }
 }

@@ -118,6 +118,9 @@ class ProductSearchType extends SearchType
             foreach ($productTypes as $productType) {
 
                 $fieldObjects = $productType->getProductFieldLayout()->getFields();
+
+                $fieldObjects = $this->getSupportedFields($fieldObjects);
+                
                 $this->_getFields[$productType->handle]['label'] = $productType->name;
                 $this->_getFields[$productType->handle]['selected'] = [];
                 $this->_getFields[$productType->handle]['fieldObjects'] = $fieldObjects;

@@ -129,4 +129,22 @@ abstract class SearchType extends Component implements SearchTypeInterface
 
         return $fieldTypes;
     }
+
+    /**
+     * @param $fieldObjects
+     * @return array
+     */
+    public function getSupportedFields($fieldObjects)
+    {
+        $fieldClasses = SuperFilter::$app->searchTypes->getAllSearchFieldTypeClasses();
+        
+        $fields = [];
+        foreach ($fieldObjects as $object) {
+            if (in_array(get_class($object), $fieldClasses)) {
+                $fields[] = $object;
+            }
+        }
+
+        return $fields;
+    }
 }
