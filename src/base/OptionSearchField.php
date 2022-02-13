@@ -44,7 +44,7 @@ abstract class OptionSearchField extends SearchField
     {
         $handle = $this->object->handle;
 
-        return "$handle::'$value'";
+        return "$handle::'*$value'";
     }
 
     public function getInitValue()

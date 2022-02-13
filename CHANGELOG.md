@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.4.0.1 - 2021-08-08
+- Fixed bug where searching for field content don't work such as radio and dropdown fields.
+- Added craft.superFilter.close() to the example-page template
+
 ## 1.4.0 - 2021-08-08
 - Fixed unsupported fields able to be selected in the search setup
 - Fixed category sort options selection.
