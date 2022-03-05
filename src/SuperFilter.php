@@ -88,6 +88,13 @@ class SuperFilter extends Plugin
         Craft::setAlias('@superfilterResources', dirname(__DIR__).'/resources/lib');
         Craft::setAlias('@superfilterModule', dirname(__DIR__));
 
+        // Set the controllerNamespace based on whether this is a console or web request
+        if (Craft::$app->getRequest()->getIsConsoleRequest()) {
+            $this->controllerNamespace = 'pdaleramirez\\superfilter\\console\\controllers';
+        } else {
+            $this->controllerNamespace = 'pdaleramirez\\superfilter\\controllers';
+        }
+
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $event->sender->set('superFilter', SuperFilterVariable::class);
         });
