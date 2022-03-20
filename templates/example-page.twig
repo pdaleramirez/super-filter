@@ -1,6 +1,13 @@
-{% extends "_layout" %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{{ siteName ~ ' Suoer Filter Page' }}</title>
 
-{% block content %}
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="relative text-gray-800 flex flex-col min-h-screen leading-relaxed">
     <div id="search-app">
 
         {{ craft.superFilter.setup('searchList') }}
@@ -18,5 +25,6 @@
         </div>
     </div>
 
-{% endblock %}
+</body>
+</html>
 

@@ -40,6 +40,8 @@ class SampleData extends Component
 
     public function generateSampleData()
     {
+        $this->createSearchSetup();
+
         $categoryGroup = $this->getCategoryGroup();
 
         $tagGroup = $this->getTagGroup();
@@ -100,18 +102,37 @@ class SampleData extends Component
         Craft::$app->getElements()->saveElement($setupElement);
     }
 
-    public function createFiles()
+    public function createFiles($templatesPath, $folderName): void
     {
         $slash = DIRECTORY_SEPARATOR;
+        $destination = $templatesPath . $slash . $folderName;
         $pathService = Craft::$app->getPath();
         $exampleTemplatesSource = FileHelper::normalizePath(
             $pathService->getVendorPath() . '/pdaleramirez/super-filter/templates/vue'
         );
-       // $tempDestination = $pathService->getTempPath() . $slash . 'superfilter_example_templates_' . md5(uniqid(mt_rand(), true));
 
-        $destination = $pathService->getSiteTemplatesPath() . $slash . 'superfilter';
+        $exampleFilePage = FileHelper::normalizePath(
+            $pathService->getVendorPath() . '/pdaleramirez/super-filter/templates/example-page.twig');
+
         FileHelper::copyDirectory($exampleTemplatesSource, $destination, ['recursive' => true, 'copyEmptyDirectories' => true]);
 
+        $examplePageDestination = $templatesPath . $slash . 'example-page.twig';
+
+        $fileContents = file_get_contents($exampleFilePage);
+        FileHelper::writeToFile($examplePageDestination, $fileContents);
+    }
+
+    /**
+     * @return string
+     * @throws \yii\base\Exception
+     */
+    private function _getTemplatesPath(): string
+    {
+        $originalMode = Craft::$app->getView()->getTemplateMode();
+        Craft::$app->getView()->setTemplateMode(\craft\web\View::TEMPLATE_MODE_SITE);
+        $templatesPath = Craft::$app->getView()->getTemplatesPath();
+        Craft::$app->getView()->setTemplateMode($originalMode);
+        return $templatesPath;
     }
 
     /**

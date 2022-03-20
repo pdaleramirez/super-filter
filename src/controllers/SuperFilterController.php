@@ -96,7 +96,6 @@ class SuperFilterController extends Controller
     }
 
     /**
-     * @return string|null
      * @throws \Throwable
      * @throws \craft\errors\CategoryGroupNotFoundException
      * @throws \yii\web\BadRequestHttpException
