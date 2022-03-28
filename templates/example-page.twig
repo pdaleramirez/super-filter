@@ -7,10 +7,10 @@
 
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="relative text-gray-800 flex flex-col min-h-screen leading-relaxed">
+<body class="m-8">
     <div id="search-app">
 
-        {{ craft.superFilter.setup('searchList') }}
+        {{ craft.superFilter.setup('superFilterShows') }}
         <div class="row">
             <div class="col-sm-2 col-md-2">
                 {{ craft.superFilter.displaySearchFields() }}

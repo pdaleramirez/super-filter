@@ -30,6 +30,7 @@ use pdaleramirez\superfilter\SuperFilter;
 class SampleData extends Component
 {
     const PREFIX = 'superFilter';
+    const DEFAULT_FOLDER = 'super-filter-search';
     private $fieldGroupId;
     private $categoryGroupId;
     private $categoryGroupUid;
@@ -73,7 +74,7 @@ class SampleData extends Component
         return null;
     }
 
-    public function createSearchSetup()
+    public function createSearchSetup($folderName = SampleData::DEFAULT_FOLDER)
     {
         $handle = 'superFilterShows';
 
@@ -92,8 +93,8 @@ class SampleData extends Component
 
         $setupElement->options = [
             'perPage' => 10,
-            'baseTemplate' => 'plain',
-            'template' => 'superfilter',
+            'baseTemplate' => 'vue',
+            'template' => $folderName,
             'initSort' => 'elements.dateCreated-asc'
         ];
 
@@ -116,23 +117,10 @@ class SampleData extends Component
 
         FileHelper::copyDirectory($exampleTemplatesSource, $destination, ['recursive' => true, 'copyEmptyDirectories' => true]);
 
-        $examplePageDestination = $templatesPath . $slash . 'example-page.twig';
+        $examplePageDestination = $templatesPath . $slash . 'super-filter-page.twig';
 
         $fileContents = file_get_contents($exampleFilePage);
         FileHelper::writeToFile($examplePageDestination, $fileContents);
-    }
-
-    /**
-     * @return string
-     * @throws \yii\base\Exception
-     */
-    private function _getTemplatesPath(): string
-    {
-        $originalMode = Craft::$app->getView()->getTemplateMode();
-        Craft::$app->getView()->setTemplateMode(\craft\web\View::TEMPLATE_MODE_SITE);
-        $templatesPath = Craft::$app->getView()->getTemplatesPath();
-        Craft::$app->getView()->setTemplateMode($originalMode);
-        return $templatesPath;
     }
 
     /**

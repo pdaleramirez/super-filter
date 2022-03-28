@@ -6,6 +6,7 @@ use craft\console\Controller;
 use Craft;
 use craft\helpers\Console;
 use craft\helpers\FileHelper;
+use pdaleramirez\superfilter\services\SampleData;
 use pdaleramirez\superfilter\SuperFilter;
 use yii\console\ExitCode;
 
@@ -41,25 +42,27 @@ class GenerateController extends Controller
 
     public function actionGenerate()
     {
-        SuperFilter::$app->sampleData->generateSampleData();
-
         $section = Craft::$app->getSections()->getSectionByHandle('superFilterShows');
 
         $entryTypes = $section->getEntryTypes();
-
-        $slash = DIRECTORY_SEPARATOR;
 
         foreach ($entryTypes as $entryType) {
             foreach ($entryType->getFieldLayout()->getFields() as $field) {
                 $handle = $field->handle;
             }
-           // Craft::dd($entryType->getFieldLayout()->getFields());
+            // Craft::dd($entryType->getFieldLayout()->getFields());
         }
+    }
+
+    public function actionExample()
+    {
+        SuperFilter::$app->sampleData->generateSampleData();
+
         if ($this->folderName !== '') {
             $folderName = $this->folderName;
         } else {
             $this->stdout('A folder will be copied to your templates directory.' . PHP_EOL);
-            $folderName = $this->prompt('Choose folder name:', ['required' => true, 'default' => 'super-filter-search']);
+            $folderName = $this->prompt('Choose folder name:', ['required' => true, 'default' => SampleData::DEFAULT_FOLDER]);
         }
 
         $templatesPath = $this->_getTemplatesPath();
@@ -77,12 +80,9 @@ class GenerateController extends Controller
             return $this->_returnErrors($errors);
         }
 
-        $templatesPath = $this->_getTemplatesPath();
+        SuperFilter::$app->sampleData->createSearchSetup($folderName);
 
         SuperFilter::$app->sampleData->createFiles($templatesPath, $folderName);
-
-        $this->stdout("folderName: " . $folderName . PHP_EOL);
-        $this->stdout("section: " . $this->section . PHP_EOL);
     }
 
     /**
