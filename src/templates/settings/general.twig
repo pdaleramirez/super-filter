@@ -64,8 +64,13 @@
             }) }}
 
             <div class="field">
-                <button @click.prevent="installSampleData" class="btn submit">Install Example Data
-                    <i class="fa fa-spin fa-spinner" style="display: none"></i></button>
+                <h2>Generate Example Data and Files</h2>
+                <p>To generate example data with associated twig templates follow this steps:</p>
+                <ol>
+                    <li>SSH to your server and run craft console command.</li>
+                    <li>Run the command <strong><code>php craft super-filter/generate/example</code></strong>. This will create example entries and create template files.</li>
+                    <li>After running command, visit your url <strong>https://your-url.test/super-filter-page</strong> you should be able to see Shows Entries Search Page.</li>
+                </ol>
             </div>
         </div>
     </div>
