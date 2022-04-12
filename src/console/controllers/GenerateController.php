@@ -2,10 +2,14 @@
 
 namespace pdaleramirez\superfilter\console\controllers;
 
+use craft\base\Plugin;
 use craft\console\Controller;
 use Craft;
 use craft\helpers\Console;
 use craft\helpers\FileHelper;
+use craft\helpers\Json;
+use craft\web\View;
+use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\services\SampleData;
 use pdaleramirez\superfilter\SuperFilter;
 use yii\console\ExitCode;
@@ -17,40 +21,67 @@ class GenerateController extends Controller
      */
     public $defaultAction = 'generate';
 
-    public string $section = 'superFilterShows';
+    public $searchSetupHandle = '';
 
     /**
      * @var string Name of the folder the templates will copy into
      * @since 3.3
      */
-    public string $folderName = '';
+    public $folderName = '';
 
     /**
      * @var bool Whether to overwrite an existing folder. Must be passed if a folder with that name already exists.
      */
-    public bool $overwrite = false;
+    public $overwrite = false;
 
     public function options($actionID)
     {
         $options = parent::options($actionID);
         $options[] = 'folderName';
         $options[] = 'overwrite';
-        $options[] = 'section';
+        $options[] = 'searchSetupHandle';
 
         return $options;
     }
 
-    public function actionGenerate()
+    public function actionTemplates()
     {
-        $section = Craft::$app->getSections()->getSectionByHandle('superFilterShows');
+        if ($this->searchSetupHandle !== '') {
+            $searchSetupHandle = $this->searchSetupHandle;
+        } else {
+            $this->stdout('Files will be created to your templates directory.' . PHP_EOL);
+            $searchSetupHandle = $this->prompt('Enter a search setup handle.', ['required' => true]);
+        }
 
-        $entryTypes = $section->getEntryTypes();
+        $searchSetup = SetupSearch::find()->where(['handle' => $searchSetupHandle])->one();
 
-        foreach ($entryTypes as $entryType) {
-            foreach ($entryType->getFieldLayout()->getFields() as $field) {
-                $handle = $field->handle;
+        if ($searchSetup === null) {
+            $this->stderr('Invalid search setup handle.');
+        } else {
+            $items = Json::decodeIfJson($searchSetup->items);
+            $containerHandle = $items['container'] ?? null;
+            $section = Craft::$app->getSections()->getSectionByHandle($containerHandle);
+
+            $entryTypes = $section->getEntryTypes();
+
+            $fields = [];
+            foreach ($entryTypes as $entryType) {
+
+                foreach ($entryType->getFieldLayout()->getFields() as $fieldLayoutField) {
+                    $fields[] = $fieldLayoutField;
+                   //$handle = $field->handle;
+                    //$content.= '<li>' . $field->name . ': ' . '${ item.' . $handle . ' }</li>';
+                }
             }
-            // Craft::dd($entryType->getFieldLayout()->getFields());
+
+            $html = Craft::$app->getView()->renderPageTemplate('super-filter/generate/items', [
+                'items' => $fields
+            ]);
+            $templatePath = $this->_getTemplatesPath();
+
+            FileHelper::writeToFile($templatePath  . '/' . SampleData::DEFAULT_FOLDER . '/items.twig', $html);
+
+            $this->stdout('xx: ' . $html);
         }
     }
 
