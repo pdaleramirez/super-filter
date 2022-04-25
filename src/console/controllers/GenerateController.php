@@ -58,30 +58,42 @@ class GenerateController extends Controller
         if ($searchSetup === null) {
             $this->stderr('Invalid search setup handle.');
         } else {
-            $items = Json::decodeIfJson($searchSetup->items);
-            $containerHandle = $items['container'] ?? null;
+            $configItems = Json::decodeIfJson($searchSetup->items);
+            $options = Json::decodeIfJson($searchSetup->options);
+
+            $templatePath = $this->_getTemplatesPath();
+            $template = $options['template'];
+
+            $templateDir =  $templatePath  . '/' . $template;
+
+            try {
+                FileHelper::createDirectory($templateDir);
+            } catch (\Exception $e) {
+                return $this->_returnErrors([$e->getMessage()]);
+            }
+
+            $containerHandle = $configItems['container'] ?? null;
             $section = Craft::$app->getSections()->getSectionByHandle($containerHandle);
 
             $entryTypes = $section->getEntryTypes();
 
-            $fields = [];
+            $items = [];
             foreach ($entryTypes as $entryType) {
 
                 foreach ($entryType->getFieldLayout()->getFields() as $fieldLayoutField) {
-                    $fields[] = $fieldLayoutField;
-                   //$handle = $field->handle;
-                    //$content.= '<li>' . $field->name . ': ' . '${ item.' . $handle . ' }</li>';
+                    $items[] = $fieldLayoutField;
                 }
             }
 
             $html = Craft::$app->getView()->renderPageTemplate('super-filter/generate/items', [
-                'items' => $fields
+                'items' => $items
             ]);
-            $templatePath = $this->_getTemplatesPath();
+            //$this->stdout(Craft::dump($items));
 
-            FileHelper::writeToFile($templatePath  . '/' . SampleData::DEFAULT_FOLDER . '/items.twig', $html);
+            $itemsPath = $templateDir . '/items.twig';
+            FileHelper::writeToFile($itemsPath, $html);
 
-            $this->stdout('xx: ' . $html);
+            $this->stdout("File items.twig template created in $itemsPath" . PHP_EOL);
         }
     }
 
