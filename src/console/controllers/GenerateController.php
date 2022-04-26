@@ -2,13 +2,11 @@
 
 namespace pdaleramirez\superfilter\console\controllers;
 
-use craft\base\Plugin;
 use craft\console\Controller;
 use Craft;
 use craft\helpers\Console;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
-use craft\web\View;
 use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\services\SampleData;
 use pdaleramirez\superfilter\SuperFilter;

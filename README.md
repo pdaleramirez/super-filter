@@ -142,4 +142,19 @@ Event::on(SearchTypes::class, SearchTypes::EVENT_ITEM_ARRAY, function (ItemArray
 });
 ```
 
+## Generate Console Command
+### Generate Example Data and Template Files
+To generate example data with associated twig templates follow this steps:
+
+1. SSH to your server and run craft console command.
+2. Run the command php craft super-filter/generate/example. This will create example entries and create template files.
+3. After running command, visit your url https://your-url.test/super-filter-page you should be able to see Shows Entries Search Page.
+
+### Generate Setup Search Template Files
+To generate initial `items.twig` template for a Setup Search:
+
+1. SSH to your server and run craft console command.
+2. Run the command php craft super-filter/generate/templates
+3. Enter a search setup handle: {theSetupSearchHandle}
+
 Contact me for inquiries or if you require more customization. <dalefirstpage@gmail.com>
