@@ -1,23 +1,17 @@
 <?php
 namespace pdaleramirez\superfilter\controllers;
 
-use craft\commerce\elements\Product;
-use craft\commerce\Plugin;
-use craft\elements\Entry;
+
 use craft\errors\InvalidPluginException;
-use craft\fields\Dropdown;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
 use pdaleramirez\superfilter\models\Settings;
 use pdaleramirez\superfilter\elements\SetupSearch;
-use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 use pdaleramirez\superfilter\web\assets\FontAwesomeAsset;
 use pdaleramirez\superfilter\web\assets\VueCpAsset;
-use Phpdocx\Create\CreateDocx;
-use yii\helpers\Url;
 
 class SuperFilterController extends Controller
 {
@@ -96,7 +90,6 @@ class SuperFilterController extends Controller
     }
 
     /**
-     * @return string|null
      * @throws \Throwable
      * @throws \craft\errors\CategoryGroupNotFoundException
      * @throws \yii\web\BadRequestHttpException

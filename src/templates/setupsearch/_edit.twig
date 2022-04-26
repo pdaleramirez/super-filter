@@ -11,8 +11,7 @@
 {% endif %}
 
 {% set crumbs = [
-    { label: "Setup Search"|t('super-filter'), url: url('super-filter/setup-search') },
-    { label: "Settings"|t('super-filter'), url: url('super-filter/settings/setup-search/edit/' ~ setupId) },
+    { label: "Setup Search"|t('super-filter'), url: url('super-filter/setup-search') }
 ] %}
 
 {% set title  = setupElement is defined ? setupElement.title : 'Create a new Setup'|t('super-filter') %}
@@ -50,6 +49,19 @@
     </div>
 
 
+{% endblock %}
+
+{% block details %}
+    <div class="meta read-only">
+        <div class="field">
+            <p>To generate initial `items.twig` template:</p>
+            <ol>
+                <li>SSH to your server and run craft console command.</li>
+                <li>Run the command <strong><code>php craft super-filter/generate/templates</code></strong></li>
+                <li>Enter a search setup handle: <strong>{{ setupElement is defined ? setupElement.handle : '' }}</strong></li>
+            </ol>
+        </div>
+    </div>
 {% endblock %}
 
 {% block content %}

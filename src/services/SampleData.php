@@ -13,6 +13,7 @@ use craft\fields\PlainText;
 use craft\fields\RadioButtons;
 use craft\fields\Tags;
 use craft\helpers\ElementHelper;
+use craft\helpers\FileHelper;
 use craft\helpers\UrlHelper;
 use craft\models\CategoryGroup;
 use craft\models\CategoryGroup_SiteSettings;
@@ -23,10 +24,13 @@ use craft\models\Section_SiteSettings;
 use craft\models\TagGroup;
 use craft\records\CategoryGroup as CategoryGroupRecord;
 use craft\elements\Tag as TagElement;
+use pdaleramirez\superfilter\elements\SetupSearch;
+use pdaleramirez\superfilter\SuperFilter;
 
 class SampleData extends Component
 {
     const PREFIX = 'superFilter';
+    const DEFAULT_FOLDER = 'super-filter-search';
     private $fieldGroupId;
     private $categoryGroupId;
     private $categoryGroupUid;
@@ -37,6 +41,8 @@ class SampleData extends Component
 
     public function generateSampleData()
     {
+        $this->createSearchSetup();
+
         $categoryGroup = $this->getCategoryGroup();
 
         $tagGroup = $this->getTagGroup();
@@ -66,6 +72,55 @@ class SampleData extends Component
         }
 
         return null;
+    }
+
+    public function createSearchSetup($folderName = SampleData::DEFAULT_FOLDER)
+    {
+        $handle = 'superFilterShows';
+
+        $setupElement = SetupSearch::find()->where(['handle' => $handle])->one();
+        if ($setupElement === null) {
+            $setupElement = new SetupSearch();
+        }
+
+
+        $setupElement->title = Craft::t("super-filter", "Super Filter Shows");
+        $setupElement->handle = $handle;
+        $postItems = '{"elements":{"selected":"entry","items":{"entry":{"label":"Entry","handle":"entry","container":{"items":{"artices":"Artices","news":"News","superFilterShows":"Shows"},"selected":"superFilterShows"},"sorts":{"artices":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[]},"news":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[]},"superFilterShows":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[]}},"items":{"artices":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[]},"news":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[]},"superFilterShows":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[]}}},"category":{"label":"Category","handle":"category","container":{"items":{"superFilterGenre":"Genre"},"selected":"superFilterShows"},"sorts":{"superFilterGenre":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[]}},"items":{"superFilterGenre":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[]}}},"product":{"label":"Product","handle":"product","container":{"items":{"clothing":"Clothing","gear":"Gear","toys":"Toys"},"selected":"superFilterShows"},"sorts":{"clothing":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[{"name":"Promotable?","attribute":"promotable","orderBy":"promotable"},{"name":"Price","attribute":"defaultPrice","orderBy":"defaultPrice"},{"name":"SKU","attribute":"defaultSku","orderBy":"defaultSku"}]},"gear":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[{"name":"Promotable?","attribute":"promotable","orderBy":"promotable"},{"name":"Price","attribute":"defaultPrice","orderBy":"defaultPrice"},{"name":"SKU","attribute":"defaultSku","orderBy":"defaultSku"}]},"toys":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[{"name":"Promotable?","attribute":"promotable","orderBy":"promotable"},{"name":"Price","attribute":"defaultPrice","orderBy":"defaultPrice"},{"name":"SKU","attribute":"defaultSku","orderBy":"defaultSku"}]}},"items":{"clothing":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[{"name":"Price Range","id":"superFilterPriceRange"}]},"gear":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[{"name":"Price Range","id":"superFilterPriceRange"}]},"toys":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[{"name":"Price Range","id":"superFilterPriceRange"}]}}}}}}';
+
+        $items = SuperFilter::$app->searchTypes->setSelectedItems($postItems);
+        $setupElement->items = $items;
+
+        $setupElement->options = [
+            'perPage' => 10,
+            'baseTemplate' => 'vue',
+            'template' => $folderName,
+            'initSort' => 'elements.dateCreated-asc'
+        ];
+
+        $setupElement->elementSearchType = 'entry';
+
+        Craft::$app->getElements()->saveElement($setupElement);
+    }
+
+    public function createFiles($templatesPath, $folderName): void
+    {
+        $slash = DIRECTORY_SEPARATOR;
+        $destination = $templatesPath . $slash . $folderName;
+        $pathService = Craft::$app->getPath();
+        $exampleTemplatesSource = FileHelper::normalizePath(
+            $pathService->getVendorPath() . '/pdaleramirez/super-filter/templates/vue'
+        );
+
+        $exampleFilePage = FileHelper::normalizePath(
+            $pathService->getVendorPath() . '/pdaleramirez/super-filter/templates/example-page.twig');
+
+        FileHelper::copyDirectory($exampleTemplatesSource, $destination, ['recursive' => true, 'copyEmptyDirectories' => true]);
+
+        $examplePageDestination = $templatesPath . $slash . 'super-filter-page.twig';
+
+        $fileContents = file_get_contents($exampleFilePage);
+        FileHelper::writeToFile($examplePageDestination, $fileContents);
     }
 
     /**
