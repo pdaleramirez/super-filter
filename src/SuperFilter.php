@@ -12,6 +12,7 @@ namespace pdaleramirez\superfilter;
 
 
 use Craft;
+use craft\base\Model;
 use craft\base\Plugin;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\web\twig\variables\CraftVariable;
@@ -63,7 +64,7 @@ class SuperFilter extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '1.0.0';
+    public string $schemaVersion = '1.0.0';
 
     // Public Methods
     // =========================================================================
@@ -150,7 +151,7 @@ class SuperFilter extends Plugin
         });
     }
 
-    public function getCpNavItem()
+    public function getCpNavItem(): array|null
     {
         $parent = parent::getCpNavItem();
 
@@ -170,7 +171,8 @@ class SuperFilter extends Plugin
 
         return $parent;
     }
-    protected function createSettingsModel()
+
+    protected function createSettingsModel(): ?Model
     {
         return new Settings();
     }

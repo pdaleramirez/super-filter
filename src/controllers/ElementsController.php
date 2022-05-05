@@ -13,7 +13,7 @@ use pdaleramirez\superfilter\SuperFilter;
 
 class ElementsController extends Controller
 {
-    protected $allowAnonymous = ['get-fields', 'filter'];
+    protected array|bool|int $allowAnonymous = ['get-fields', 'filter'];
 
     public function actionGetFields()
     {

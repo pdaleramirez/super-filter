@@ -15,7 +15,7 @@ use pdaleramirez\superfilter\web\assets\VueCpAsset;
 
 class SuperFilterController extends Controller
 {
-    protected $allowAnonymous = ['filter'];
+    protected array|bool|int $allowAnonymous = ['filter'];
     /**
      * @return \yii\web\Response
      * @throws InvalidPluginException

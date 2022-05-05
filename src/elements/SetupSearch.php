@@ -88,7 +88,7 @@ class SetupSearch extends Element
         return $attributes;
     }
 
-    public function getCpEditUrl()
+    public function getCpEditUrl(): null|string
     {
         return UrlHelper::cpUrl(
             'super-filter/setup-search/edit/'.$this->id
@@ -120,7 +120,7 @@ class SetupSearch extends Element
      *
      * @throws \Exception
      */
-    public function afterSave(bool $isNew)
+    public function afterSave(bool $isNew): void
     {
         /**
          * @var $record SetupSearchRecord

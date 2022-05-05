@@ -9,7 +9,7 @@ class SetupSearchQuery extends ElementQuery
     /**
      * @inheritdoc
      */
-    protected $defaultOrderBy = ['superfilter_setup_search.dateCreated' => SORT_DESC];
+    protected array $defaultOrderBy = ['superfilter_setup_search.dateCreated' => SORT_DESC];
 
     /**
      * @inheritdoc

@@ -2,7 +2,7 @@
     "name": "pdaleramirez/super-filter",
     "description": "A Craft CMS 3 plugin that lets you build your search page with search filters from your element fields and filter element entries by categories, tags, element relations and other fields.",
     "type": "craft-plugin",
-    "version": "1.6.0",
+    "version": "1.7.0",
     "keywords": [
         "craft",
         "cms",
@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0"
+        "craftcms/cms": "^4.0.0-RC.1"
     },
     "autoload": {
         "psr-4": {
@@ -36,5 +36,24 @@
         "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/pdaleramirez/super-filter/master/CHANGELOG.md",
         "class": "pdaleramirez\\superfilter\\SuperFilter"
+    },
+    "scripts": {
+        "check-cs": "ecs check --ansi",
+        "fix-cs": "ecs check --ansi --fix",
+        "phpstan": "phpstan --memory-limit=1G",
+        "testunit": [
+            "Composer\\Config::disableProcessTimeout",
+            "codecept run unit"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.0.2"
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
     }
 }

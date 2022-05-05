@@ -32,7 +32,7 @@ class GenerateController extends Controller
      */
     public $overwrite = false;
 
-    public function options($actionID)
+    public function options($actionID): array
     {
         $options = parent::options($actionID);
         $options[] = 'folderName';

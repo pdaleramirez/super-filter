@@ -24,7 +24,7 @@ class SetupSearch extends ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public static function find()
+    public static function find(): \craft\db\ActiveQuery
     {
         $query = parent::find()
             ->innerJoinWith(['element element']);

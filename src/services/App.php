@@ -23,7 +23,7 @@ class App extends Component
      */
     public $searchTypes;
 
-    public function init()
+    public function init(): void
     {
         $this->sampleData = new SampleData();
         $this->searchTypes = new SearchTypes();

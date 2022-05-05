@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\elements\Category;
 use craft\elements\Entry;
+use craft\fieldlayoutelements\CustomField;
 use craft\fields\Categories;
 use craft\fields\Checkboxes;
 use craft\fields\Dropdown;
@@ -52,13 +53,13 @@ class SampleData extends Component
         $this->categoryGroupId  = $categoryGroup->id;
         $this->categoryGroupUid = $categoryGroup->uid;
 
-        $ids = $this->createFields();
+        $fields = $this->createFields();
 
-        if ($ids) {
+        if ($fields) {
             $section = $this->createSection();
 
             if ($section) {
-                $entryType = $this->saveEntryType($section, $ids);
+                $entryType = $this->saveEntryType($section, $fields);
 
                 if ($entryType) {
 
@@ -66,7 +67,7 @@ class SampleData extends Component
 
                     $this->generateEntries();
 
-                    return $ids;
+                    return $fields;
                 }
             }
         }
@@ -130,17 +131,17 @@ class SampleData extends Component
      * @throws \Throwable
      * @throws \craft\errors\EntryTypeNotFoundException
      */
-    public function saveEntryType(Section $section, $ids)
+    public function saveEntryType(Section $section, $fields)
     {
         $entryTypes = $section->getEntryTypes();
 
         $entryType  = $entryTypes[0];
 
-        $layout = [
-            'Content' => $ids
-        ];
-
-        $fieldLayout = Craft::$app->getFields()->assembleLayout($layout);
+//        $layout['tabs'][0] = [
+//            'Content' => $ids
+//        ];
+        $config = $this->getConfig($fields);
+        $fieldLayout = Craft::$app->getFields()->createLayout($config);
 
         // Set the field layout
         $fieldLayout->type = Entry::class;
@@ -153,6 +154,29 @@ class SampleData extends Component
         $this->entryTypeId = $entryType->id;
 
         return $entryType;
+    }
+
+    private function getConfig($fields): array
+    {
+        $layoutElements = [];
+
+        foreach ($fields as $field) {
+            $field = Craft::$app->getFields()->getFieldById($field->id);
+            if ($field) {
+                $layoutElements[] = new CustomField($field);
+            }
+        }
+        return array (
+            'tabs' =>
+                array (
+                    0 =>
+                        array (
+                            'name' => 'Content',
+                            'elements' =>
+                                $layoutElements
+                        ),
+                ),
+        );
     }
 
     public function createSection()
@@ -208,16 +232,16 @@ class SampleData extends Component
 
         $this->fieldGroupId = $fieldGroup->id;
 
-        $ids = [];
+        $fields = [];
 
-        $ids[] = $this->getFieldDescription();
-        $ids[] = $this->getFieldGenre();
-        $ids[] = $this->getFieldShowTags();
-        $ids[] = $this->getFieldShowTypes();
-        $ids[] = $this->getFieldReleaseDate();
-        $ids[] = $this->getFieldImdbRating();
+        $fields[] = $this->getFieldDescription();
+        $fields[] = $this->getFieldGenre();
+        $fields[] = $this->getFieldShowTags();
+        $fields[] = $this->getFieldShowTypes();
+        $fields[] = $this->getFieldReleaseDate();
+        $fields[] = $this->getFieldImdbRating();
 
-        return $ids;
+        return $fields;
     }
 
     private function getFieldGroup()
@@ -512,7 +536,7 @@ class SampleData extends Component
 
         foreach ($entries as $slug => $entry) {
 
-            $slug = ElementHelper::createSlug(static::PREFIX . $slug);
+            $slug = ElementHelper::generateSlug(static::PREFIX . $slug);
 
             $element = Entry::find()->where(['slug' => $slug])->one() ?? new Entry();
 
@@ -531,7 +555,7 @@ class SampleData extends Component
                 if ($fieldElement) {
                     $fieldIds = [];
                     foreach ($field as $fieldSlug) {
-                        $elementSlug = ElementHelper::createSlug(static::PREFIX . $fieldSlug);
+                        $elementSlug = ElementHelper::generateSlug(static::PREFIX . $fieldSlug);
 
                         $elementObj = $fieldElement['element']::find()->where(['slug' => $elementSlug])->one();
                         if (!$elementObj) {
@@ -742,10 +766,10 @@ class SampleData extends Component
      */
     private function saveField(array $config)
     {
-        $fieldByHandle = Craft::$app->getFields()->createField($config);
+        $field = Craft::$app->getFields()->createField($config);
 
-        Craft::$app->getFields()->saveField($fieldByHandle);
+        Craft::$app->getFields()->saveField($field);
 
-        return $fieldByHandle->id;
+        return $field;
     }
 }
