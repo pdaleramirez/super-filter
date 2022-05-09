@@ -52,21 +52,22 @@ class ProductSearchType extends SearchType
         $fields = [];
 
         $fieldObjects = $this->_getFields ?? $this->getFieldObjects();
+        if ($fieldObjects !== null) {
+            foreach ($fieldObjects as $sectionHandle => $item) {
+                $fields[$sectionHandle]['label'] = $item['label'];
+                $fields[$sectionHandle]['selected'] = [];
+                $itemObjects = $item['fieldObjects'];
 
-        foreach ($fieldObjects as $sectionHandle => $item) {
-            $fields[$sectionHandle]['label']    = $item['label'];
-            $fields[$sectionHandle]['selected'] = [];
-            $itemObjects = $item['fieldObjects'];
-
-            if (count($itemObjects) > 0) {
-                foreach ($itemObjects as $key => $fieldObject) {
-                    $fields[$sectionHandle]['options'][$key]['name'] = $fieldObject->name;
-                    $fields[$sectionHandle]['options'][$key]['id']   = $fieldObject->id;
+                if (count($itemObjects) > 0) {
+                    foreach ($itemObjects as $key => $fieldObject) {
+                        $fields[$sectionHandle]['options'][$key]['name'] = $fieldObject->name;
+                        $fields[$sectionHandle]['options'][$key]['id'] = $fieldObject->id;
+                    }
                 }
+                $last = count($itemObjects);
+                $fields[$sectionHandle]['options'][$last]['name'] = "Price Range";
+                $fields[$sectionHandle]['options'][$last]['id'] = PriceRange::KEY;
             }
-            $last = count($itemObjects);
-            $fields[$sectionHandle]['options'][$last]['name'] = "Price Range";
-            $fields[$sectionHandle]['options'][$last]['id']   = PriceRange::KEY;
         }
 
         return $fields;
@@ -84,23 +85,25 @@ class ProductSearchType extends SearchType
 
         $fieldObjects = $this->_getFields ?? $this->getFieldObjects();
 
-        foreach ($fieldObjects as $sectionHandle => $item) {
-            $fields[$sectionHandle]['label']    = $item['label'];
-            $fields[$sectionHandle]['selected'] = [];
-            $itemObjects = $item['fieldObjects'];
+        if ($fieldObjects !== null) {
+            foreach ($fieldObjects as $sectionHandle => $item) {
+                $fields[$sectionHandle]['label']    = $item['label'];
+                $fields[$sectionHandle]['selected'] = [];
+                $itemObjects = $item['fieldObjects'];
 
-            $sortFields = [];
-            if (count($itemObjects) > 0) {
-                foreach ($itemObjects as $key => $fieldObject) {
-                    if (in_array($fieldObject->handle, $entryOptions['sortOptions'])) {
-                        $sortFields[$key]['name'] = $fieldObject->name;
-                        $sortFields[$key]['orderBy'] = $fieldObject->handle;
+                $sortFields = [];
+                if (count($itemObjects) > 0) {
+                    foreach ($itemObjects as $key => $fieldObject) {
+                        if (in_array($fieldObject->handle, $entryOptions['sortOptions'])) {
+                            $sortFields[$key]['name'] = $fieldObject->name;
+                            $sortFields[$key]['orderBy'] = $fieldObject->handle;
+                        }
                     }
                 }
-            }
 
-            $fields[$sectionHandle]['options'] = array_merge($entryOptions['defaultSortOptions'],
-                $sortFields);
+                $fields[$sectionHandle]['options'] = array_merge($entryOptions['defaultSortOptions'],
+                    $sortFields);
+            }
         }
 
         return $fields;
@@ -117,7 +120,7 @@ class ProductSearchType extends SearchType
         if (!empty($productTypes)) {
             foreach ($productTypes as $productType) {
 
-                $fieldObjects = $productType->getProductFieldLayout()->getFields();
+                $fieldObjects = $productType->getProductFieldLayout()->getCustomFields();
 
                 $fieldObjects = $this->getSupportedFields($fieldObjects);
                 

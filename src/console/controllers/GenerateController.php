@@ -78,7 +78,7 @@ class GenerateController extends Controller
             $items = [];
             foreach ($entryTypes as $entryType) {
 
-                foreach ($entryType->getFieldLayout()->getFields() as $fieldLayoutField) {
+                foreach ($entryType->getFieldLayout()->getCustomFields() as $fieldLayoutField) {
                     $items[] = $fieldLayoutField;
                 }
             }
@@ -93,6 +93,8 @@ class GenerateController extends Controller
 
             $this->stdout("File items.twig template created in $itemsPath" . PHP_EOL);
         }
+
+        return true;
     }
 
     public function actionExample()
@@ -124,6 +126,8 @@ class GenerateController extends Controller
         SuperFilter::$app->sampleData->createSearchSetup($folderName);
 
         SuperFilter::$app->sampleData->createFiles($templatesPath, $folderName);
+
+        return true;
     }
 
     /**

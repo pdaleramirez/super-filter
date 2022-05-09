@@ -41,7 +41,7 @@ class CategorySearchType extends SearchType
 
         if (!empty($groups)) {
             foreach ($groups as $group) {
-                $fieldObjects = $group->getFieldLayout()->getFields();
+                $fieldObjects = $group->getFieldLayout()->getCustomFields();
 
                 $fieldObjects = $this->getSupportedFields($fieldObjects);
                 $fields[$group->handle]['label'] = $group->name;
@@ -72,7 +72,7 @@ class CategorySearchType extends SearchType
 
         if (!empty($groups)) {
             foreach ($groups as $group) {
-                $fieldObjects = $group->getFieldLayout()->getFields();
+                $fieldObjects = $group->getFieldLayout()->getCustomFields();
                 $fields[$group->handle]['label'] = $group->name;
                 $fields[$group->handle]['selected'] = [];
                 $fields[$group->handle]['options'] = [];

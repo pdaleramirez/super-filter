@@ -121,7 +121,7 @@ class EntrySearchType extends SearchType
 
                 if (count($entryTypes) > 0) {
                     foreach ($entryTypes as $entryType) {
-                        $fieldObjects = $entryType->getFieldLayout()->getFields();
+                        $fieldObjects = $entryType->getFieldLayout()->getCustomFields();
                         $this->_getFields[$section->handle]['label'] = $section->name;
                         $this->_getFields[$section->handle]['selected'] = [];
                         $this->_getFields[$section->handle]['fieldObjects'] = $fieldObjects;
