@@ -4,17 +4,15 @@ namespace pdaleramirez\superfilter\elements;
 
 use Craft;
 use craft\base\Element;
-use craft\base\Field;
-use craft\behaviors\FieldLayoutBehavior;
 use craft\elements\actions\Delete;
 use craft\elements\db\ElementQueryInterface;
+use craft\elements\User;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\validators\HandleValidator;
 use craft\validators\UniqueValidator;
 use pdaleramirez\superfilter\elements\db\SetupSearchQuery;
 use pdaleramirez\superfilter\records\SetupSearch as SetupSearchRecord;
-use pdaleramirez\superfilter\SuperFilter;
 use yii\base\Exception;
 
 /**
@@ -228,5 +226,26 @@ class SetupSearch extends Element
     public function sorts()
     {
         return Json::decodeIfJson($this->sorts) ?? [];
+    }
+
+    public function canView(User $user): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function canSave(User $user): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function canDelete(User $user): bool
+    {
+        return true;
     }
 }

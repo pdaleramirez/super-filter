@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.7.1 - 2023-07-16
+
+### Changed
+- Fixed a bug where editing search setup on element index is not working.
+
 ## 1.7.0 - 2022-05-09
 
 ### Changed
