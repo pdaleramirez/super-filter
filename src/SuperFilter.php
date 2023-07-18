@@ -119,6 +119,7 @@ class SuperFilter extends Plugin
             $event->rules["super-filter/show-list"] = 'super-filter/elements/get-elements';
             $event->rules['super-filter/filter']    = 'super-filter/elements/filter';
             $event->rules['super-filter/fields']    = 'super-filter/elements/get-fields';
+            $event->rules['super-filter/entries']    = 'super-filter/elements/entries';
         });
 
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_TYPES, function (RegisterSearchTypeEvent $event) {

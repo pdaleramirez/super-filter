@@ -13,7 +13,7 @@ use pdaleramirez\superfilter\SuperFilter;
 
 class ElementsController extends Controller
 {
-    protected array|bool|int $allowAnonymous = ['get-fields', 'filter'];
+    protected array|bool|int $allowAnonymous = ['get-fields', 'filter', 'entries'];
 
     public function actionGetFields()
     {
@@ -119,5 +119,15 @@ class ElementsController extends Controller
             'links' => $searchSetupService->getLinks(),
             'query' => $query
         ]);
+    }
+
+    public function actionEntries()
+    {
+        $data = [];
+        $data[] = 'test';
+        $data[] = 'test2';
+        $data[] = 'test3';
+
+        return $this->asJson($data);
     }
 }
