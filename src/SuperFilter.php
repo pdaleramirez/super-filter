@@ -30,11 +30,13 @@ use pdaleramirez\superfilter\fields\RadioButtons;
 use pdaleramirez\superfilter\fields\Tags;
 use pdaleramirez\superfilter\fields\Title;
 use pdaleramirez\superfilter\models\Settings;
+use pdaleramirez\superfilter\plugin\Services;
 use pdaleramirez\superfilter\searchtypes\CategorySearchType;
 use pdaleramirez\superfilter\searchtypes\EntrySearchType;
 use pdaleramirez\superfilter\searchtypes\ProductSearchType;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\services\SearchTypes;
+use pdaleramirez\superfilter\services\Templates;
 use pdaleramirez\superfilter\web\twig\variables\SuperFilterVariable;
 use yii\base\Event;
 use craft\web\UrlManager;
@@ -50,6 +52,7 @@ use craft\events\RegisterUrlRulesEvent;
  */
 class SuperFilter extends Plugin
 {
+    use Services;
     // Static Properties
     // =========================================================================
 
@@ -176,5 +179,14 @@ class SuperFilter extends Plugin
     protected function createSettingsModel(): ?Model
     {
         return new Settings();
+    }
+
+    public static function config(): array
+    {
+        return [
+            'components' => [
+                'templates' => ['class' => Templates::class]
+            ]
+        ];
     }
 }

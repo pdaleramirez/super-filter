@@ -184,4 +184,12 @@ class SuperFilterVariable
     {
         Craft::$app->view->setTemplatesPath($this->prevTemplate);
     }
+
+    public function getFrontendAssets()
+    {
+        $view = Craft::$app->getView();
+        //$view->registerAssetBundle(VueAsset::class);
+
+        return SuperFilter::getInstance()->getTemplates()->getFrontendAssets();
+    }
 }
