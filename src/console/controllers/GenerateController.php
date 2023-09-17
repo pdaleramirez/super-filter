@@ -99,7 +99,7 @@ class GenerateController extends Controller
 
     public function actionExample()
     {
-        SuperFilter::$app->sampleData->generateSampleData();
+        $fields = SuperFilter::$app->sampleData->generateSampleData();
 
         if ($this->folderName !== '') {
             $folderName = $this->folderName;
@@ -123,7 +123,7 @@ class GenerateController extends Controller
             return $this->_returnErrors($errors);
         }
 
-        SuperFilter::$app->sampleData->createSearchSetup($folderName);
+        SuperFilter::$app->sampleData->createSearchSetup($folderName, $fields);
 
         SuperFilter::$app->sampleData->createFiles($templatesPath, $folderName);
 

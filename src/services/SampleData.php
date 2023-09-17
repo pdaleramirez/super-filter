@@ -1,4 +1,5 @@
 <?php
+
 namespace pdaleramirez\superfilter\services;
 
 use craft\base\Component;
@@ -47,10 +48,10 @@ class SampleData extends Component
         $categoryGroup = $this->getCategoryGroup();
 
         $tagGroup = $this->getTagGroup();
-        $this->tagGroupId  = $tagGroup->id;
+        $this->tagGroupId = $tagGroup->id;
         $this->tagGroupUid = $tagGroup->uid;
 
-        $this->categoryGroupId  = $categoryGroup->id;
+        $this->categoryGroupId = $categoryGroup->id;
         $this->categoryGroupUid = $categoryGroup->uid;
 
         $fields = $this->createFields();
@@ -62,8 +63,7 @@ class SampleData extends Component
                 $entryType = $this->saveEntryType($section, $fields);
 
                 if ($entryType) {
-
-                    $this->entryTypeId      = $entryType->id;
+                    $this->entryTypeId = $entryType->id;
 
                     $this->generateEntries();
 
@@ -75,7 +75,7 @@ class SampleData extends Component
         return null;
     }
 
-    public function createSearchSetup($folderName = SampleData::DEFAULT_FOLDER)
+    public function createSearchSetup($folderName = SampleData::DEFAULT_FOLDER, array $fields = [])
     {
         $handle = 'superFilterShows';
 
@@ -87,7 +87,82 @@ class SampleData extends Component
 
         $setupElement->title = Craft::t("super-filter", "Super Filter Shows");
         $setupElement->handle = $handle;
-        $postItems = '{"elements":{"selected":"entry","items":{"entry":{"label":"Entry","handle":"entry","container":{"items":{"artices":"Artices","news":"News","superFilterShows":"Shows"},"selected":"superFilterShows"},"sorts":{"artices":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[]},"news":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[]},"superFilterShows":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[]}},"items":{"artices":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[]},"news":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[]},"superFilterShows":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[]}}},"category":{"label":"Category","handle":"category","container":{"items":{"superFilterGenre":"Genre"},"selected":"superFilterShows"},"sorts":{"superFilterGenre":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[]}},"items":{"superFilterGenre":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[]}}},"product":{"label":"Product","handle":"product","container":{"items":{"clothing":"Clothing","gear":"Gear","toys":"Toys"},"selected":"superFilterShows"},"sorts":{"clothing":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[{"name":"Promotable?","attribute":"promotable","orderBy":"promotable"},{"name":"Price","attribute":"defaultPrice","orderBy":"defaultPrice"},{"name":"SKU","attribute":"defaultSku","orderBy":"defaultSku"}]},"gear":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[{"name":"Promotable?","attribute":"promotable","orderBy":"promotable"},{"name":"Price","attribute":"defaultPrice","orderBy":"defaultPrice"},{"name":"SKU","attribute":"defaultSku","orderBy":"defaultSku"}]},"toys":{"selected":[{"name":"Title","attribute":"title","orderBy":"title"},{"name":"Date Created","attribute":"dateCreated","orderBy":"elements.dateCreated"},{"name":"Date Updated","attribute":"dateUpdated","orderBy":"elements.dateUpdated"},{"name":"URI","attribute":"uri","orderBy":"uri"},{"name":"Slug","attribute":"slug","orderBy":"slug"}],"options":[{"name":"Promotable?","attribute":"promotable","orderBy":"promotable"},{"name":"Price","attribute":"defaultPrice","orderBy":"defaultPrice"},{"name":"SKU","attribute":"defaultSku","orderBy":"defaultSku"}]}},"items":{"clothing":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[{"name":"Price Range","id":"superFilterPriceRange"}]},"gear":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[{"name":"Price Range","id":"superFilterPriceRange"}]},"toys":{"selected":[{"name":"Title","id":"title"},{"name":"Imdb Rating","id":"6"},{"name":"Show Tags","id":"3"},{"name":"Show Types","id":"4"},{"name":"Description","id":"1"},{"name":"Release Date","id":"5"},{"name":"Genre","id":"2"}],"options":[{"name":"Price Range","id":"superFilterPriceRange"}]}}}}}}';
+
+        $title[] = [
+            'title' => 'Title',
+            'id' => 'title',
+        ];
+
+        $superFilterShowsFields = array_map(function ($field) {
+            return [
+                'id' => $field->id,
+                'name' => $field->name
+            ];
+        }, $fields);
+
+        $superFilterShowsFields = array_merge($title, $superFilterShowsFields);
+
+
+        $sortSelected = [];
+
+        $sortSelected[] = [
+            "name" => "Title",
+            "attribute" => "title",
+            "orderBy" => "title"
+        ];
+
+        $sortSelected[] = [
+            "name" => "Date Created",
+            "attribute" => "dateCreated",
+            "orderBy" => "elements.dateCreated"
+        ];
+        $sortSelected[] = [
+            "name" => "Date Updated",
+            "attribute" => "dateUpdated",
+            "orderBy" => "elements.dateUpdated"
+        ];
+
+        $sortSelected[] = [
+            "name" => "URI",
+            "attribute" => "uri",
+            "orderBy" => "uri"
+        ];
+
+        $sortSelected[] = [
+            "name" => "Slug",
+            "attribute" => "slug",
+            "orderBy" => "slug"
+        ];
+
+        $elements = [];
+        $elements['selected'] = 'entry';
+        $elements['items'] = [
+            'entry' => [
+                'label' => 'Entry',
+                'handle' => 'entry',
+                'container' => [
+                    'items' => [
+                        'superFilterShows' => 'Shows'
+                    ],
+                    'selected' => 'superFilterShows'
+                ],
+                'sorts' => [
+                    'superFilterShows' => [
+                        'selected' => $sortSelected,
+                        'options' => []
+                    ]
+                ],
+                'items' => [
+                    'superFilterShows' => [
+                        'selected' => $superFilterShowsFields,
+                        'options' => []
+                    ]
+                ]
+            ]
+        ];
+        $postItems = [];
+        $postItems['elements'] = $elements;
+
 
         $items = SuperFilter::$app->searchTypes->setSelectedItems($postItems);
         $setupElement->items = $items;
@@ -114,9 +189,14 @@ class SampleData extends Component
         );
 
         $exampleFilePage = FileHelper::normalizePath(
-            $pathService->getVendorPath() . '/pdaleramirez/super-filter/templates/example-page.twig');
+            $pathService->getVendorPath() . '/pdaleramirez/super-filter/templates/example-page.twig'
+        );
 
-        FileHelper::copyDirectory($exampleTemplatesSource, $destination, ['recursive' => true, 'copyEmptyDirectories' => true]);
+        FileHelper::copyDirectory(
+            $exampleTemplatesSource,
+            $destination,
+            ['recursive' => true, 'copyEmptyDirectories' => true]
+        );
 
         $examplePageDestination = $templatesPath . $slash . 'super-filter-page.twig';
 
@@ -135,7 +215,7 @@ class SampleData extends Component
     {
         $entryTypes = $section->getEntryTypes();
 
-        $entryType  = $entryTypes[0];
+        $entryType = $entryTypes[0];
 
 //        $layout['tabs'][0] = [
 //            'Content' => $ids
@@ -166,11 +246,11 @@ class SampleData extends Component
                 $layoutElements[] = new CustomField($field);
             }
         }
-        return array (
+        return array(
             'tabs' =>
-                array (
+                array(
                     0 =>
-                        array (
+                        array(
                             'name' => 'Content',
                             'elements' =>
                                 $layoutElements
@@ -186,12 +266,12 @@ class SampleData extends Component
         $section = Craft::$app->getSections()->getSectionByHandle($handle);
         if (!$section) {
             $section = new Section();
-            $section->name   = "Shows";
+            $section->name = "Shows";
             $section->handle = $handle;
-            $section->type   = "channel";
-            $section->enableVersioning  = true;
+            $section->type = "channel";
+            $section->enableVersioning = true;
             $section->propagationMethod = Section::PROPAGATION_METHOD_ALL;
-            $section->previewTargets    = [];
+            $section->previewTargets = [];
 
             $sites = Craft::$app->getSites()->getAllSiteIds();
 
@@ -251,7 +331,7 @@ class SampleData extends Component
         $group = new FieldGroup();
 
         $record = \craft\records\FieldGroup::find()->where([
-            'name'      => $name
+            'name' => $name
         ])->one();
 
         if ($record) {
@@ -280,17 +360,16 @@ class SampleData extends Component
         $categoryGroupRecord = CategoryGroupRecord::find()
             ->where([
                 'dateDeleted' => null,
-                'handle'      => $handle
+                'handle' => $handle
             ])->one();
 
         if ($categoryGroupRecord) {
-
             $categoryGroup->setAttributes($categoryGroupRecord->getAttributes(), false);
 
             return $categoryGroup;
         }
 
-        $categoryGroup->name   = 'Genre';
+        $categoryGroup->name = 'Genre';
         $categoryGroup->handle = $handle;
 
         $siteSettings = [];
@@ -323,7 +402,7 @@ class SampleData extends Component
         $tagGroupRecord = \craft\records\TagGroup::find()
             ->where([
                 'dateDeleted' => null,
-                'handle'      => $tagHandle
+                'handle' => $tagHandle
             ])->one();
 
         if ($tagGroupRecord) {
@@ -332,7 +411,7 @@ class SampleData extends Component
             return $tagGroup;
         }
 
-        $tagGroup->name   = 'Show Tags';
+        $tagGroup->name = 'Show Tags';
         $tagGroup->handle = $tagHandle;
 
         if (!Craft::$app->getTags()->saveTagGroup($tagGroup)) {
@@ -535,15 +614,14 @@ class SampleData extends Component
         ];
 
         foreach ($entries as $slug => $entry) {
-
             $slug = ElementHelper::generateSlug(static::PREFIX . $slug);
 
             $element = Entry::find()->where(['slug' => $slug])->one() ?? new Entry();
 
-            $element->title       = $entry['title'];
-            $element->slug        = $slug;
-            $element->sectionId   = $this->sectionId;
-            $element->typeId      = $this->entryTypeId;
+            $element->title = $entry['title'];
+            $element->slug = $slug;
+            $element->sectionId = $this->sectionId;
+            $element->typeId = $this->entryTypeId;
 
             $fields = $entry['fields'];
 
@@ -559,9 +637,9 @@ class SampleData extends Component
 
                         $elementObj = $fieldElement['element']::find()->where(['slug' => $elementSlug])->one();
                         if (!$elementObj) {
-                            $fieldElementObj          = new $fieldElement['element'];
-                            $fieldElementObj->title   = ucwords($fieldSlug);
-                            $fieldElementObj->slug    = $elementSlug;
+                            $fieldElementObj = new $fieldElement['element'];
+                            $fieldElementObj->title = ucwords($fieldSlug);
+                            $fieldElementObj->slug = $elementSlug;
                             $fieldElementObj->groupId = $fieldElement['groupId'];
                             Craft::$app->getElements()->saveElement($fieldElementObj);
 
@@ -587,19 +665,19 @@ class SampleData extends Component
 
     public function isElement($handle)
     {
-         if (in_array($handle, [
-           'Genre'
-            ])) {
+        if (in_array($handle, [
+            'Genre'
+        ])) {
             return ['element' => Category::class, 'groupId' => $this->categoryGroupId];
-         }
+        }
 
-         if (in_array($handle, [
-           'ShowTags'
-            ])) {
+        if (in_array($handle, [
+            'ShowTags'
+        ])) {
             return ['element' => TagElement::class, 'groupId' => $this->tagGroupId];
-         }
+        }
 
-         return false;
+        return false;
     }
 
     private function getFieldDescription()
@@ -608,15 +686,15 @@ class SampleData extends Component
 
         $fieldByHandle = Craft::$app->getFields()->getFieldByHandle($handle);
 
-        $config  = [
-            'type'    => PlainText::class,
-            "id"      => $fieldByHandle->id ?? null,
+        $config = [
+            'type' => PlainText::class,
+            "id" => $fieldByHandle->id ?? null,
             "groupId" => $this->fieldGroupId,
-            'name'    => 'Description',
-            'handle'  => $handle,
-            'multiline'   => true,
+            'name' => 'Description',
+            'handle' => $handle,
+            'multiline' => true,
             "initialRows" => 4,
-            "columnType"  => "text",
+            "columnType" => "text",
             "searchable" => true
         ];
 
@@ -630,12 +708,12 @@ class SampleData extends Component
         $fieldByHandle = Craft::$app->getFields()->getFieldByHandle($handle);
 
         $config = [
-            "type"    => Categories::class,
-            "id"      => $fieldByHandle->id ?? null,
+            "type" => Categories::class,
+            "id" => $fieldByHandle->id ?? null,
             "groupId" => $this->fieldGroupId,
             "source" => 'group:' . $this->categoryGroupUid,
-            "name"    => "Genre",
-            "handle"  => $handle
+            "name" => "Genre",
+            "handle" => $handle
         ];
 
         return $this->saveField($config);
@@ -643,18 +721,17 @@ class SampleData extends Component
 
     private function getFieldShowTags()
     {
-
         $handle = static::PREFIX . "ShowTags";
 
         $fieldByHandle = Craft::$app->getFields()->getFieldByHandle($handle);
 
         $config = [
-            "type"    => Tags::class,
-            "id"      => $fieldByHandle->id ?? null,
+            "type" => Tags::class,
+            "id" => $fieldByHandle->id ?? null,
             "groupId" => $this->fieldGroupId,
             "source" => 'taggroup:' . $this->tagGroupUid,
-            "name"    => "Show Tags",
-            "handle"  => $handle
+            "name" => "Show Tags",
+            "handle" => $handle
         ];
 
         return $this->saveField($config);
@@ -667,15 +744,15 @@ class SampleData extends Component
         $fieldByHandle = Craft::$app->getFields()->getFieldByHandle($handle);
 
         $config = [
-            "type"    => Dropdown::class,
-            "id"      => $fieldByHandle->id ?? null,
-            "name"    => "Show Types",
-            "handle"  => $handle,
+            "type" => Dropdown::class,
+            "id" => $fieldByHandle->id ?? null,
+            "name" => "Show Types",
+            "handle" => $handle,
             "groupId" => $this->fieldGroupId,
             'optgroups' => true,
             "searchable" => true,
             'settings' => [
-                    'options' => [
+                'options' => [
                     [
                         'label' => 'Films',
                         'value' => 'films'
@@ -711,18 +788,18 @@ class SampleData extends Component
         $options = [];
 
         // @bug if value is not type cast string it throws an error
-        for ($i=2011; $i<=2025; $i++) {
+        for ($i = 2011; $i <= 2025; $i++) {
             $options[] = [
                 'label' => $i,
-                'value' => (string) $i
+                'value' => (string)$i
             ];
         }
 
         $config = [
-            "type"    => Dropdown::class,
-            "id"      => $fieldByHandle->id ?? null,
-            "name"    => "Release Date",
-            "handle"  => $handle,
+            "type" => Dropdown::class,
+            "id" => $fieldByHandle->id ?? null,
+            "name" => "Release Date",
+            "handle" => $handle,
             "groupId" => $this->fieldGroupId,
             'settings' => ['options' => $options],
             "searchable" => true
@@ -739,18 +816,18 @@ class SampleData extends Component
 
         $options = [];
 
-        for ($i=4; $i<=9; $i++) {
+        for ($i = 4; $i <= 9; $i++) {
             $options[] = [
                 'label' => $i,
-                'value' => (string) $i
+                'value' => (string)$i
             ];
         }
 
         $config = [
-            "type"    => RadioButtons::class,
-            "id"      => $fieldByHandle->id ?? null,
-            "name"    => "Imdb Rating",
-            "handle"  => $handle,
+            "type" => RadioButtons::class,
+            "id" => $fieldByHandle->id ?? null,
+            "name" => "Imdb Rating",
+            "handle" => $handle,
             "groupId" => $this->fieldGroupId,
             'settings' => ['options' => $options],
             "searchable" => true
