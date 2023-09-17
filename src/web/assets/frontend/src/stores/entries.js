@@ -6,6 +6,7 @@ import {useUrl} from "../helpers/url";
 export const useEntriesStore = defineStore('entries', {
     state: () => ({
         elements: [],
+        items: [],
         params: {
             handle: 'superFilterShows',
             config: {
@@ -20,6 +21,25 @@ export const useEntriesStore = defineStore('entries', {
 
     },
     actions: {
+         async fetchGql() {
+            const query = `{
+  entries(section: "superFilterShows" ) { title }
+}`;
+
+             const headers = {
+                 'Authorization': 'Bearer BGk2lakdab3ztbEavoAXtJdSPyoohkoB',
+                 'Content-Type': 'application/graphql', // Example header for specifying JSON content
+                 // Add any other custom headers here
+             };
+
+             const response =  await axios.post( this.url.getUrl('super-filter/fields'), query, {
+                 headers: headers
+             });
+
+             this.items = response.data;
+             this.currentPage = this.elements.config.currentPage;
+             return this.items;
+         },
          async fetchData() {
 
             const response =  await axios.post( this.url.getUrl('super-filter/fields'), this.params);
