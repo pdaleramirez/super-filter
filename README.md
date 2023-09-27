@@ -1,4 +1,4 @@
-# Super Filter plugin for Craft CMS 3.x  
+# Super Filter plugin for Craft CMS 4.x  
   
 Build your search page with search filters from your element fields and filter element entries by categories, tags, element relations, products (Craft Commerce) and other fields. 
 Easily setup your search page by using twig variable functions, back-end coding not needed.
