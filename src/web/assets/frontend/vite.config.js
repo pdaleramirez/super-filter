@@ -25,6 +25,8 @@ export default ({mode}) => {
       manifest: true,
     },
     server: {
+      open: true,
+      host: 'superfilter.plugin',
       proxy: {
         "/api": {
           target: process.env.VITE_SITE_URL,
