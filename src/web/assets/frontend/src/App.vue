@@ -4,6 +4,7 @@
 
              <Wrapper />
 
+             <TestCompiler />
            </main>
 
 </template>
@@ -19,6 +20,19 @@
 
 import Wrapper from "./views/Wrapper.vue";
 import List from "./components/List.vue";
+import TestCompiler from "./components/TestCompiler.vue";
+import { useEntriesStore } from "./stores/entries";
+const store = useEntriesStore();
+import { storeToRefs } from "pinia";
+import {onBeforeMount} from "vue";
+onBeforeMount(() => {
+  setTimeout(() => {
+    store.fetchData();
+
+  }, 2000);
+});
+
+const { elements } = storeToRefs(store);
 </script>
 
 <style scoped>

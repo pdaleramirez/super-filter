@@ -1,29 +1,51 @@
-<script setup>
+<script>
 
-import List from "../components/List.vue";
+
+import { mapActions } from 'pinia'
 import {onBeforeMount} from "vue";
-import {useEntriesStore} from "../stores/entries";
-const store = useEntriesStore();
+import { useEntriesStore } from "../stores/entries";
+
 import { storeToRefs } from "pinia";
+import SearchFields from "../components/SearchFields.vue";
+import ShowRun from "../components/ShowRun.vue";
+import AppMessage from "../components/AppMessage.vue";
+import VRuntimeTemplate from "vue3-runtime-template";
+import List from "../components/List.vue";
 
-onBeforeMount(() => {
-  setTimeout(() => {
-    store.fetchData();
+export default {
+  data: () => ({
+    name: "Mellow",
+    elements: {},
+    template: ''
+  }),
+  methods: {
+    ...mapActions(useEntriesStore,['fetchData', 'getTestRequest'])
+  },
+  components: {
+    SearchFields,
+    List,
+    AppMessage,
+    VRuntimeTemplate
+  },
+  mounted() {
+   this.fetchData().then((response) => {
+     this.elements = response;
+   })
 
-  }, 2000);
-});
+   this.getTestRequest().then((response) => {
+     this.template = response;
+   })
 
-const { elements } = storeToRefs(store);
+  }
+};
 
 </script>
 
 <template>
-  <div v-if="elements.items">
-    <List />
-  </div>
-  <div v-else>
-    <h1>Loading ....</h1>
-  </div>
+
+  <v-runtime-template :template="template"></v-runtime-template>
+
+
 </template>
 
 <style scoped lang="scss">

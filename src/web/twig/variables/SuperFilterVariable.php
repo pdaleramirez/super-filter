@@ -167,7 +167,7 @@ class SuperFilterVariable
 
     private function renderTemplate($file, $variables = [])
     {
-        $template = SuperFilter::$app->searchTypes->getTemplate($file);
+        $template = $this->searchSetupService->getTemplate($file);
 
         $config  = $this->searchSetupService->getConfig();
 

@@ -5,6 +5,7 @@ namespace pdaleramirez\superfilter\controllers;
 use craft\db\Paginator;
 use craft\elements\Entry;
 use craft\helpers\Json;
+use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
@@ -13,7 +14,7 @@ use pdaleramirez\superfilter\SuperFilter;
 
 class ElementsController extends Controller
 {
-    protected array|bool|int $allowAnonymous = ['get-fields', 'filter', 'entries'];
+    protected array|bool|int $allowAnonymous = ['get-fields', 'filter', 'entries', 'get-template-content'];
 
     public function actionGetFields()
     {
@@ -129,5 +130,20 @@ class ElementsController extends Controller
         $data[] = 'test3';
 
         return $this->asJson($data);
+    }
+
+    public function actionGetTemplateContent()
+    {
+        $handle = Craft::$app->getRequest()->getBodyParam('handle');
+
+        $config = SuperFilter::$app->searchTypes->getConfigById($handle);
+
+        $searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
+
+        $template = $searchSetupService->getTemplate('items.vue');
+
+        $html = Craft::$app->getView()->renderTemplate($template);
+
+        return Template::raw($html);
     }
 }

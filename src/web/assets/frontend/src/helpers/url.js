@@ -9,4 +9,4 @@ export function useUrl(url) {
     }
 
     return { getUrl };
-}
+}``

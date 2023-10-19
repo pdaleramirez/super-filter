@@ -6,6 +6,8 @@ import {useUrl} from "../helpers/url";
 export const useEntriesStore = defineStore('entries', {
     state: () => ({
         elements: [],
+        templateVar: {},
+        fields: {},
         items: [],
         params: {
             handle: 'superFilterShows',
@@ -79,6 +81,26 @@ export const useEntriesStore = defineStore('entries', {
             this.elements = response.data;
 
             return this.elements;
+        },
+
+        async getTemplate(handle) {
+            const response = await axios.post( this.url.getUrl('super-filter/template'), {handle: handle});
+            this.templateVar = response.data;
+            return response.data;
+        },
+
+        async getTestRequest(handle) {
+            const response = await axios.get( '/api/test-api', {handle: handle});
+            this.templateVar = response.data;
+
+            return response.data;
+        },
+
+        async getFieldRequest(handle) {
+            const response = await axios.get( '/api/test-fields', {handle: handle});
+            this.fields = response.data;
+
+            return response.data;
         },
 
          _getResponse(params) {
