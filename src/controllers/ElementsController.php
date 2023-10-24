@@ -9,6 +9,7 @@ use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
+use Doctrine\Inflector\Rules\French\Inflectible;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 
@@ -135,12 +136,13 @@ class ElementsController extends Controller
     public function actionGetTemplateContent()
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
+        $filename = Craft::$app->getRequest()->getBodyParam('filename');
 
         $config = SuperFilter::$app->searchTypes->getConfigById($handle);
 
         $searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
 
-        $template = $searchSetupService->getTemplate('items.vue');
+        $template = $searchSetupService->getTemplate($filename . '.vue');
 
         $html = Craft::$app->getView()->renderTemplate($template);
 

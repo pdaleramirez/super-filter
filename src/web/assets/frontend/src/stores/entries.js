@@ -6,7 +6,7 @@ import {useUrl} from "../helpers/url";
 export const useEntriesStore = defineStore('entries', {
     state: () => ({
         elements: [],
-        templateVar: {},
+        templateContent: '',
         fields: {},
         items: [],
         params: {
@@ -43,7 +43,6 @@ export const useEntriesStore = defineStore('entries', {
              return this.items;
          },
          async fetchData() {
-
             const response =  await axios.post( this.url.getUrl('super-filter/fields'), this.params);
 
             this.elements = response.data;
@@ -51,7 +50,6 @@ export const useEntriesStore = defineStore('entries', {
             return this.elements;
         },
         action(params, method) {
-             console.log('method ' + method)
             switch (method) {
                 case 'next':
                     return this.next(params);
@@ -83,21 +81,23 @@ export const useEntriesStore = defineStore('entries', {
             return this.elements;
         },
 
-        async getTemplate(handle) {
-            const response = await axios.post( this.url.getUrl('super-filter/template'), {handle: handle});
-            this.templateVar = response.data;
+        async getTemplate(handle, filename ) {
+
+            const response = await axios.post( this.url.getUrl('super-filter/template'), { handle: handle, filename: filename });
+            this.templateContent = response.data;
+            
             return response.data;
         },
 
         async getTestRequest(handle) {
             const response = await axios.get( '/api/test-api', {handle: handle});
-            this.templateVar = response.data;
+            this.templateContent = response.data;
 
             return response.data;
         },
 
         async getFieldRequest(handle) {
-            const response = await axios.get( '/api/test-fields', {handle: handle});
+            const response = await axios.get( this.url.getUrl('test-fields'), {handle: handle});
             this.fields = response.data;
 
             return response.data;

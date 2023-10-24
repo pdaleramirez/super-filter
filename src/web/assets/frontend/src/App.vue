@@ -23,8 +23,11 @@ import List from "./components/List.vue";
 import TestCompiler from "./components/TestCompiler.vue";
 import { useEntriesStore } from "./stores/entries";
 const store = useEntriesStore();
-import { storeToRefs } from "pinia";
-import {onBeforeMount} from "vue";
+
+import {onBeforeMount, inject} from "vue";
+
+const handle = inject('handle');
+
 onBeforeMount(() => {
   setTimeout(() => {
     store.fetchData();
@@ -32,7 +35,7 @@ onBeforeMount(() => {
   }, 2000);
 });
 
-const { elements } = storeToRefs(store);
+//const { elements } = storeToRefs(store);
 </script>
 
 <style scoped>

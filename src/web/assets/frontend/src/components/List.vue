@@ -23,10 +23,10 @@ const {get, loading, error} = filter((params, method) => store.action(params, me
 </script>
 
 <template>
-  <div class="w-full flex">
+  <div class="w-full flex border-blue-500">
     <div class="flex-auto bg-white h-5 w-25 block h-48 w-1/3">--</div>
     <div class="flex-auto bg-white h-full">
-      <h1>Entries</h1>
+      <h1>List Entries</h1>
 
       <span v-if="loading">Loading...</span>
       <ul v-if="elements">

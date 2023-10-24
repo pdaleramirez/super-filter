@@ -1,11 +1,16 @@
 import './assets/main.css'
-import { createApp } from 'vue'
+import { createApp, defineExpose } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import './assets/tailwind.css'
 
-const app = createApp(App)
 
-app.use(createPinia())
-app.mount('#app')
 
+
+const elements = document.querySelectorAll('.searchApp');
+elements.forEach((element) => {
+    const app = createApp(App);
+    app.provide('handle', element.getAttribute('handle'));
+    app.use(createPinia())
+    app.mount(element)
+})
