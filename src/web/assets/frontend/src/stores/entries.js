@@ -7,6 +7,7 @@ export const useEntriesStore = defineStore('entries', {
     state: () => ({
         elements: [],
         templateContent: '',
+        templateFields: '',
         fields: {},
         items: [],
         params: {
@@ -88,9 +89,22 @@ export const useEntriesStore = defineStore('entries', {
             
             return response.data;
         },
+        async getFieldTemplate(handle, filename ) {
+
+            const response = await axios.post( this.url.getUrl('super-filter/template'), { handle: handle, filename: filename });
+            this.templateFields = response.data;
+
+            return response.data;
+        },
 
         async getTestRequest(handle) {
-            const response = await axios.get( '/api/test-api', {handle: handle});
+            const response = await axios.get( '/api/test-api', {handle: handle}, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                  //  "Access-Control-Allow-Origin": "*"
+                }
+            });
             this.templateContent = response.data;
 
             return response.data;

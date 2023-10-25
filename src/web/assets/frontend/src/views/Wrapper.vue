@@ -16,10 +16,9 @@ export default {
     name: "Mellow",
     elements: {},
     template: '',
-    templateFields: '',
   }),
   methods: {
-    ...mapActions(useEntriesStore,['fetchData', 'getTestRequest'])
+   // ...mapActions(useEntriesStore,['fetchData', 'getTestRequest'])
   },
   components: {
     SearchFields,
@@ -29,18 +28,14 @@ export default {
     VRuntimeTemplate
   },
   async mounted() {
-   // this.fetchData().then((response) => {
-   //   this.elements = response;
-   // })
 
-   // this.getTestRequest().then((response) => {
-   //   this.template = response;
-   // })
     const handle = inject('handle')
     const store = useEntriesStore();
     const templateReq = template((handle) => store.getTemplate(handle, 'main'));
+    const templateField = template((handle) => store.getFieldTemplate(handle, 'fields'));
 
     templateReq.get(handle);
+    templateField.get(handle);
 
     const { elements, templateContent } = storeToRefs(store);
     this.elements = elements;
@@ -54,8 +49,6 @@ export default {
 <template>
 
   <v-runtime-template :template="template"></v-runtime-template>
-  <v-runtime-template :template="templateFields"></v-runtime-template>
-
 
 </template>
 

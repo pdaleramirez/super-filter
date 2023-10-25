@@ -6,6 +6,7 @@ import { useEntriesStore } from "../stores/entries";
 import Field from "./Field.vue";
 import VRuntimeTemplate from "vue3-runtime-template";
 import template from "../composables/template";
+import {inject} from "vue";
 export default {
   data: () => ({
     name: "Mellow",
@@ -13,23 +14,22 @@ export default {
     fields: {},
     template: ''
   }),
-  methods: {
-    ...mapActions(useEntriesStore,['fetchData', 'getFieldsTemplate'])
-  },
   components: {
     Field,
     VRuntimeTemplate
   },
   mounted() {
     const store = useEntriesStore();
-    const fieldReq = template((handle) => store.getFieldRequest(handle));
-    fieldReq.get('superFilterShows');
-    const {elements, fields} = storeToRefs(store);
-    this.elements = elements;
-    this.fields = fields;
 
+    const { elements, templateFields } = storeToRefs(store);
 
+    if (elements.value.config !== undefined) {
+     // console.log(elements.value.config.items.items)
+      this.fields = elements.value.config.items.items;
+    }
 
+    ///this.fields = elements.config.items.items;
+    this.template = templateFields;
   }
 };
 
@@ -37,15 +37,8 @@ export default {
 
 <template>
   <div class="border-2 border-green-500">
-  <h1>Fields</h1>
-title: {{ fields.title }}
-    <ul v-if="fields">
-      <li v-for="item in fields" :key="item.id">
-        {{ item.id }}
-      </li>
-    </ul>
 
-<!--  <v-runtime-template :template="template"></v-runtime-template>-->
+  <v-runtime-template :template="template" :template-props="fields" ></v-runtime-template>
   </div>
 
 </template>

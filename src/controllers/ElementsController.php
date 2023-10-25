@@ -144,7 +144,9 @@ class ElementsController extends Controller
 
         $template = $searchSetupService->getTemplate($filename . '.vue');
 
-        $html = Craft::$app->getView()->renderTemplate($template);
+        $path = Craft::$app->getPath()->getSiteTemplatesPath() . DIRECTORY_SEPARATOR . $template;
+
+        $html = file_get_contents($path);
 
         return Template::raw($html);
     }
