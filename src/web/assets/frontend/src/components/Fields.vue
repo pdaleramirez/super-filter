@@ -1,6 +1,5 @@
 <script>
 
-
 import {mapActions, storeToRefs} from 'pinia'
 import { useEntriesStore } from "../stores/entries";
 import Field from "./Field.vue";
@@ -24,11 +23,9 @@ export default {
     const { elements, templateFields } = storeToRefs(store);
 
     if (elements.value.config !== undefined) {
-     // console.log(elements.value.config.items.items)
       this.fields = elements.value.config.items.items;
     }
 
-    ///this.fields = elements.config.items.items;
     this.template = templateFields;
   }
 };
@@ -39,6 +36,19 @@ export default {
   <div class="border-2 border-green-500">
 
   <v-runtime-template :template="template" :template-props="fields" ></v-runtime-template>
+    <h1>FIELDS Static!</h1>
+    <div v-if="fields">
+      {{ fields }}
+    </div>
+
+<!--    <div v-if="elements.config.items.items">-->
+<!--      <li v-for="item in elements.config.items.items" :key="item.id">-->
+<!--        {{ item.title }}-->
+<!--      </li>-->
+<!--    </div>-->
+<!--    <div v-else>-->
+<!--      <h1>Loading fields ....</h1>-->
+<!--    </div>-->
   </div>
 
 </template>

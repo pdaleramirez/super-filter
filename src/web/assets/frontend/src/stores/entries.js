@@ -47,6 +47,7 @@ export const useEntriesStore = defineStore('entries', {
             const response =  await axios.post( this.url.getUrl('super-filter/fields'), this.params);
 
             this.elements = response.data;
+
             this.currentPage = this.elements.config.currentPage;
             return this.elements;
         },

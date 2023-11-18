@@ -10,12 +10,13 @@ use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
 use Doctrine\Inflector\Rules\French\Inflectible;
+use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 
 class ElementsController extends Controller
 {
-    protected array|bool|int $allowAnonymous = ['get-fields', 'filter', 'entries', 'get-template-content'];
+    protected array|bool|int $allowAnonymous = ['get-fields', 'filter', 'entries', 'get-template-content', 'get-search-fields'];
 
     public function actionGetFields()
     {
@@ -149,5 +150,14 @@ class ElementsController extends Controller
         $html = file_get_contents($path);
 
         return Template::raw($html);
+    }
+
+    public function actionGetSearchFields()
+    {
+        $handle = Craft::$app->getRequest()->getBodyParam('handle');
+
+        $searchSetup = SetupSearch::find()->where(['handle' => $handle])->one();
+
+        return $this->asJson($searchSetup->items()['items']);
     }
 }
