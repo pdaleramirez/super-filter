@@ -89,7 +89,7 @@ class SampleData extends Component
         $setupElement->handle = $handle;
 
         $title[] = [
-            'title' => 'Title',
+            'name' => 'Title',
             'id' => 'title',
         ];
 
