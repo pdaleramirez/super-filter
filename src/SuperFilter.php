@@ -123,7 +123,7 @@ class SuperFilter extends Plugin
             $event->rules['super-filter/fields']    = 'super-filter/elements/get-fields';
             $event->rules['super-filter/entries']    = 'super-filter/elements/entries';
             $event->rules['super-filter/template']    = 'super-filter/elements/get-template-content';
-            $event->rules['super-filter/search-fields']    = 'super-filter/elements/get-search-fields';
+            $event->rules['super-filter/search-fields-info']    = 'super-filter/elements/get-search-fields-info';
         });
 
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_TYPES, function (RegisterSearchTypeEvent $event) {

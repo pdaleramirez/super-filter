@@ -16,6 +16,7 @@ export default {
     name: "Mellow",
     elements: {},
     template: '',
+    searchFieldsInfo: '',
   }),
   methods: {
    // ...mapActions(useEntriesStore,['fetchData', 'getTestRequest'])

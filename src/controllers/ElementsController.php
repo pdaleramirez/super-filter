@@ -16,7 +16,7 @@ use pdaleramirez\superfilter\SuperFilter;
 
 class ElementsController extends Controller
 {
-    protected array|bool|int $allowAnonymous = ['get-fields', 'filter', 'entries', 'get-template-content', 'get-search-fields'];
+    protected array|bool|int $allowAnonymous = ['get-fields', 'filter', 'entries', 'get-template-content', 'get-search-fields-info'];
 
     public function actionGetFields()
     {
@@ -152,12 +152,31 @@ class ElementsController extends Controller
         return Template::raw($html);
     }
 
-    public function actionGetSearchFields()
+    public function actionGetSearchFieldsInfo()
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
 
         $searchSetup = SetupSearch::find()->where(['handle' => $handle])->one();
 
-        return $this->asJson($searchSetup->items()['items']);
+        $items = $searchSetup->items()['items'] ?? null;
+
+        $fields = [];
+
+        if ($items !== null) {
+            foreach ($items as $key => $item) {
+                if (is_int($item['id'])) {
+                    $fieldObj = Craft::$app->getFields()->getFieldById($item['id']);
+                    $fields[$key]['name'] = $fieldObj->name;
+                    $fields[$key]['handle'] = $fieldObj->handle;
+                    $fields[$key]['type'] =  (new \ReflectionClass($fieldObj))->getShortName();;
+                } elseif ($item['id'] === 'title') {
+                    $fields[$key]['name'] = 'Title';
+                    $fields[$key]['handle'] = 'title';
+                    $fields[$key]['type'] = "PlainText";
+                }
+            }
+        }
+
+        return $this->asJson($fields);
     }
 }

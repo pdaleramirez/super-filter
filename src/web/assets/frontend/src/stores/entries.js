@@ -6,6 +6,7 @@ import {useUrl} from "../helpers/url";
 export const useEntriesStore = defineStore('entries', {
     state: () => ({
         elements: [],
+        searchFieldsInfo: [],
         templateContent: '',
         templateFields: '',
         fields: {},
@@ -45,8 +46,10 @@ export const useEntriesStore = defineStore('entries', {
          },
          async fetchData() {
             const response =  await axios.post( this.url.getUrl('super-filter/fields'), this.params);
+            const searchFieldsInfoResponse =  await axios.post( this.url.getUrl('super-filter/search-fields-info'), this.params);
 
             this.elements = response.data;
+            this.searchFieldsInfo = searchFieldsInfoResponse.data;
 
             this.currentPage = this.elements.config.currentPage;
             return this.elements;
