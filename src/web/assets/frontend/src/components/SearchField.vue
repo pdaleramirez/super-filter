@@ -1,14 +1,40 @@
 <script setup>
+
+import { useEntriesStore } from "../stores/entries";
+import {storeToRefs} from "pinia";
+import { ref,computed } from "vue";
 const props = defineProps({
-  type: { type: String, required: true },
   handle: { type: String },
 })
+
+const fieldValue = ref('');
+
+const store = useEntriesStore();
+
+const { elements, templateFields, searchFieldsInfo } = storeToRefs(store);
+
+const getFieldValue = (e) => {
+
+  if (searchFieldsInfo.value) {
+    searchFieldsInfo.value[props.handle].value = fieldValue.value;
+  }
+}
+
+const searchField = computed(() => {
+  return searchFieldsInfo.value[props.handle];
+});
 </script>
 
 <template>
-  <input type="text" /> Plain Text {{ type }}
+
+    <div v-if="searchField">
+      <input type="text" @input="getFieldValue" v-model="fieldValue" /> {{  searchField.type }} {{ handle ?? '' }}
+    </div>
+
 </template>
 
-<style scoped lang="scss">
-
+<style scoped>
+  input {
+    border: 1px solid red;
+  }
 </style>

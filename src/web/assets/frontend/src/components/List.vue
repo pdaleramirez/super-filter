@@ -4,7 +4,7 @@ import filter from "../composables/filter";
 import {storeToRefs} from "pinia";
 
 const store = useEntriesStore();
-const {elements} = storeToRefs(store);
+const {elements, searchFieldsInfo} = storeToRefs(store);
 
 const params = {
   handle: 'superFilterShows',

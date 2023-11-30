@@ -1,5 +1,5 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import {ref, computed} from 'vue'
+import {defineStore} from 'pinia'
 import axios from 'axios';
 import {useUrl} from "../helpers/url";
 
@@ -12,41 +12,46 @@ export const useEntriesStore = defineStore('entries', {
         fields: {},
         items: [],
         params: {
-            handle: 'superFilterShows',
+            handle: '',
             config: {
-                currentPage: 1
-            }
+                currentPage: 1,
+                params: {
+                    fields: {}
+                }
+            },
+
         },
         url: useUrl(),
         currentPage: 1,
         response: {}
     }),
-    getters: {
-
-    },
+    getters: {},
     actions: {
-         async fetchGql() {
+        async fetchGql() {
             const query = `{
   entries(section: "superFilterShows" ) { title }
 }`;
 
-             const headers = {
-                 'Authorization': 'Bearer BGk2lakdab3ztbEavoAXtJdSPyoohkoB',
-                 'Content-Type': 'application/graphql', // Example header for specifying JSON content
-                 // Add any other custom headers here
-             };
+            const headers = {
+                'Authorization': 'Bearer BGk2lakdab3ztbEavoAXtJdSPyoohkoB',
+                'Content-Type': 'application/graphql', // Example header for specifying JSON content
+                // Add any other custom headers here
+            };
 
-             const response =  await axios.post( this.url.getUrl('super-filter/fields'), query, {
-                 headers: headers
-             });
+            const response = await axios.post(this.url.getUrl('super-filter/fields'), query, {
+                headers: headers
+            });
 
-             this.items = response.data;
-             this.currentPage = this.elements.config.currentPage;
-             return this.items;
-         },
-         async fetchData() {
-            const response =  await axios.post( this.url.getUrl('super-filter/fields'), this.params);
-            const searchFieldsInfoResponse =  await axios.post( this.url.getUrl('super-filter/search-fields-info'), this.params);
+            this.items = response.data;
+            this.currentPage = this.elements.config.currentPage;
+            return this.items;
+        },
+        async fetchData(handle) {
+            this.params.handle = handle;
+            //this.params.config.params.fields.title = 'attack';
+
+            const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
+            const searchFieldsInfoResponse = await axios.post(this.url.getUrl('super-filter/search-fields-info'), this.params);
 
             this.elements = response.data;
             this.searchFieldsInfo = searchFieldsInfoResponse.data;
@@ -54,20 +59,32 @@ export const useEntriesStore = defineStore('entries', {
             this.currentPage = this.elements.config.currentPage;
             return this.elements;
         },
+        async filterData(handle) {
+            let params = {};
+            params.handle = handle;
+           // params.config.params.fields.title = 'attack';
+            console.log('filter data')
+            const response = await axios.post(this.url.getUrl('super-filter/fields'), params);
+            //
+            // this.elements = response.data;
+            //
+            // this.currentPage = this.elements.config.currentPage;
+            // return this.elements;
+        },
         action(params, method) {
             switch (method) {
                 case 'next':
                     return this.next(params);
                     break;
 
-                    case 'back':
+                case 'back':
                     return this.back(params);
                     break;
 
             }
         },
-         async next(params) {
-             params.config.currentPage = params.config.currentPage + 1;
+        async next(params) {
+            params.config.currentPage = params.config.currentPage + 1;
 
             const response = await this._getResponse(params);
 
@@ -86,27 +103,33 @@ export const useEntriesStore = defineStore('entries', {
             return this.elements;
         },
 
-        async getTemplate(handle, filename ) {
+        async getTemplate(handle, filename) {
 
-            const response = await axios.post( this.url.getUrl('super-filter/template'), { handle: handle, filename: filename });
+            const response = await axios.post(this.url.getUrl('super-filter/template'), {
+                handle: handle,
+                filename: filename
+            });
             this.templateContent = response.data;
-            
+
             return response.data;
         },
-        async getFieldTemplate(handle, filename ) {
+        async getFieldTemplate(handle, filename) {
 
-            const response = await axios.post( this.url.getUrl('super-filter/template'), { handle: handle, filename: filename });
+            const response = await axios.post(this.url.getUrl('super-filter/template'), {
+                handle: handle,
+                filename: filename
+            });
             this.templateFields = response.data;
 
             return response.data;
         },
 
         async getTestRequest(handle) {
-            const response = await axios.get( '/api/test-api', {handle: handle}, {
+            const response = await axios.get('/api/test-api', {handle: handle}, {
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
-                  //  "Access-Control-Allow-Origin": "*"
+                    //  "Access-Control-Allow-Origin": "*"
                 }
             });
             this.templateContent = response.data;
@@ -115,14 +138,14 @@ export const useEntriesStore = defineStore('entries', {
         },
 
         async getFieldRequest(handle) {
-            const response = await axios.get( this.url.getUrl('test-fields'), {handle: handle});
+            const response = await axios.get(this.url.getUrl('test-fields'), {handle: handle});
             this.fields = response.data;
 
             return response.data;
         },
 
-         _getResponse(params) {
-            return axios.post( this.url.getUrl('super-filter/filter'), params);
+        _getResponse(params) {
+            return axios.post(this.url.getUrl('super-filter/filter'), params);
         }
     }
 })

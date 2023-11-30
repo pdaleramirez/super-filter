@@ -15,6 +15,9 @@ export default {
     searchFieldsInfo: {},
     template: ''
   }),
+  methods: {
+
+  },
   components: {
     SearchField,
     Field,
@@ -35,23 +38,26 @@ export default {
 
     this.template = templateFields;
   }
+
+
 };
+
 
 </script>
 
 <template>
-  <div class="border-2 border-green-500">
-
   <v-runtime-template :template="template" :template-props="fields" ></v-runtime-template>
+<!--  <div class="border-2 border-green-500">-->
+<!--    <h1>FIELDS Static!</h1>-->
+<!--    <div v-if="searchFieldsInfo">-->
+<!--      <div v-for="field in searchFieldsInfo" >-->
+<!--        <SearchField :handle="field.handle" />-->
 
-    <h1>FIELDS Static!</h1>
-    <div v-if="searchFieldsInfo">
-      <div v-for="field in searchFieldsInfo" >
-        <SearchField :type="field.type" />
-      </div>
-    </div>
-  </div>
 
+<!--        sfinfo: {{ field.value }}-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
 </template>
 
 <style scoped lang="scss">

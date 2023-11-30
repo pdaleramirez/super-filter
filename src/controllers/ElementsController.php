@@ -21,6 +21,7 @@ class ElementsController extends Controller
     public function actionGetFields()
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
+        $bodyParams = Craft::$app->getRequest()->getBodyParams();
 		$this->setItemAttributes();
         $searchSetupService = SuperFilter::$app->searchTypes;
 
@@ -166,13 +167,15 @@ class ElementsController extends Controller
             foreach ($items as $key => $item) {
                 if (is_int($item['id'])) {
                     $fieldObj = Craft::$app->getFields()->getFieldById($item['id']);
-                    $fields[$key]['name'] = $fieldObj->name;
-                    $fields[$key]['handle'] = $fieldObj->handle;
-                    $fields[$key]['type'] =  (new \ReflectionClass($fieldObj))->getShortName();;
+                    $fields[$fieldObj->handle]['name'] = $fieldObj->name;
+                    $fields[$fieldObj->handle]['handle'] = $fieldObj->handle;
+                    $fields[$fieldObj->handle]['type'] =  (new \ReflectionClass($fieldObj))->getShortName();;
+                    $fields[$fieldObj->handle]['value'] =  '';
                 } elseif ($item['id'] === 'title') {
-                    $fields[$key]['name'] = 'Title';
-                    $fields[$key]['handle'] = 'title';
-                    $fields[$key]['type'] = "PlainText";
+                    $fields['title']['name'] = 'Title';
+                    $fields['title']['handle'] = 'title';
+                    $fields['title']['type'] = "PlainText";
+                    $fields['title']['value'] = '';
                 }
             }
         }
