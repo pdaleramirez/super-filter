@@ -7,16 +7,16 @@ const props = defineProps({
   handle: { type: String },
 })
 
-const fieldValue = ref('');
+//const fieldValue = ref('');
 
 const store = useEntriesStore();
 
-const { elements, templateFields, searchFieldsInfo } = storeToRefs(store);
+const { elements, templateFields, searchFieldsInfo, fieldValue } = storeToRefs(store);
 
 const getFieldValue = (e) => {
 
   if (searchFieldsInfo.value) {
-    searchFieldsInfo.value[props.handle].value = fieldValue.value;
+   // searchFieldsInfo.value[props.handle].value = searchField.value;
   }
 }
 
@@ -28,7 +28,7 @@ const searchField = computed(() => {
 <template>
 
     <div v-if="searchField">
-      <input type="text" @input="getFieldValue" v-model="fieldValue" /> {{  searchField.type }} {{ handle ?? '' }}
+      <input type="text" @input="getFieldValue" v-model="searchField.value" /> {{  searchField.value }} {{ handle ?? '' }}
     </div>
 
 </template>

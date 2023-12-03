@@ -5,12 +5,15 @@ import {useUrl} from "../helpers/url";
 
 export const useEntriesStore = defineStore('entries', {
     state: () => ({
+        handle: '',
         elements: [],
         searchFieldsInfo: [],
         templateContent: '',
         templateFields: '',
+        templateList: '',
         fields: {},
         items: [],
+        fieldValue: '',
         params: {
             handle: '',
             config: {
@@ -59,17 +62,32 @@ export const useEntriesStore = defineStore('entries', {
             this.currentPage = this.elements.config.currentPage;
             return this.elements;
         },
-        async filterData(handle) {
-            let params = {};
+        async filterData(handle = null) {
+
+            if (handle === null) {
+                handle = this.handle;
+            }
+
+            let params = {
+                handle: '',
+                config: {
+                    currentPage: 1,
+                    params: {
+                        fields: {}
+                    }
+                },
+            };
             params.handle = handle;
-           // params.config.params.fields.title = 'attack';
-            console.log('filter data')
+            for (const [key, field] of Object.entries(this.searchFieldsInfo)) {
+                if (this.searchFieldsInfo[key].value !== '') {
+                    params.config.params.fields[key] = this.searchFieldsInfo[key].value;
+                }
+            }
+
             const response = await axios.post(this.url.getUrl('super-filter/fields'), params);
+            console.log(response.data);
             //
-            // this.elements = response.data;
-            //
-            // this.currentPage = this.elements.config.currentPage;
-            // return this.elements;
+             this.elements = response.data;
         },
         action(params, method) {
             switch (method) {
@@ -120,6 +138,16 @@ export const useEntriesStore = defineStore('entries', {
                 filename: filename
             });
             this.templateFields = response.data;
+
+            return response.data;
+        },
+        async getListTemplate(handle, filename) {
+
+            const response = await axios.post(this.url.getUrl('super-filter/template'), {
+                handle: handle,
+                filename: filename
+            });
+            this.templateList = response.data;
 
             return response.data;
         },

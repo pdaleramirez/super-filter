@@ -1,45 +1,80 @@
-<script setup>
+<!--<script setup>-->
+<!--import {useEntriesStore} from '../stores/entries';-->
+<!--import filter from "../composables/filter";-->
+<!--import {storeToRefs} from "pinia";-->
+
+<!--const store = useEntriesStore();-->
+<!--const {elements, searchFieldsInfo} = storeToRefs(store);-->
+
+<!--const params = {-->
+<!--  handle: 'superFilterShows',-->
+<!--  config: {-->
+<!--    currentPage: 1-->
+<!--  }-->
+<!--}-->
+
+<!--const {get, loading, error} = filter((params, method) => store.action(params, method));-->
+
+<!--</script>-->
+
+<script>
 import {useEntriesStore} from '../stores/entries';
-import filter from "../composables/filter";
 import {storeToRefs} from "pinia";
+import VRuntimeTemplate from "vue3-runtime-template";
+import {inject} from "vue";
+import template from "../composables/template";
 
-const store = useEntriesStore();
-const {elements, searchFieldsInfo} = storeToRefs(store);
+export default {
+  data: () => ({
+    elements: {},
+    fields: {},
+    searchFieldsInfo: {},
+    template: '',
+    handle: ''
+  }),
+  methods: {
+  },
+  components: {
+    VRuntimeTemplate
+  },
+  mounted() {
 
-const params = {
-  handle: 'superFilterShows',
-  config: {
-    currentPage: 1
+     const handle = inject('handle')
+     const store = useEntriesStore();
+     const templateReq = template((handle) => store.getListTemplate(handle, 'list'));
+    //
+     templateReq.get(handle);
+    //
+     const { elements, templateList } = storeToRefs(store);
+     this.elements = elements;
+     this.template = templateList;
+
   }
-}
-
-//const url = useUrl();
-//const { data } = await axios.post( url.getUrl('super-filter/fields'), params);
-
-//const elements = await url.fetchData();
-//console.log(fetch);
-const {get, loading, error} = filter((params, method) => store.action(params, method));
+};
 
 </script>
 
 <template>
-  <div class="w-full flex border-blue-500">
-    <div class="flex-auto bg-white h-5 w-25 block h-48 w-1/3">--</div>
-    <div class="flex-auto bg-white h-full">
-      <h1>List Entries</h1>
+  xxx
+  <v-runtime-template :template="template" ></v-runtime-template>
 
-      <span v-if="loading">Loading...</span>
-      <ul v-if="elements">
-        <li v-for="item in elements.items" :key="item.id">
-          {{ item.title }}
-        </li>
-      </ul>
+<!--  <div class="w-full flex border-blue-500">-->
+<!--    <div class="flex-auto bg-white h-5 w-25 block h-48 w-1/3">&#45;&#45;</div>-->
+<!--    <div class="flex-auto bg-white h-full">-->
+<!--      <h1>List Entries</h1>-->
 
-      <button @click="get(params, 'next')">Next</button>
-      -
-      <button @click="get(params, 'back')">Back</button>
-    </div>
-  </div>
+<!--      <span v-if="loading">Loading...</span>-->
+<!--      <ul v-if="elements">-->
+<!--        <li v-for="item in elements.items" :key="item.id">-->
+<!--          {{ item.title }}-->
+<!--        </li>-->
+<!--      </ul>-->
+
+<!--      <button @click="get(params, 'next')">Next</button>-->
+<!--      - -->
+<!--      <button @click="get(params, 'back')">Back</button>-->
+<!--    </div>-->
+<!--  </div>-->
 </template>
 
 <style scoped lang="scss">

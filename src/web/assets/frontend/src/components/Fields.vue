@@ -1,11 +1,9 @@
 <script>
 
-import {mapActions, storeToRefs} from 'pinia'
+import { storeToRefs} from 'pinia'
 import { useEntriesStore } from "../stores/entries";
 import Field from "./Field.vue";
 import VRuntimeTemplate from "vue3-runtime-template";
-import template from "../composables/template";
-import {inject} from "vue";
 import SearchField from "./SearchField.vue";
 export default {
   data: () => ({
@@ -13,10 +11,15 @@ export default {
     elements: {},
     fields: {},
     searchFieldsInfo: {},
-    template: ''
+    template: '',
+    handle: ''
   }),
   methods: {
+    handleSubmitFilter() {
+      const store = useEntriesStore();
 
+      store.filterData();
+    },
   },
   components: {
     SearchField,
@@ -37,26 +40,22 @@ export default {
     }
 
     this.template = templateFields;
+
   }
-
-
 };
-
 
 </script>
 
 <template>
   <v-runtime-template :template="template" :template-props="fields" ></v-runtime-template>
 <!--  <div class="border-2 border-green-500">-->
-<!--    <h1>FIELDS Static!</h1>-->
+<!--    <h1>FIELDS Runtime!</h1>-->
 <!--    <div v-if="searchFieldsInfo">-->
 <!--      <div v-for="field in searchFieldsInfo" >-->
 <!--        <SearchField :handle="field.handle" />-->
-
-
-<!--        sfinfo: {{ field.value }}-->
 <!--      </div>-->
 <!--    </div>-->
+<!--    <button class="btn btn-outline-primary" id="filterButton" @click="handleSubmitFilter" >Submit Test</button>-->
 <!--  </div>-->
 </template>
 

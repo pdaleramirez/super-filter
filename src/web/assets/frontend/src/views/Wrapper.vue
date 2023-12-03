@@ -49,10 +49,10 @@ export default {
 <template>
 
   <v-runtime-template :template="template"></v-runtime-template>
-<!--  <h1>Super filter Static</h1>-->
+<!--  <h1>Super filter static</h1>-->
 <!--  <div class="grid grid-cols-2 border-blue-500">-->
 <!--    <div>-->
-<!--      <Fields />-->
+<!--      <Fields/>-->
 
 <!--    </div>-->
 <!--    <div>-->
@@ -60,6 +60,7 @@ export default {
 
 <!--    </div>-->
 <!--  </div>-->
+
 </template>
 
 <style scoped lang="scss">

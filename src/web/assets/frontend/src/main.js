@@ -4,9 +4,6 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import './assets/tailwind.css'
 
-
-
-
 const elements = document.querySelectorAll('.searchApp');
 elements.forEach((element) => {
     const app = createApp(App);
