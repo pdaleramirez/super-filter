@@ -5,6 +5,7 @@ import { useEntriesStore } from "../stores/entries";
 import Field from "./Field.vue";
 import VRuntimeTemplate from "vue3-runtime-template";
 import SearchField from "./SearchField.vue";
+import {inject} from "vue";
 export default {
   data: () => ({
     name: "Mellow",
@@ -18,7 +19,7 @@ export default {
     handleSubmitFilter() {
       const store = useEntriesStore();
 
-      store.filterData();
+      store.filterData(this.handle);
     },
   },
   components: {
@@ -41,6 +42,9 @@ export default {
 
     this.template = templateFields;
 
+    this.handle = inject('handle');
+
+    //console.log('handle: ' + this.handle);
   }
 };
 
