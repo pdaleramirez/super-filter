@@ -601,8 +601,6 @@ class SearchTypes extends Component
      */
     public function getSearchFieldObjectById($id, $handle = false)
     {
-        $fieldObj = null;
-
         if (($customField = SuperFilter::$app->searchTypes->getCustomSearchFieldType($id))) {
             $this->setSearchFieldAttributes($customField, $id);
 

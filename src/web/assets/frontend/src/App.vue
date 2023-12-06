@@ -6,7 +6,11 @@
     <div>
 
     </div>
+
+
   </main>
+
+
 
 </template>
 
@@ -23,6 +27,7 @@ const store = useEntriesStore();
 const handle = inject('handle');
 store.handle = handle;
 const text = ref('');
+
 const {elements, searchFieldsInfo} = storeToRefs(store);
 
 onBeforeMount(() => {
@@ -40,9 +45,8 @@ const subscription = store.$subscribe((mutation, state) => {
     submit(handle, mutation, state.searchFieldsInfo)
   }
 });
-
 </script>
 
-<style scoped>
+<style>
 
 </style>

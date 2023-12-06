@@ -8,7 +8,6 @@ import SearchField from "./SearchField.vue";
 import {inject} from "vue";
 export default {
   data: () => ({
-    name: "Mellow",
     elements: {},
     fields: {},
     searchFieldsInfo: {},
@@ -52,15 +51,7 @@ export default {
 
 <template>
   <v-runtime-template :template="template" :template-props="fields" ></v-runtime-template>
-<!--  <div class="border-2 border-green-500">-->
-<!--    <h1>FIELDS Runtime!</h1>-->
-<!--    <div v-if="searchFieldsInfo">-->
-<!--      <div v-for="field in searchFieldsInfo" >-->
-<!--        <SearchField :handle="field.handle" />-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <button class="btn btn-outline-primary" id="filterButton" @click="handleSubmitFilter" >Submit Test</button>-->
-<!--  </div>-->
+
 </template>
 
 <style scoped lang="scss">

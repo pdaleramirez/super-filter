@@ -19,7 +19,10 @@ export const useEntriesStore = defineStore('entries', {
             config: {
                 currentPage: 1,
                 params: {
-                    fields: {}
+                    fields: {},
+                    options: {
+                        perPage: 2
+                    },
                 }
             },
 
@@ -67,26 +70,16 @@ export const useEntriesStore = defineStore('entries', {
             if (handle === null) {
                 handle = this.handle;
             }
-
-            let params = {
-                handle: '',
-                config: {
-                    currentPage: 1,
-                    params: {
-                        fields: {}
-                    }
-                },
-            };
-            params.handle = handle;
+            console.log(this.params)
+            this.params.handle = handle;
             for (const [key, field] of Object.entries(this.searchFieldsInfo)) {
                 if (this.searchFieldsInfo[key].value !== '') {
-                    params.config.params.fields[key] = this.searchFieldsInfo[key].value;
+                    this.params.config.params.fields[key] = this.searchFieldsInfo[key].value;
                 }
             }
 
-            const response = await axios.post(this.url.getUrl('super-filter/fields'), params);
-            console.log(response.data);
-            //
+            const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
+
              this.elements = response.data;
         },
         action(params, method) {

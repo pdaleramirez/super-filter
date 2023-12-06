@@ -1,7 +1,5 @@
 <script>
 
-
-import { mapActions } from 'pinia'
 import { useEntriesStore } from "../stores/entries";
 import SearchFields from "../components/SearchFields.vue";
 import AppMessage from "../components/AppMessage.vue";
@@ -11,14 +9,23 @@ import {inject} from "vue";
 import Fields from "../components/Fields.vue";
 import {storeToRefs} from "pinia";
 import template from "../composables/template";
+import filter from "../composables/filter";
 export default {
   data: () => ({
-    name: "Mellow",
+    handle: "",
     elements: {},
     template: '',
     searchFieldsInfo: '',
+    currentPage: 1,
   }),
   methods: {
+    onClickHandler(page) {
+      const store = useEntriesStore();
+      console.log('onclick')
+      console.log(store.params)
+      store.params.config.currentPage = page;
+      store.filterData(this.handle)
+    },
   },
   components: {
     SearchFields,
@@ -29,7 +36,9 @@ export default {
   },
   async mounted() {
 
-    const handle = inject('handle')
+    const handle = inject('handle');
+    this.handle = handle;
+
     const store = useEntriesStore();
     const templateReq = template((handle) => store.getTemplate(handle, 'main'));
     const templateField = template((handle) => store.getFieldTemplate(handle, 'fields'));
@@ -41,6 +50,7 @@ export default {
     this.elements = elements;
     this.template = templateContent;
 
+    this.filter = filter((params, method) => store.action(params, method));
   }
 };
 
@@ -63,6 +73,31 @@ export default {
 
 </template>
 
-<style scoped lang="scss">
+<style>
+
+.pagination-container {
+  display: flex;
+  column-gap: 10px;
+}
+.paginate-buttons {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: rgb(242, 242, 242);
+  border: 1px solid rgb(217, 217, 217);
+  color: black;
+}
+.paginate-buttons:hover {
+  background-color: #d8d8d8;
+}
+.active-page {
+  background-color: #3498db;
+  border: 1px solid #3498db;
+  color: white;
+}
+.active-page:hover {
+  background-color: #2988c8;
+}
 
 </style>

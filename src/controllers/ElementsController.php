@@ -21,13 +21,14 @@ class ElementsController extends Controller
     public function actionGetFields()
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
-        $bodyParams = Craft::$app->getRequest()->getBodyParams();
+
 		$this->setItemAttributes();
         $searchSetupService = SuperFilter::$app->searchTypes;
 
         $config = $searchSetupService->getConfigById($handle);
 
         $requestParams = Craft::$app->getRequest()->getBodyParam('config.params');
+        $config['currentPage'] = Craft::$app->getRequest()->getBodyParam('config.currentPage');
 
         if ($requestParams) {
             $config['params'] = $requestParams;
