@@ -21,7 +21,7 @@ export const useEntriesStore = defineStore('entries', {
                 params: {
                     fields: {},
                     options: {
-                        perPage: 2
+                        perPage: 1
                     },
                 }
             },
@@ -70,7 +70,7 @@ export const useEntriesStore = defineStore('entries', {
             if (handle === null) {
                 handle = this.handle;
             }
-            console.log(this.params)
+
             this.params.handle = handle;
             for (const [key, field] of Object.entries(this.searchFieldsInfo)) {
                 if (this.searchFieldsInfo[key].value !== '') {

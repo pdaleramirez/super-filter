@@ -4,7 +4,6 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import './assets/tailwind.css'
 import VueAwesomePaginate from "vue-awesome-paginate";
-import "vue-awesome-paginate/dist/style.css";
 
 const elements = document.querySelectorAll('.searchApp');
 elements.forEach((element) => {

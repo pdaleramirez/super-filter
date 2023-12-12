@@ -7,6 +7,7 @@ import VRuntimeTemplate from "vue3-runtime-template";
 import List from "../components/List.vue";
 import {inject} from "vue";
 import Fields from "../components/Fields.vue";
+import Paginate from "../components/Paginate.vue";
 import {storeToRefs} from "pinia";
 import template from "../composables/template";
 import filter from "../composables/filter";
@@ -21,8 +22,7 @@ export default {
   methods: {
     onClickHandler(page) {
       const store = useEntriesStore();
-      console.log('onclick')
-      console.log(store.params)
+
       store.params.config.currentPage = page;
       store.filterData(this.handle)
     },
@@ -31,6 +31,7 @@ export default {
     SearchFields,
     Fields,
     List,
+    Paginate,
     AppMessage,
     VRuntimeTemplate
   },
@@ -59,6 +60,11 @@ export default {
 <template>
 
   <v-runtime-template :template="template"></v-runtime-template>
+
+  <Paginate
+      :maxPagesShown=1
+      :show-breakpoint-buttons="false"
+  />
 <!--  <h1>Super filter static</h1>-->
 <!--  <div class="grid grid-cols-2 border-blue-500">-->
 <!--    <div>-->

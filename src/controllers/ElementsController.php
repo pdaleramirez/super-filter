@@ -11,6 +11,7 @@ use craft\web\Controller;
 use Craft;
 use Doctrine\Inflector\Rules\French\Inflectible;
 use pdaleramirez\superfilter\elements\SetupSearch;
+use pdaleramirez\superfilter\fields\Categories;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 
@@ -165,9 +166,22 @@ class ElementsController extends Controller
         $fields = [];
 
         if ($items !== null) {
+
             foreach ($items as $key => $item) {
+
                 if (is_int($item['id'])) {
                     $fieldObj = Craft::$app->getFields()->getFieldById($item['id']);
+
+                    $fieldObj = Craft::$app->getFields()->getFieldByHandle($fieldObj->handle);
+
+                    $searchField = SuperFilter::$app->searchTypes->getSearchFieldByObj($fieldObj);
+
+                    if ($searchField instanceof Categories) {
+                        $categories = $searchField->getElementQuery()->level(1)->all();
+                        $tree = [];
+                        $fields[$fieldObj->handle]['options'] = $searchField->getTree($categories, $tree);
+                    }
+
                     $fields[$fieldObj->handle]['name'] = $fieldObj->name;
                     $fields[$fieldObj->handle]['handle'] = $fieldObj->handle;
                     $fields[$fieldObj->handle]['type'] =  (new \ReflectionClass($fieldObj))->getShortName();;

@@ -13,13 +13,6 @@ const store = useEntriesStore();
 
 const { elements, templateFields, searchFieldsInfo, fieldValue } = storeToRefs(store);
 
-const getFieldValue = (e) => {
-
-  if (searchFieldsInfo.value) {
-   // searchFieldsInfo.value[props.handle].value = searchField.value;
-  }
-}
-
 const searchField = computed(() => {
   return searchFieldsInfo.value[props.handle];
 });
@@ -28,7 +21,16 @@ const searchField = computed(() => {
 <template>
 
     <div v-if="searchField">
-      <input type="text" @input="getFieldValue" v-model="searchField.value" /> {{  searchField.value }} {{ handle ?? '' }}
+      <template v-if="searchField.type === 'PlainText'">
+        <input type="text" v-model="searchField.value" />
+      </template>
+      <template v-if="searchField.type === 'Categories'">
+        <select v-model="searchField.value">
+          <option v-for="option in searchField.options" :value="option.value">{{ option.label }}</option>
+        </select>
+      </template>
+
+      {{  searchField.type }} {{ handle ?? '' }}
     </div>
 
 </template>
