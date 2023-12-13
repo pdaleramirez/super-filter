@@ -3,6 +3,7 @@
 import { useEntriesStore } from "../stores/entries";
 import {storeToRefs} from "pinia";
 import { ref,computed } from "vue";
+import TreeComponent from "./TreeComponent.vue";
 const props = defineProps({
   handle: { type: String },
 })
@@ -25,9 +26,11 @@ const searchField = computed(() => {
         <input type="text" v-model="searchField.value" />
       </template>
       <template v-if="searchField.type === 'Categories'">
-        <select v-model="searchField.value">
-          <option v-for="option in searchField.options" :value="option.value">{{ option.label }}</option>
-        </select>
+
+        <TreeComponent :handle="searchField.handle" :tree="searchField.options" />
+<!--        <select v-model="searchField.value">-->
+<!--          <option v-for="option in searchField.options" :value="option.id">{{ option.title }}</option>-->
+<!--        </select>-->
       </template>
 
       {{  searchField.type }} {{ handle ?? '' }}

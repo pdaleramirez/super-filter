@@ -112,6 +112,7 @@ class Categories extends ElementSearchField
                 'id' => $category->id,
                 'title' => $category->title,
                 'selected' => $selected,
+                'level' => $category->level
             ];
 
             $children = $category->getChildren()->all();

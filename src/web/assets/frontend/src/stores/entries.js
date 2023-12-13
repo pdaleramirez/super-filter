@@ -75,6 +75,8 @@ export const useEntriesStore = defineStore('entries', {
             for (const [key, field] of Object.entries(this.searchFieldsInfo)) {
                 if (this.searchFieldsInfo[key].value !== '') {
                     this.params.config.params.fields[key] = this.searchFieldsInfo[key].value;
+                } else {
+                    delete this.params.config.params.fields[key];
                 }
             }
 

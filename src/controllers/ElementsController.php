@@ -180,12 +180,16 @@ class ElementsController extends Controller
                         $categories = $searchField->getElementQuery()->level(1)->all();
                         $tree = [];
                         $fields[$fieldObj->handle]['options'] = $searchField->getTree($categories, $tree);
+
+                        $fields[$fieldObj->handle]['value'] = [];
+                    } else {
+                        $fields[$fieldObj->handle]['value'] = '';
                     }
 
                     $fields[$fieldObj->handle]['name'] = $fieldObj->name;
                     $fields[$fieldObj->handle]['handle'] = $fieldObj->handle;
                     $fields[$fieldObj->handle]['type'] =  (new \ReflectionClass($fieldObj))->getShortName();;
-                    $fields[$fieldObj->handle]['value'] =  '';
+
                 } elseif ($item['id'] === 'title') {
                     $fields['title']['name'] = 'Title';
                     $fields['title']['handle'] = 'title';
