@@ -42,8 +42,6 @@ const searchField = computed(() => {
 // Watch the selected property of each node
 tree.value.forEach(node => {
   watch(() => node.selected, (newValue, oldValue) => {
-    console.log(`Node ${node.title} selected changed from ${oldValue} to ${newValue}`);
-
     if (newValue) {
       // If the node is selected, add its id to searchField.value
       searchField.value.value.push(node.id);

@@ -27,9 +27,11 @@ export default function filter(fn) {
 
         let delayTimer;
         for (const [key, field] of fieldEntries) {
+
             if (mutation.events.target.handle === key) {
                 clearTimeout(delayTimer);
                 delayTimer = setTimeout(() => {
+
                     fn(handle, fieldEntries);
                 }, 500);
             }

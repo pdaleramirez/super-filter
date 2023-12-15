@@ -73,16 +73,18 @@ export const useEntriesStore = defineStore('entries', {
 
             this.params.handle = handle;
             for (const [key, field] of Object.entries(this.searchFieldsInfo)) {
-                if (this.searchFieldsInfo[key].value !== '') {
-                    this.params.config.params.fields[key] = this.searchFieldsInfo[key].value;
-                } else {
+
+                this.params.config.params.fields[key] = this.searchFieldsInfo[key].value;
+
+                if (this.searchFieldsInfo[key].value === '' || this.searchFieldsInfo[key].value.length <= 0) {
                     delete this.params.config.params.fields[key];
                 }
             }
 
             const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
 
-             this.elements = response.data;
+             this.elements.items = response.data.items;
+             this.elements.links = response.data.links;
         },
         action(params, method) {
             switch (method) {

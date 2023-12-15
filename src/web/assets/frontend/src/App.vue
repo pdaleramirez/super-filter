@@ -36,15 +36,15 @@ onBeforeMount(() => {
 
   //}, 2000);
 });
-const { submit } = filter((handle) => store.filterData(handle));
-
-let delayTimer;
-const subscription = store.$subscribe((mutation, state) => {
-
-  if (Object.entries(state.searchFieldsInfo).length > 0) {
-    submit(handle, mutation, state.searchFieldsInfo)
-  }
-});
+// const { submit } = filter((handle) => store.filterData(handle));
+//
+// let delayTimer;
+// const subscription = store.$subscribe((mutation, state) => {
+//
+//   if (Object.entries(state.searchFieldsInfo).length > 0) {
+//     submit(handle, mutation, state.searchFieldsInfo)
+//   }
+// });
 </script>
 
 <style>
