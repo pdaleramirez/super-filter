@@ -2,15 +2,16 @@
 import { useEntriesStore } from '../stores/entries';
 import {storeToRefs} from "pinia";
 import {onBeforeMount, ref} from "vue";
-import template from "../composables/template";
+import template from "../composables/useTemplate";
 import VRuntimeTemplate from "vue3-runtime-template";
 import AppMessage from "./AppMessage.vue";
+import useTemplate from "../composables/useTemplate";
 
 const props = defineProps(['handle']);
 const store = useEntriesStore();
 // const {get, loading, error } = template((handle) => store.getTemplate(handle));
-const testReq = template((handle) => store.getTestRequest(handle));
-const fieldReq = template((handle) => store.getFieldRequest(handle));
+const testReq = useTemplate((handle) => store.getTestRequest(handle));
+const fieldReq = useTemplate((handle) => store.getFieldRequest(handle));
 
 testReq.get(props.handle);
 fieldReq.get(props.handle);

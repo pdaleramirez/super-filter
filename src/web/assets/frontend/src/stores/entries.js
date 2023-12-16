@@ -1,4 +1,3 @@
-import {ref, computed} from 'vue'
 import {defineStore} from 'pinia'
 import axios from 'axios';
 import {useUrl} from "../helpers/url";
@@ -10,6 +9,7 @@ export const useEntriesStore = defineStore('entries', {
         searchFieldsInfo: [],
         templateContent: '',
         templateFields: '',
+        templateSingleField: {},
         templateList: '',
         fields: {},
         items: [],
@@ -66,6 +66,8 @@ export const useEntriesStore = defineStore('entries', {
             return this.elements;
         },
         async filterData(handle = null) {
+            console.log('handle')
+            console.log(handle)
 
             if (handle === null) {
                 handle = this.handle;
@@ -125,6 +127,15 @@ export const useEntriesStore = defineStore('entries', {
                 filename: filename
             });
             this.templateContent = response.data;
+
+            return response.data;
+        },
+        async getSingleFieldTemplate(handle, fieldHandle, filename) {
+            const response = await axios.post(this.url.getUrl('super-filter/template'), {
+                handle: handle,
+                filename: filename
+            });
+            this.templateSingleField[fieldHandle] = response.data;
 
             return response.data;
         },

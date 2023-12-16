@@ -17,11 +17,10 @@
 <script setup>
 
 import Wrapper from "./views/Wrapper.vue";
-import { ref, provide } from "vue";
+import { ref } from "vue";
 import { useEntriesStore } from "./stores/entries";
-import { onBeforeMount, onMounted, inject, watch} from "vue";
+import { onBeforeMount, inject } from "vue";
 import { storeToRefs } from "pinia";
-import filter from "./composables/filter";
 const store = useEntriesStore();
 
 const handle = inject('handle');

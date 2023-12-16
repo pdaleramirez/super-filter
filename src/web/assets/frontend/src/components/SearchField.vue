@@ -2,8 +2,10 @@
 
 import { useEntriesStore } from "../stores/entries";
 import {storeToRefs} from "pinia";
-import { ref,computed, watch } from "vue";
+import { computed, watch } from "vue";
 import TreeComponent from "./TreeComponent.vue";
+import PlainText from "./fields/PlainText.vue";
+import useFilter from "../composables/useFilter";
 const props = defineProps({
   handle: { type: String },
 })
@@ -18,12 +20,12 @@ const searchField = computed(() => {
   return searchFieldsInfo.value[props.handle];
 });
 
-watch(searchField.value, (newValue, oldValue) => {
-
-  console.log(newValue.value.length)
-  if (newValue.value.length > 0) {
-    store.filterData(store.handle);
-  }
+watch(searchField.value, (newValue) => {
+console.log('sss')
+   const { get } = useFilter((handle) => store.filterData(handle));
+   if (newValue.value.length > 0) {
+     get(store.handle)
+   }
 });
 
 
@@ -33,7 +35,8 @@ watch(searchField.value, (newValue, oldValue) => {
 
     <div v-if="searchField">
       <template v-if="searchField.type === 'PlainText'">
-        <input type="text" v-model="searchField.value" />
+
+        <PlainText :fieldHandle="searchField.handle" />
       </template>
       <template v-if="searchField.type === 'Categories'">
 

@@ -1,15 +1,15 @@
 import {ref} from "vue";
 
-export default function template(fn) {
+export default function useTemplate(fn) {
 
     const loading = ref(false)
     const error = ref(null)
 
-    const get = async (handle) => {
+    const get = async (...params) => {
         try {
             loading.value = true;
 
-            await fn(handle);
+            await fn(...params);
 
         } catch (err) {
             loading.value = false;

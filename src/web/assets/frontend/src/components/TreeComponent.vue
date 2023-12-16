@@ -12,6 +12,9 @@
 import {computed, ref, watch} from 'vue';
 import {useEntriesStore} from "../stores/entries";
 import {storeToRefs} from "pinia";
+let tree = ref(props.tree);
+let selected = ref(null);
+
 
 const props = defineProps({
   tree: {
@@ -27,9 +30,6 @@ const props = defineProps({
     default: ''
   }
 });
-
-let tree = ref(props.tree);
-let selected = ref(null);
 
 const store = useEntriesStore();
 

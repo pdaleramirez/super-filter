@@ -1,29 +1,10 @@
-<!--<script setup>-->
-<!--import {useEntriesStore} from '../stores/entries';-->
-<!--import filter from "../composables/filter";-->
-<!--import {storeToRefs} from "pinia";-->
-
-<!--const store = useEntriesStore();-->
-<!--const {elements, searchFieldsInfo} = storeToRefs(store);-->
-
-<!--const params = {-->
-<!--  handle: 'superFilterShows',-->
-<!--  config: {-->
-<!--    currentPage: 1-->
-<!--  }-->
-<!--}-->
-
-<!--const {get, loading, error} = filter((params, method) => store.action(params, method));-->
-
-<!--</script>-->
-
 <script>
 import {useEntriesStore} from '../stores/entries';
 import {storeToRefs} from "pinia";
 import VRuntimeTemplate from "vue3-runtime-template";
 import {inject} from "vue";
-import template from "../composables/template";
-import filter from "../composables/filter";
+import useFilter from "../composables/useFilter";
+import useTemplate from "../composables/useTemplate";
 
 export default {
   data: () => ({
@@ -44,13 +25,13 @@ export default {
   components: {
     VRuntimeTemplate
   },
-  mounted() {
+  async mounted() {
 
     const handle = inject('handle')
     const store = useEntriesStore();
-    const templateReq = template((handle) => store.getListTemplate(handle, 'list'));
+    const templateReq = useTemplate((handle) => store.getListTemplate(handle, 'list'));
 
-    templateReq.get(handle);
+    await templateReq.get(handle);
 
     const {elements, templateList} = storeToRefs(store);
     this.elements = elements;
@@ -63,7 +44,7 @@ export default {
       }
     }
 
-    this.filter = filter((params, method) => store.action(params, method));
+    this.filter = useFilter((params, method) => store.action(params, method));
   }
 };
 

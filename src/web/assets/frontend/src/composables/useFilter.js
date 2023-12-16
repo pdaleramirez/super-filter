@@ -1,11 +1,13 @@
 import {ref} from "vue";
 
-export default function filter(fn) {
+export default function useFilter(fn) {
 
     const loading = ref(false)
     const error = ref(null)
 
     const get = async (...params) => {
+        console.log('params');
+        console.log(params)
         try {
             loading.value = true;
             await fn(...params);

@@ -9,8 +9,8 @@ import {inject} from "vue";
 import Fields from "../components/Fields.vue";
 import Paginate from "../components/Paginate.vue";
 import {storeToRefs} from "pinia";
-import template from "../composables/template";
-import filter from "../composables/filter";
+import useFilter from "../composables/useFilter";
+import useTemplate from "../composables/useTemplate";
 export default {
   data: () => ({
     handle: "",
@@ -41,8 +41,8 @@ export default {
     this.handle = handle;
 
     const store = useEntriesStore();
-    const templateReq = template((handle) => store.getTemplate(handle, 'main'));
-    const templateField = template((handle) => store.getFieldTemplate(handle, 'fields'));
+    const templateReq = useTemplate((handle) => store.getTemplate(handle, 'main'));
+    const templateField = useTemplate((handle) => store.getFieldTemplate(handle, 'fields'));
 
     templateReq.get(handle);
     templateField.get(handle);
@@ -51,7 +51,7 @@ export default {
     this.elements = elements;
     this.template = templateContent;
 
-    this.filter = filter((params, method) => store.action(params, method));
+    this.filter = useFilter((params, method) => store.action(params, method));
   }
 };
 

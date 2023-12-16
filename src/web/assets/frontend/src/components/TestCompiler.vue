@@ -5,8 +5,6 @@
 </template>
 
 <script setup>
-import VRuntimeTemplate from "vue3-runtime-template";
-import AppMessage from "./AppMessage.vue";
 import {ref} from "vue";
 
 const name  = ref('Mellow');

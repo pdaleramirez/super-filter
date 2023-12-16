@@ -1,10 +1,12 @@
+<!--suppress ES6UnusedImports, ES6UnusedImports -->6UnusedImports -->
 <script setup>
 import {useEntriesStore} from '../stores/entries';
 import {storeToRefs} from "pinia";
 import {onBeforeMount, ref} from "vue";
-import template from "../composables/template";
+import template from "../composables/useTemplate";
 import VRuntimeTemplate from "vue3-runtime-template";
 import AppMessage from "./AppMessage.vue";
+import useTemplate from "../composables/useTemplate";
 
 const props = defineProps(['handle']);
 const store = useEntriesStore();

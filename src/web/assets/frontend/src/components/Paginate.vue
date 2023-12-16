@@ -1,8 +1,9 @@
 <script setup>
 import {useEntriesStore} from "../stores/entries";
-import template from "../composables/template";
+import template from "../composables/useTemplate";
 import {storeToRefs} from "pinia";
 import {usePaginateProps} from "../composables/usePaginateProps";
+
 const store = useEntriesStore();
 
 const {elements} = storeToRefs(store);
