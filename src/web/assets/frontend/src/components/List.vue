@@ -29,13 +29,13 @@ export default {
 
     const handle = inject('handle')
     const store = useEntriesStore();
-    const templateReq = useTemplate((handle) => store.getListTemplate(handle, 'list'));
+    const filename = 'list';
+    const template = useTemplate((handle) => store.getTemplate(handle, filename));
 
-    await templateReq.get(handle);
+    this.template = await template.get(handle, filename);
 
-    const {elements, templateList} = storeToRefs(store);
+    const { elements } = storeToRefs(store);
     this.elements = elements;
-    this.template = templateList;
 
     this.params = {
       handle: handle,

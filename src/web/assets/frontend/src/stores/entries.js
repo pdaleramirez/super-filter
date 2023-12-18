@@ -7,10 +7,7 @@ export const useEntriesStore = defineStore('entries', {
         handle: '',
         elements: [],
         searchFieldsInfo: [],
-        templateContent: '',
-        templateFields: '',
-        templateSingleField: {},
-        templateList: '',
+        templates: {},
         fields: {},
         items: [],
         fieldValue: '',
@@ -66,15 +63,12 @@ export const useEntriesStore = defineStore('entries', {
             return this.elements;
         },
         async filterData(handle = null) {
-            console.log('handle')
-            console.log(handle)
-
             if (handle === null) {
                 handle = this.handle;
             }
 
             this.params.handle = handle;
-            for (const [key, field] of Object.entries(this.searchFieldsInfo)) {
+            for (const [key] of Object.entries(this.searchFieldsInfo)) {
 
                 this.params.config.params.fields[key] = this.searchFieldsInfo[key].value;
 
@@ -87,18 +81,6 @@ export const useEntriesStore = defineStore('entries', {
 
              this.elements.items = response.data.items;
              this.elements.links = response.data.links;
-        },
-        action(params, method) {
-            switch (method) {
-                case 'next':
-                    return this.next(params);
-                    break;
-
-                case 'back':
-                    return this.back(params);
-                    break;
-
-            }
         },
         async next(params) {
             params.config.currentPage = params.config.currentPage + 1;
@@ -126,56 +108,7 @@ export const useEntriesStore = defineStore('entries', {
                 handle: handle,
                 filename: filename
             });
-            this.templateContent = response.data;
-
-            return response.data;
-        },
-        async getSingleFieldTemplate(handle, fieldHandle, filename) {
-            const response = await axios.post(this.url.getUrl('super-filter/template'), {
-                handle: handle,
-                filename: filename
-            });
-            this.templateSingleField[fieldHandle] = response.data;
-
-            return response.data;
-        },
-        async getFieldTemplate(handle, filename) {
-
-            const response = await axios.post(this.url.getUrl('super-filter/template'), {
-                handle: handle,
-                filename: filename
-            });
-            this.templateFields = response.data;
-
-            return response.data;
-        },
-        async getListTemplate(handle, filename) {
-
-            const response = await axios.post(this.url.getUrl('super-filter/template'), {
-                handle: handle,
-                filename: filename
-            });
-            this.templateList = response.data;
-
-            return response.data;
-        },
-
-        async getTestRequest(handle) {
-            const response = await axios.get('/api/test-api', {handle: handle}, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    //  "Access-Control-Allow-Origin": "*"
-                }
-            });
-            this.templateContent = response.data;
-
-            return response.data;
-        },
-
-        async getFieldRequest(handle) {
-            const response = await axios.get(this.url.getUrl('test-fields'), {handle: handle});
-            this.fields = response.data;
+            this.templates[filename] = response.data;
 
             return response.data;
         },

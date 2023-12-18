@@ -1,7 +1,6 @@
 <script>
 
 import { useEntriesStore } from "../stores/entries";
-import SearchFields from "../components/SearchFields.vue";
 import AppMessage from "../components/AppMessage.vue";
 import VRuntimeTemplate from "vue3-runtime-template";
 import List from "../components/List.vue";
@@ -28,7 +27,6 @@ export default {
     },
   },
   components: {
-    SearchFields,
     Fields,
     List,
     Paginate,
@@ -41,15 +39,14 @@ export default {
     this.handle = handle;
 
     const store = useEntriesStore();
-    const templateReq = useTemplate((handle) => store.getTemplate(handle, 'main'));
-    const templateField = useTemplate((handle) => store.getFieldTemplate(handle, 'fields'));
+    const filename = 'main';
+    const template = useTemplate((handle, filename) => store.getTemplate(handle, filename));
 
-    templateReq.get(handle);
-    templateField.get(handle);
+    this.template = await template.get(handle, filename);
 
-    const { elements, templateContent } = storeToRefs(store);
+    const { elements } = storeToRefs(store);
     this.elements = elements;
-    this.template = templateContent;
+
 
     this.filter = useFilter((params, method) => store.action(params, method));
   }

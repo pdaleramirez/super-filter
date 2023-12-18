@@ -6,8 +6,7 @@ export default function useFilter(fn) {
     const error = ref(null)
 
     const get = async (...params) => {
-        console.log('params');
-        console.log(params)
+
         try {
             loading.value = true;
             await fn(...params);

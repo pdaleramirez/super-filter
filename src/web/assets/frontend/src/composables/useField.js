@@ -11,8 +11,7 @@ export default function useField(handle = '') {
     const SearchField = computed(() => {
         return searchFieldsInfo.value[handle];
     });
-console.log('SearchField')
-console.log(SearchField)
+
     return {
         SearchField
     };

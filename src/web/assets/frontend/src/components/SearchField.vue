@@ -21,7 +21,7 @@ const searchField = computed(() => {
 });
 
 watch(searchField.value, (newValue) => {
-console.log('sss')
+
    const { get } = useFilter((handle) => store.filterData(handle));
    if (newValue.value.length > 0) {
      get(store.handle)

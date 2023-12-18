@@ -2,10 +2,10 @@
 
 import { storeToRefs} from 'pinia'
 import { useEntriesStore } from "../stores/entries";
-import Field from "./Field.vue";
 import VRuntimeTemplate from "vue3-runtime-template";
 import SearchField from "./SearchField.vue";
 import {inject} from "vue";
+import useTemplate from "../composables/useTemplate";
 export default {
   data: () => ({
     elements: {},
@@ -23,13 +23,17 @@ export default {
   },
   components: {
     SearchField,
-    Field,
     VRuntimeTemplate
   },
-  mounted() {
+  async mounted() {
+    const handle = inject('handle');
     const store = useEntriesStore();
 
-    const { elements, templateFields, searchFieldsInfo } = storeToRefs(store);
+    const filename = 'fields';
+    const template = useTemplate((handle) => store.getTemplate(handle, filename));
+    this.template = await template.get(handle, filename);
+
+    const { elements, searchFieldsInfo } = storeToRefs(store);
 
     if (elements.value.config !== undefined) {
       this.fields = elements.value.config.items.items;
@@ -38,12 +42,6 @@ export default {
     if (searchFieldsInfo !== undefined) {
       this.searchFieldsInfo = searchFieldsInfo;
     }
-
-    this.template = templateFields;
-
-    this.handle = inject('handle');
-
-    //console.log('handle: ' + this.handle);
   }
 };
 
