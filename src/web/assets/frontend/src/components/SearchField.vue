@@ -20,18 +20,6 @@ const searchField = computed(() => {
   return searchFieldsInfo.value[props.handle];
 });
 
-// watch(searchFieldsInfo.value[props.handle].value, (newValue, oldValue) => {
-//
-//     console.log('watch it')
-//     const { get } = useFilter((handle) => store.filterData(handle));
-//     get(store.handle)
-//     if (toRaw(newValue).type === 'PlainText') {
-//
-//       //get(store.handle)
-//     }
-// });
-
-
 </script>
 
 <template>

@@ -13,6 +13,7 @@ import {computed, ref, watch} from 'vue';
 import {useEntriesStore} from "../stores/entries";
 import {storeToRefs} from "pinia";
 import useField from "../composables/useField";
+import useFilter from "../composables/useFilter";
 let tree = ref(props.tree);
 let selected = ref(null);
 
@@ -54,7 +55,9 @@ tree.value.forEach(node => {
         SearchField.value.value.splice(index, 1);
       }
     }
-    console.log(SearchField.value.value)
+
+    const {get} = useFilter((handle) => store.filterData(handle));
+    get(store.handle)
   });
 });
 </script>

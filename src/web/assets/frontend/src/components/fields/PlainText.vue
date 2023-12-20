@@ -41,10 +41,6 @@ export default {
   watch: {
     SearchField: {
       handler: function (newValue, oldValue) {
-        console.log('watch searcg')
-        console.log(newValue)
-
-
         const {get} = useFilter((handle) => this.store.filterData(handle));
         get(this.store.handle)
       },

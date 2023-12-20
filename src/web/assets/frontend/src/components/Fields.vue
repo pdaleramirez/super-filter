@@ -4,8 +4,10 @@ import { storeToRefs} from 'pinia'
 import { useEntriesStore } from "../stores/entries";
 import VRuntimeTemplate from "vue3-runtime-template";
 import SearchField from "./SearchField.vue";
-import {inject} from "vue";
+import { inject, watch } from "vue";
 import useTemplate from "../composables/useTemplate";
+import useFilter from "../composables/useFilter";
+
 export default {
   data: () => ({
     elements: {},
@@ -42,6 +44,18 @@ export default {
     if (searchFieldsInfo !== undefined) {
       this.searchFieldsInfo = searchFieldsInfo;
     }
+
+    // if (Object.keys(searchFieldsInfo.value).length > 0) {
+    //
+    //   for (let value of Object.values(searchFieldsInfo.value)) {
+    //       watch(value, (newValue, oldValue) => {
+    //          const { get } = useFilter((handle) => store.filterData(handle));
+    //
+    //           get(store.handle)
+    //
+    //       });
+    //   }
+    // }
   }
 };
 

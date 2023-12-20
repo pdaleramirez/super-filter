@@ -6,7 +6,7 @@ export const useEntriesStore = defineStore('entries', {
     state: () => ({
         handle: '',
         elements: [],
-        searchFieldsInfo: [],
+        searchFieldsInfo: {},
         templates: {},
         fields: {},
         items: [],
