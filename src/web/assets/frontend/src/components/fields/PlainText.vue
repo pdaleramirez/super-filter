@@ -1,9 +1,10 @@
 <script>
 import useField from "../../composables/useField";
-import { useEntriesStore } from "../../stores/entries";
+import {useEntriesStore} from "../../stores/entries";
 import useTemplate from "../../composables/useTemplate";
-import { inject, ref } from "vue";
+import {inject, ref} from "vue";
 import VRuntimeTemplate from "vue3-runtime-template";
+import useFilter from "../../composables/useFilter";
 
 export default {
   data: () => ({
@@ -11,6 +12,7 @@ export default {
     template: '',
     elements: {},
     SearchField: {},
+    store: {},
   }),
   props: {
     fieldHandle: {
@@ -24,16 +26,31 @@ export default {
   async mounted() {
 
     const appHandle = inject('handle');
-     const store = useEntriesStore();
-     const filename = 'fields/plaintext';
-     const templateReq = useTemplate((appHandle, filename) => store.getTemplate(appHandle, filename));
+    const store = useEntriesStore();
+    const filename = 'fields/plaintext';
+    const templateReq = useTemplate((appHandle, filename) => store.getTemplate(appHandle, filename));
 
-     this.template = await templateReq.get(appHandle, filename);
+    this.template = await templateReq.get(appHandle, filename);
 
-     const { SearchField } = useField(this.fieldHandle);
-      this.SearchField = SearchField;
+    const {SearchField} = useField(this.fieldHandle);
+    this.SearchField = SearchField;
 
-  }
+    this.store = store;
+  },
+  // Watch for Search.value changes
+  watch: {
+    SearchField: {
+      handler: function (newValue, oldValue) {
+        console.log('watch searcg')
+        console.log(newValue)
+
+
+        const {get} = useFilter((handle) => this.store.filterData(handle));
+        get(this.store.handle)
+      },
+      deep: true
+    }
+  },
 };
 </script>
 
@@ -43,7 +60,7 @@ export default {
 </template>
 
 <style>
-  input {
-    border: 1px solid red;
-  }
+input {
+  border: 1px solid red;
+}
 </style>
