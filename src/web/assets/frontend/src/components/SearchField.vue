@@ -3,14 +3,13 @@
 import { useEntriesStore } from "../stores/entries";
 import {storeToRefs} from "pinia";
 import { computed, watch, toRaw, ref } from "vue";
-import TreeComponent from "./TreeComponent.vue";
+import TreeComponent from "./fields/TreeComponent.vue";
 import PlainText from "./fields/PlainText.vue";
 import useFilter from "../composables/useFilter";
+import Dropdown from "./fields/Dropdown.vue";
 const props = defineProps({
   handle: { type: String },
 })
-
-//const fieldValue = ref('');
 
 const store = useEntriesStore();
 
@@ -33,13 +32,15 @@ const searchField = computed(() => {
         <TreeComponent :fieldHandle="searchField.handle" :tree="searchField.options" />
 
       </template>
-
+      <template v-if="searchField.type === 'Dropdown'">
+        <Dropdown :fieldHandle="searchField.handle" :options="searchField.options" /> {{ searchField.handle }}
+      </template>
     </div>
 
 </template>
 
 <style scoped>
-  input {
+  select {
     border: 1px solid red;
   }
 </style>

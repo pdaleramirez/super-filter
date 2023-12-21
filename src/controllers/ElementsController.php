@@ -12,6 +12,7 @@ use Craft;
 use Doctrine\Inflector\Rules\French\Inflectible;
 use pdaleramirez\superfilter\elements\SetupSearch;
 use pdaleramirez\superfilter\fields\Categories;
+use pdaleramirez\superfilter\fields\Dropdown;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 
@@ -182,8 +183,9 @@ class ElementsController extends Controller
                         $fields[$fieldObj->handle]['options'] = $searchField->getTree($categories, $tree);
 
                         $fields[$fieldObj->handle]['value'] = [];
-                    } else {
-                        $fields[$fieldObj->handle]['value'] = '';
+                    } elseif ($searchField instanceof Dropdown) {
+                        $fields[$fieldObj->handle]['options'] = $searchField->getOptions();
+                        $fields[$fieldObj->handle]['value'] = "";
                     }
 
                     $fields[$fieldObj->handle]['name'] = $fieldObj->name;

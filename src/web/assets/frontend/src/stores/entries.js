@@ -51,7 +51,6 @@ export const useEntriesStore = defineStore('entries', {
         },
         async fetchData(handle) {
             this.params.handle = handle;
-            //this.params.config.params.fields.title = 'attack';
 
             const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
             const searchFieldsInfoResponse = await axios.post(this.url.getUrl('super-filter/search-fields-info'), this.params);
@@ -68,26 +67,26 @@ export const useEntriesStore = defineStore('entries', {
             }
 
             this.params.handle = handle;
+            console.log('response')
 
-            for (const [key] of Object.entries(this.searchFieldsInfo)) {
-
-
-
-                if (this.searchFieldsInfo[key].value !== '' && this.searchFieldsInfo[key].value.length > 0) {
-                    this.params.config.params.fields[key] = this.searchFieldsInfo[key].value;
+            for (let field of Object.values(this.searchFieldsInfo)) {
+                if (field.handle === 'superFilterShowTypes') {
+                    console.log(field.value)
                 }
 
+                 if (field.value !== undefined && field.value.length > 0) {
+                     this.params.config.params.fields[field.handle] = field.value;
+                 }
 
-                if (this.searchFieldsInfo[key].value.length <= 0) {
-                    delete this.params.config.params.fields[key];
+                if ((field.value !== undefined && (field.value.length <= 0 || field.value === '')) || field.value === undefined) {
+                    delete this.params.config.params.fields[field.handle];
                 }
             }
+            console.log('end response')
+            const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
 
-
-                const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
-
-                this.elements.items = response.data.items;
-                this.elements.links = response.data.links;
+            this.elements.items = response.data.items;
+            this.elements.links = response.data.links;
 
 
         },

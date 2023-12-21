@@ -9,11 +9,10 @@
 </template>
 
 <script setup>
-import {computed, ref, watch} from 'vue';
-import {useEntriesStore} from "../stores/entries";
-import {storeToRefs} from "pinia";
-import useField from "../composables/useField";
-import useFilter from "../composables/useFilter";
+import { ref, watch } from 'vue';
+import { useEntriesStore } from "../../stores/entries";
+import { storeToRefs } from "pinia";
+import useField from "../../composables/useField";
 let tree = ref(props.tree);
 let selected = ref(null);
 
@@ -36,10 +35,6 @@ const props = defineProps({
 const store = useEntriesStore();
 
  const { searchFieldsInfo } = storeToRefs(store);
-//
-// const searchField = computed(() => {
-//   return searchFieldsInfo.value[props.fieldHandle];
-// });
 
 const {SearchField} = useField(props.fieldHandle)
 
@@ -55,9 +50,6 @@ tree.value.forEach(node => {
         SearchField.value.value.splice(index, 1);
       }
     }
-
-    const {get} = useFilter((handle) => store.filterData(handle));
-    get(store.handle)
   });
 });
 </script>
