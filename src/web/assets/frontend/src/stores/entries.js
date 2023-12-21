@@ -67,12 +67,8 @@ export const useEntriesStore = defineStore('entries', {
             }
 
             this.params.handle = handle;
-            console.log('response')
 
             for (let field of Object.values(this.searchFieldsInfo)) {
-                if (field.handle === 'superFilterShowTypes') {
-                    console.log(field.value)
-                }
 
                  if (field.value !== undefined && field.value.length > 0) {
                      this.params.config.params.fields[field.handle] = field.value;
@@ -82,7 +78,7 @@ export const useEntriesStore = defineStore('entries', {
                     delete this.params.config.params.fields[field.handle];
                 }
             }
-            console.log('end response')
+
             const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
 
             this.elements.items = response.data.items;
