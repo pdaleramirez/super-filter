@@ -5,7 +5,6 @@ import {storeToRefs} from "pinia";
 import { computed, watch, toRaw, ref } from "vue";
 import TreeComponent from "./fields/TreeComponent.vue";
 import PlainText from "./fields/PlainText.vue";
-import useFilter from "../composables/useFilter";
 import Dropdown from "./fields/Dropdown.vue";
 const props = defineProps({
   handle: { type: String },

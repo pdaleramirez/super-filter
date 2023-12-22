@@ -27,9 +27,9 @@ export default {
     const appHandle = inject('handle');
     const store = useEntriesStore();
     const filename = 'fields/plaintext';
-    const templateReq = useTemplate((appHandle, filename) => store.getTemplate(appHandle, filename));
+    const template = useTemplate((appHandle, filename) => store.getTemplate(appHandle, filename));
 
-    this.template = await templateReq.get(appHandle, filename);
+    this.template = await template.get(appHandle, filename);
 
     const {SearchField} = useField(this.fieldHandle);
 
@@ -39,7 +39,6 @@ export default {
 </script>
 
 <template>
-
   <v-runtime-template :template="template"></v-runtime-template>
 </template>
 

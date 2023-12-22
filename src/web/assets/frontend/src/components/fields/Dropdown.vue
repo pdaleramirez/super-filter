@@ -31,9 +31,9 @@ export default {
     const appHandle = inject('handle');
     const store = useEntriesStore();
     const filename = 'fields/dropdown';
-    const templateReq = useTemplate((appHandle, filename) => store.getTemplate(appHandle, filename));
+    const template = useTemplate((appHandle, filename) => store.getTemplate(appHandle, filename));
 
-    this.template = await templateReq.get(appHandle, filename);
+    this.template = await template.get(appHandle, filename);
 
     const {SearchField} = useField(this.fieldHandle);
 
@@ -43,10 +43,8 @@ export default {
 </script>
 
 <template>
-  <!-- Create a dropdown selection from options props -->
-  <select v-model="SearchField.value">
-    <option v-for="option in options" :value="option.value">{{ option.label }}</option>
-  </select>
+  <v-runtime-template :template="template"></v-runtime-template>
+
 </template>
 
 <style>
