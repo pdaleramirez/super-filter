@@ -44,6 +44,13 @@ class Title extends SearchField
         return $query->search("title:*$value*");
     }
 
+    public function getSearchParams($value)
+    {
+        $handle = $this->object->handle;
+
+        return "$handle::*$value*";
+    }
+
     public function getHtml()
     {
         $template = SuperFilter::$app->searchTypes->getTemplate('fields/plaintext');

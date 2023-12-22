@@ -740,8 +740,6 @@ class SearchTypes extends Component
             foreach ($fields as $handle => $value) {
                 $fieldType = SuperFilter::$app->searchTypes->getSearchFieldObjectById($handle, true);
 
-                $fieldType->getQueryParams($query, $value);
-
                 $searchParams = $fieldType->getSearchParams($value);
 
                 if ($searchParams) {
@@ -764,7 +762,8 @@ class SearchTypes extends Component
 
         if ($searchQuery) {
             $searchOperator = $operator == 'and' ? ' ' : ' OR ';
-            $query->search(implode($searchOperator, $searchQuery));
+            $searchPattern = implode($searchOperator, $searchQuery);
+            $query->search($searchPattern);
         }
 
         if ($related) {
