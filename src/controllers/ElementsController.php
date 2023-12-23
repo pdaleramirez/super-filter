@@ -24,7 +24,7 @@ class ElementsController extends Controller
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
 
-		$this->setItemAttributes();
+        $this->setItemAttributes();
         $searchSetupService = SuperFilter::$app->searchTypes;
 
         $config = $searchSetupService->getConfigById($handle);
@@ -40,7 +40,7 @@ class ElementsController extends Controller
 
         $config = $searchSetupService->getConfig();
 
-        $config['params']['fields'] =  $searchSetupService->getInitFields($config);
+        $config['params']['fields'] = $searchSetupService->getInitFields($config);
 
         return Json::encode([
             'config' => $config,
@@ -50,24 +50,24 @@ class ElementsController extends Controller
         ]);
     }
 
-	private function setItemAttributes()
-	{
-		$searchSetupService = SuperFilter::$app->searchTypes;
-		$itemAttributes = Craft::$app->getRequest()->getBodyParam('itemAttributes');
+    private function setItemAttributes()
+    {
+        $searchSetupService = SuperFilter::$app->searchTypes;
+        $itemAttributes = Craft::$app->getRequest()->getBodyParam('itemAttributes');
 
-		if ($itemAttributes !== null) {
-			$itemAttributes = Json::decode($itemAttributes);
+        if ($itemAttributes !== null) {
+            $itemAttributes = Json::decode($itemAttributes);
 
-			if ($itemAttributes) {
-				$searchSetupService->setItemAttributes($itemAttributes);
-			}
-		}
-	}
+            if ($itemAttributes) {
+                $searchSetupService->setItemAttributes($itemAttributes);
+            }
+        }
+    }
 
     public function actionFilter()
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
-		$this->setItemAttributes();
+        $this->setItemAttributes();
         $searchSetupService = SuperFilter::$app->searchTypes;
 
         $config = $searchSetupService->getConfigById($handle);
@@ -170,34 +170,15 @@ class ElementsController extends Controller
 
             foreach ($items as $key => $item) {
 
-                if (is_int($item['id'])) {
-                    $fieldObj = Craft::$app->getFields()->getFieldById($item['id']);
+                $searchField = SuperFilter::$app->searchTypes->getSearchFieldObjectById($item['id']);
 
-                    $fieldObj = Craft::$app->getFields()->getFieldByHandle($fieldObj->handle);
+                $object = $searchField->getObject();
+                $searchFieldInfo['name'] = $object->name;
+                $searchFieldInfo['handle'] = $object->handle;
+                $searchFieldInfo['type'] = $searchField->getShortName();
 
-                    $searchField = SuperFilter::$app->searchTypes->getSearchFieldByObj($fieldObj);
-
-                    if ($searchField instanceof Categories) {
-                        $categories = $searchField->getElementQuery()->level(1)->all();
-                        $tree = [];
-                        $fields[$fieldObj->handle]['options'] = $searchField->getTree($categories, $tree);
-
-                        $fields[$fieldObj->handle]['value'] = [];
-                    } elseif ($searchField instanceof Dropdown) {
-                        $fields[$fieldObj->handle]['options'] = $searchField->getOptions();
-                        $fields[$fieldObj->handle]['value'] = "";
-                    }
-
-                    $fields[$fieldObj->handle]['name'] = $fieldObj->name;
-                    $fields[$fieldObj->handle]['handle'] = $fieldObj->handle;
-                    $fields[$fieldObj->handle]['type'] =  (new \ReflectionClass($fieldObj))->getShortName();;
-
-                } elseif ($item['id'] === 'title') {
-                    $fields['title']['name'] = 'Title';
-                    $fields['title']['handle'] = 'title';
-                    $fields['title']['type'] = "PlainText";
-                    $fields['title']['value'] = '';
-                }
+                $fieldInfo = array_merge($searchFieldInfo, $searchField->getSearchFieldsInfo());
+                $fields[$object->handle] = $fieldInfo;
             }
         }
 

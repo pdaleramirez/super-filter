@@ -60,4 +60,16 @@ class Title extends SearchField
                'field' => $this
             ]);
     }
+
+    public function getSearchFieldsInfo(): array
+    {
+        return [
+            'value' => ""
+        ];
+    }
+
+    public function getShortName(): string
+    {
+        return "Title";
+    }
 }

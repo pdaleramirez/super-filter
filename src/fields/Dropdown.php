@@ -32,4 +32,12 @@ class Dropdown extends OptionSearchField
                'options' => $this->getOptions()
             ]);
     }
+
+    public function getSearchFieldsInfo(): array
+    {
+        return [
+            'options' => $this->getOptions(),
+            'value' => ""
+        ];
+    }
 }

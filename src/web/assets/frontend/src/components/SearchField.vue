@@ -28,12 +28,19 @@ const searchField = computed(() => {
         <PlainText :fieldHandle="searchField.handle" />
       </template>
       <template v-if="searchField.type === 'Categories'">
-        <TreeComponent :fieldHandle="searchField.handle" :tree="searchField.options" />
 
+        <template v-if="searchField.limit === 1">
+          <Dropdown :fieldHandle="searchField.handle" :options="searchField.options" />
+        </template>
+        <template v-else>
+          <TreeComponent :fieldHandle="searchField.handle" :tree="searchField.options" />
+        </template>
       </template>
       <template v-if="searchField.type === 'Dropdown'">
-        <Dropdown :fieldHandle="searchField.handle" :options="searchField.options" /> {{ searchField.handle }}
+        <Dropdown :fieldHandle="searchField.handle" :options="searchField.options" />
       </template>
+
+      {{ searchField.handle }} {{ searchField.type }}
     </div>
 
 </template>

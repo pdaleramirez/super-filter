@@ -114,4 +114,18 @@ abstract class ElementSearchField extends SearchField
     {
         return $element->all();
     }
+
+    protected function getOptions(): array
+    {
+        $elements = $this->getElements();
+        $options = [];
+        foreach ($elements as $element) {
+            $options[] = [
+                'value' => $element['id'],
+                'label' => $element['title'],
+            ];
+        }
+
+        return $options;
+    }
 }

@@ -172,4 +172,22 @@ class Categories extends ElementSearchField
 
 		return array_merge([$operator], $elements);
 	}
+
+    public function getSearchFieldsInfo(): array
+    {
+        $categories = $this->getElementQuery()->level(1)->all();
+        $tree = [];
+
+        if ($this->object->branchLimit === 1) {
+            $options = $this->getOptions();
+        } else {
+            $options = $this->getTree($categories, $tree);
+        }
+
+        return [
+            'options' => $options,
+            'value' => [],
+            'limit' => $this->object->branchLimit
+        ];
+    }
 }
