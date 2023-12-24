@@ -6,6 +6,7 @@ import { computed, watch, toRaw, ref } from "vue";
 import TreeComponent from "./fields/TreeComponent.vue";
 import PlainText from "./fields/PlainText.vue";
 import Dropdown from "./fields/Dropdown.vue";
+import Checkboxes from "./fields/Checkboxes.vue";
 const props = defineProps({
   handle: { type: String },
 })
@@ -39,8 +40,11 @@ const searchField = computed(() => {
       <template v-if="searchField.type === 'Dropdown'">
         <Dropdown :fieldHandle="searchField.handle" :options="searchField.options" />
       </template>
+      <template v-if="searchField.type === 'Tags'">
+        <Checkboxes :fieldHandle="searchField.handle" :options="searchField.options" />
+      </template>
 
-      {{ searchField.handle }} {{ searchField.type }}
+
     </div>
 
 </template>

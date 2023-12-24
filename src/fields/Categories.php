@@ -186,7 +186,8 @@ class Categories extends ElementSearchField
 
         return [
             'options' => $options,
-            'value' => [],
+            'selectionLabel' => $this->object->selectionLabel,
+            'value' => $this->object->branchLimit === 1 ? "" : [],
             'limit' => $this->object->branchLimit
         ];
     }

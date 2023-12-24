@@ -70,7 +70,7 @@ export const useEntriesStore = defineStore('entries', {
 
             for (let field of Object.values(this.searchFieldsInfo)) {
 
-                 if (field.value !== undefined && field.value.length > 0) {
+                 if (field.value !== undefined && (field.value.length > 0 || field.value !== '')) {
                      this.params.config.params.fields[field.handle] = field.value;
                  }
 
