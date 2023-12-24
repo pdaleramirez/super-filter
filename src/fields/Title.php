@@ -70,6 +70,6 @@ class Title extends SearchField
 
     public function getShortName(): string
     {
-        return "Title";
+        return "PlainText";
     }
 }
