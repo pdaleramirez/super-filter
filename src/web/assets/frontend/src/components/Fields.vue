@@ -48,13 +48,18 @@ export default {
     if (Object.keys(searchFieldsInfo.value).length > 0) {
       for (let value of Object.values(searchFieldsInfo.value)) {
         watch(value, (newValue, oldValue) => {
-console.log('watching', newValue, oldValue);
           const { get } = useFilter((handle) => store.filterData(handle));
           get(store.handle)
-
         });
       }
     }
+
+    if (elements.value.config && elements.value.config.params) {
+      watch(() => elements.value.config.params.sort, (newValue, oldValue) => {
+        const { get } = useFilter((handle) => store.filterData(handle));
+        get(store.handle)
+      });
+   }
   }
 };
 

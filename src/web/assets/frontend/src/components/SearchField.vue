@@ -7,6 +7,8 @@ import TreeComponent from "./fields/TreeComponent.vue";
 import PlainText from "./fields/PlainText.vue";
 import Dropdown from "./fields/Dropdown.vue";
 import Checkboxes from "./fields/Checkboxes.vue";
+import Radiobuttons from "./fields/Radiobuttons.vue";
+import Number from "./fields/Number.vue";
 const props = defineProps({
   handle: { type: String },
 })
@@ -44,7 +46,13 @@ const searchField = computed(() => {
         <Checkboxes :fieldHandle="searchField.handle" :options="searchField.options" />
       </template>
 
-
+      <template v-if="searchField.type === 'RadioButtons'">
+        <Radiobuttons :fieldHandle="searchField.handle" :options="searchField.options" />
+      </template>
+      <template v-if="searchField.type === 'Number'">
+        <Number :fieldHandle="searchField.handle" />
+      </template>
+      {{ searchField.handle }} {{ searchField.type }}
     </div>
 
 </template>

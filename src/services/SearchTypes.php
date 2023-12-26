@@ -248,14 +248,16 @@ class SearchTypes extends Component
         $sortOptions = [];
         $count = 0;
         foreach ($elementSortOptions as $key => $sortOption) {
+
             if (is_string($key)) {
                 $defaultSortOptions[$count]['name'] = $sortOption;
                 $defaultSortOptions[$count]['attribute'] = $key;
                 $defaultSortOptions[$count]['orderBy']   = $key;
             } else {
-                if (in_array($sortOption['orderBy'], ['elements.dateCreated', 'elements.dateUpdated'])) {
+
+                if (in_array($sortOption['orderBy'], ['dateCreated', 'dateUpdated'])) {
                     $defaultSortOptions[$count]['name'] = $sortOption['label'];
-                    $defaultSortOptions[$count]['attribute'] = $sortOption['attribute'];
+                    $defaultSortOptions[$count]['attribute'] = $sortOption['orderBy'];
                     $defaultSortOptions[$count]['orderBy'] = $sortOption['orderBy'];
                 }
 
@@ -272,11 +274,7 @@ class SearchTypes extends Component
                         // yii/db/ExpressionInterface
                         return $var;
                     };
-                }
-                else if (is_string($orderBy)) {
-                    $attribute = str_replace('field_', '', $orderBy);
-                }
-                else {
+                } else {
                     $attribute = null;
                 }
 
@@ -433,7 +431,7 @@ class SearchTypes extends Component
 		}
 
         $paginator = new Paginator($elementQuery, [
-            'currentPage' => $config['currentPage'],
+            'currentPage' => (int) $config['currentPage'],
             'pageSize'    => $config['options']['perPage'] != '' ? $config['options']['perPage'] : static::PAGE_SIZE
         ]);
 

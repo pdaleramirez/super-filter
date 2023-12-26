@@ -12,7 +12,7 @@ use yii\db\QueryInterface;
 
 abstract class OptionSearchField extends SearchField
 {
-
+    use PlainSearchTrait;
     public function getOptions()
     {
         /**
@@ -40,15 +40,16 @@ abstract class OptionSearchField extends SearchField
         return $query;
     }
 
-    public function getSearchParams($value)
-    {
-        $handle = $this->object->handle;
-
-        return "$handle::'*$value'";
-    }
-
     public function getInitValue()
     {
         return '';
+    }
+
+    public function getSearchFieldsInfo(): array
+    {
+        return [
+            'options' => $this->getOptions(),
+            'value' => ""
+        ];
     }
 }

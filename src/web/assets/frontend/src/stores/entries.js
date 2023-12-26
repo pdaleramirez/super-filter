@@ -79,6 +79,10 @@ export const useEntriesStore = defineStore('entries', {
                 }
             }
 
+            if (this.elements.config.params.sort !== undefined) {
+                this.params.config.params.sort = this.elements.config.params.sort;
+            }
+
             const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
 
             this.elements.items = response.data.items;

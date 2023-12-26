@@ -4,11 +4,14 @@ namespace pdaleramirez\superfilter\fields;
 
 use Craft;
 use craft\fields\Number as NumberCraft;
+use pdaleramirez\superfilter\base\PlainSearchTrait;
 use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\SuperFilter;
 
 class Number extends SearchField
 {
+    use PlainSearchTrait;
+
     public $initValue = '';
     public function fieldType()
     {
