@@ -8,6 +8,7 @@ use craft\base\Element;
 use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\base\Serializable;
+use craft\db\Connection;
 use craft\db\Paginator;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Json;
@@ -254,31 +255,27 @@ class SearchTypes extends Component
                 $defaultSortOptions[$count]['attribute'] = $key;
                 $defaultSortOptions[$count]['orderBy']   = $key;
             } else {
+                $orderBy = $sortOption['orderBy'];
 
                 if (in_array($sortOption['orderBy'], ['dateCreated', 'dateUpdated'])) {
                     $defaultSortOptions[$count]['name'] = $sortOption['label'];
                     $defaultSortOptions[$count]['attribute'] = $sortOption['orderBy'];
                     $defaultSortOptions[$count]['orderBy'] = $sortOption['orderBy'];
-                }
-
-                $orderBy = $sortOption['orderBy'];
-
-                if (is_callable($orderBy)) {
-                    $attribute = function($dir) use ($orderBy) {
-                        $var = $orderBy($dir);
+                } elseif (is_callable($orderBy)) {
+                    $attribute = function(int $dir, Connection $db) use ($orderBy) {
+                        $var = $orderBy($dir, $db);
 
                         if (is_array($var)) {
                             return str_replace('field_', '', $var);
                         }
 
-                        // yii/db/ExpressionInterface
                         return $var;
                     };
-                } else {
-                    $attribute = null;
+
+                    $sortOptions[] = $attribute(SORT_ASC, $db = Craft::$app->getDb());
                 }
 
-                $sortOptions[] = $attribute;
+
             }
 
             $count++;
