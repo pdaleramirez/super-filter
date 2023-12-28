@@ -46,11 +46,11 @@ export default {
     }
 
     if (Object.keys(searchFieldsInfo.value).length > 0) {
-      for (let value of Object.values(searchFieldsInfo.value)) {
-        watch(value, (newValue, oldValue) => {
+      for (let searchField of Object.values(searchFieldsInfo.value)) {
+        watch(() => searchField.value, (newValue, oldValue) => {
           const { get } = useFilter((handle) => store.filterData(handle));
           get(store.handle)
-        });
+        }, {deep: true});
       }
     }
 

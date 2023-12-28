@@ -16,7 +16,7 @@ class PriceRange extends SearchField
     public $initValue = ['min' => '', 'max' => ''];
     public $object;
     public $custom = true;
-    const KEY = 'superFilterPriceRange';
+    public const KEY = 'superFilterPriceRange';
     
     public function __construct()
     {
@@ -27,7 +27,7 @@ class PriceRange extends SearchField
 
     public function getKey()
     {
-        return static::KEY;;
+        return static::KEY;
     }
 
     public function fieldType()
@@ -69,5 +69,20 @@ class PriceRange extends SearchField
             [
                 'field' => $this
             ]);
+    }
+
+    public function getSearchFieldsInfo(): array
+    {
+        $value['value'] = [
+            'min' => null,
+            'max' => null,
+        ];
+
+        return $value;
+    }
+
+    public function getShortName(): string
+    {
+        return "PriceRange";
     }
 }

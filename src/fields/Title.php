@@ -58,7 +58,7 @@ class Title extends SearchField
     public function getSearchFieldsInfo(): array
     {
         return [
-            'value' => ""
+            'value' => "",
         ];
     }
 

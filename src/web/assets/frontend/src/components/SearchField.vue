@@ -2,13 +2,14 @@
 
 import { useEntriesStore } from "../stores/entries";
 import {storeToRefs} from "pinia";
-import { computed, watch, toRaw, ref } from "vue";
+import { computed } from "vue";
 import TreeComponent from "./fields/TreeComponent.vue";
 import PlainText from "./fields/PlainText.vue";
 import Dropdown from "./fields/Dropdown.vue";
 import Checkboxes from "./fields/Checkboxes.vue";
 import Radiobuttons from "./fields/Radiobuttons.vue";
 import Number from "./fields/Number.vue";
+import PriceRange from "./fields/PriceRange.vue";
 const props = defineProps({
   handle: { type: String },
 })
@@ -51,6 +52,9 @@ const searchField = computed(() => {
       </template>
       <template v-if="searchField.type === 'Number'">
         <Number :fieldHandle="searchField.handle" />
+      </template>
+      <template v-if="searchField.type === 'PriceRange'">
+        <PriceRange :fieldHandle="searchField.handle" />
       </template>
       {{ searchField.handle }} {{ searchField.type }}
     </div>
