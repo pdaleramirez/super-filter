@@ -742,6 +742,8 @@ class SearchTypes extends Component
             foreach ($fields as $handle => $value) {
                 $fieldType = SuperFilter::$app->searchTypes->getSearchFieldObjectById($handle, true);
 
+                $fieldType->getQueryParams($query, $value);
+
                 $searchParams = $fieldType->getSearchParams($value);
 
                 if ($searchParams) {
