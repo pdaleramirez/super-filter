@@ -48,6 +48,8 @@ class SearchTypes extends Component
      */
     protected $searchType;
 	protected $itemAttributes = [];
+
+    private string $templatePath = "";
     /**
      * @return array|SearchType[]
      */
@@ -704,7 +706,10 @@ class SearchTypes extends Component
 
             Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);
 
-            $siteTemplate = $template . '/' . $filename;
+            $siteTemplate = $template . DIRECTORY_SEPARATOR . $filename;
+
+            $this->templatePath = $siteTemplatesPath . DIRECTORY_SEPARATOR . $siteTemplate;
+
             if (Craft::$app->getView()->doesTemplateExist($siteTemplate)) {
                 return $siteTemplate;
             }
@@ -714,7 +719,16 @@ class SearchTypes extends Component
 
         Craft::$app->getView()->setTemplatesPath($builtin);
 
-        return $baseTemplate . '/' . $filename;
+        $template  = $baseTemplate . DIRECTORY_SEPARATOR . $filename;
+
+        $this->templatePath = $builtin . DIRECTORY_SEPARATOR . $template;
+
+        return $template;
+    }
+
+    public function getTemplatePath()
+    {
+        return $this->templatePath;
     }
 
     /**

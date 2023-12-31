@@ -1,7 +1,6 @@
 <script>
 
 import { useEntriesStore } from "../stores/entries";
-import AppMessage from "../components/AppMessage.vue";
 import VRuntimeTemplate from "vue3-runtime-template";
 import List from "../components/List.vue";
 import {inject} from "vue";
@@ -32,7 +31,6 @@ export default {
     List,
     Sorts,
     Paginate,
-    AppMessage,
     VRuntimeTemplate
   },
   async mounted() {
@@ -59,17 +57,6 @@ export default {
 <template>
 
   <v-runtime-template :template="template"></v-runtime-template>
-<!--  <h1>Super filter static</h1>-->
-<!--  <div class="grid grid-cols-2 border-blue-500">-->
-<!--    <div>-->
-<!--      <Fields/>-->
-
-<!--    </div>-->
-<!--    <div>-->
-<!--      <List/>-->
-
-<!--    </div>-->
-<!--  </div>-->
 
 </template>
 

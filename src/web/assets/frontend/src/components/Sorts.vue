@@ -30,7 +30,7 @@ export default {
 
     const handle = inject('handle')
     const store = useEntriesStore();
-    const filename = 'list';
+    const filename = 'sorts';
     const template = useTemplate((handle) => store.getTemplate(handle, filename));
 
     this.template = await template.get(handle, filename);

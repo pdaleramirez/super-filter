@@ -45,13 +45,7 @@ export default {
 </script>
 
 <template>
-<!--  <v-runtime-template :template="template"></v-runtime-template>-->
-
-  <ul v-if="SearchField.handle">
-    <li v-for="option in options" :value="option.value">
-      <input type="checkbox" :value="option.value" v-model="SearchField.value" /> {{ option.label }}
-    </li>
-  </ul>
+  <v-runtime-template :template="template"></v-runtime-template>
 
 </template>
 

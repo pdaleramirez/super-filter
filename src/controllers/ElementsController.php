@@ -147,10 +147,9 @@ class ElementsController extends Controller
 
         $searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
 
-        $template = $searchSetupService->getTemplate($filename . '.vue');
+        $searchSetupService->getTemplate($filename . '.vue');
 
-        $path = Craft::$app->getPath()->getSiteTemplatesPath() . DIRECTORY_SEPARATOR . $template;
-
+        $path = $searchSetupService->getTemplatePath();
         $html = file_get_contents($path);
 
         return Template::raw($html);

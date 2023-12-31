@@ -42,8 +42,8 @@ class PriceRange extends SearchField
      */
     public function getQueryParams(QueryInterface $query, $value)
     {
-        $min = $value['min'] ?? null;
-        $max = $value['max'] ?? null;
+        $min = $value['min'] ?: null;
+        $max = $value['max'] ?: null;
         /**
          * @var ProductQuery $query
          */

@@ -56,7 +56,6 @@ const searchField = computed(() => {
       <template v-if="searchField.type === 'PriceRange'">
         <PriceRange :fieldHandle="searchField.handle" />
       </template>
-      {{ searchField.handle }} {{ searchField.type }}
     </div>
 
 </template>

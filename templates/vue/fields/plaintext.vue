@@ -1,0 +1,1 @@
+<input type="text" class="border-2 border-gray-300 rounded-md p-2" v-model="SearchField.value" />
