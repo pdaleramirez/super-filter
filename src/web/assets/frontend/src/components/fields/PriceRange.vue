@@ -30,7 +30,7 @@ export default {
 
     const appHandle = inject('handle');
     const store = useEntriesStore();
-    const filename = 'fields/plaintext';
+    const filename = 'fields/pricerange';
     const template = useTemplate((appHandle, filename) => store.getTemplate(appHandle, filename));
 
     this.template = await template.get(appHandle, filename);
@@ -52,15 +52,7 @@ export default {
 </script>
 
 <template>
-  <template v-if="SearchField.value">
-    <small>Min</small> <input type="number"
-                              v-model="range.min"
-                              size="2" />
-
-    <small>Max</small> <input type="number"
-                              v-model="range.max"
-                              size="2" />
-  </template>
+  <v-runtime-template :template="template"></v-runtime-template>
 </template>
 
 <style>

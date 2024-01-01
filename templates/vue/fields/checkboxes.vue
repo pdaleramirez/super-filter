@@ -1,5 +1,6 @@
-<ul v-if="SearchField.handle">
-  <li v-for="option in options" :value="option.value">
-    <input type="checkbox" :value="option.value" v-model="SearchField.value" /> {{ option.label }}
+<ul v-if="SearchField.handle" class="space-y-1">
+  <li v-for="option in options" :value="option.value" class="flex items-center space-x-2">
+    <input type="checkbox" :value="option.value" v-model="SearchField.value" class="form-checkbox text-indigo-600 h-4 w-4" />
+    <span class="text-gray-700">{{ option.label }}</span>
   </li>
 </ul>

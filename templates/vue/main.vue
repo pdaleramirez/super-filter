@@ -12,8 +12,4 @@
         :show-breakpoint-buttons="false"
     />
   </div>
-
-
 </div>
-<script setup>
-</script>

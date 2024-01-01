@@ -53,14 +53,7 @@ export default {
 
 <template>
 
-  <div v-if="elements.config && elements.config.items">
-    <select v-model="elements.config.params.sort">
-      <template v-for="sort in elements.config.items.sorts">
-        <option :value="sort.orderBy + '-asc'">{{ sort.name }} Ascending</option>
-        <option :value="sort.orderBy + '-desc'">{{ sort.name }} Descending</option>
-      </template>
-    </select>
-  </div>
+  <v-runtime-template :template="template"></v-runtime-template>
 
 </template>
 
