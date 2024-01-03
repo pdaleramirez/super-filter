@@ -19,7 +19,7 @@ export default {
   methods: {
     handleSubmitFilter() {
       const store = useEntriesStore();
-
+      console.log('handle submit filter')
       store.filterData(this.handle);
     },
   },
@@ -29,8 +29,10 @@ export default {
   },
   async mounted() {
     const handle = inject('handle');
-    const store = useEntriesStore();
+    const fieldWatch = inject('fieldWatch');
 
+    const store = useEntriesStore();
+    this.handle = handle;
     const filename = 'fields';
     const template = useTemplate((handle) => store.getTemplate(handle, filename));
     this.template = await template.get(handle, filename);
@@ -45,12 +47,14 @@ export default {
       this.searchFieldsInfo = searchFieldsInfo;
     }
 
-    if (Object.keys(searchFieldsInfo.value).length > 0) {
-      for (let searchField of Object.values(searchFieldsInfo.value)) {
-        watch(() => searchField.value, (newValue, oldValue) => {
-          const { get } = useFilter((handle) => store.filterData(handle));
-          get(store.handle)
-        }, {deep: true});
+    if ((fieldWatch === true || fieldWatch === 'true') || (elements.value.config !== undefined && elements.value.config.options.fieldWatch === '1')) {
+      if (Object.keys(searchFieldsInfo.value).length > 0) {
+        for (let searchField of Object.values(searchFieldsInfo.value)) {
+          watch(() => searchField.value, (newValue, oldValue) => {
+            const { get } = useFilter((handle) => store.filterData(handle));
+            get(store.handle)
+          }, {deep: true});
+        }
       }
     }
 
@@ -59,7 +63,7 @@ export default {
         const { get } = useFilter((handle) => store.filterData(handle));
         get(store.handle)
       });
-   }
+    }
   }
 };
 

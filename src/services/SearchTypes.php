@@ -139,6 +139,7 @@ class SearchTypes extends Component
         $items['handle'] = $className::refHandle();
 
         $items['container'] = null;
+        $items['fieldWatch'] = true;
 
         $selectedContainer = $selected['container'] ?? null;
 

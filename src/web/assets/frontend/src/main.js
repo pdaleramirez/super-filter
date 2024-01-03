@@ -9,6 +9,7 @@ const elements = document.querySelectorAll('.searchApp');
 elements.forEach((element) => {
     const app = createApp(App);
     app.provide('handle', element.getAttribute('handle'));
+    app.provide('fieldWatch', element.getAttribute('fieldWatch'));
     app.use(createPinia())
     app.use(VueAwesomePaginate);
     app.mount(element)

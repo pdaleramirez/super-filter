@@ -3,14 +3,8 @@
   <main>
 
     <Wrapper/>
-    <div>
-
-    </div>
-
 
   </main>
-
-
 
 </template>
 
@@ -24,6 +18,7 @@ import { storeToRefs } from "pinia";
 const store = useEntriesStore();
 
 const handle = inject('handle');
+
 store.handle = handle;
 const text = ref('');
 

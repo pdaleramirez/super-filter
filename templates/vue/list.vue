@@ -1,6 +1,6 @@
 <div class="flex-auto bg-white mb-10">
 <span v-if="loading">Loading...</span>
-<div class="grid grid-cols-2 gap-4" v-if="elements">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4" v-if="elements">
   <div class="p-4 border rounded-lg shadow-sm bg-white" v-for="item in elements.items" :key="item.id">
     <div class="flex flex-col md:flex-row md:items-start">
       <div class="w-full md:w-1/2 text-right">
