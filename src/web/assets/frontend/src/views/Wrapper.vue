@@ -19,12 +19,7 @@ export default {
     currentPage: 1,
   }),
   methods: {
-    onClickHandler(page) {
-      const store = useEntriesStore();
 
-      store.params.config.currentPage = page;
-      store.filterData(this.handle)
-    },
   },
   components: {
     Fields,

@@ -10,6 +10,7 @@ export const useEntriesStore = defineStore('entries', {
         templates: {},
         fields: {},
         items: [],
+        records: [],
         fieldValue: '',
         params: {
             handle: '',
@@ -61,34 +62,53 @@ export const useEntriesStore = defineStore('entries', {
             this.currentPage = this.elements.config.currentPage;
             return this.elements;
         },
+        async fetchFields(handle) {
+            this.params.handle = handle;
+            const searchFieldsInfoResponse = await axios.post(this.url.getUrl('super-filter/search-fields-info'), this.params);
+            this.searchFieldsInfo = searchFieldsInfoResponse.data;
+        },
         async filterData(handle = null) {
             if (handle === null) {
                 handle = this.handle;
             }
 
+           this.prepareParams(handle);
+
+            const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
+
+            this.elements.items = response.data.items;
+            this.elements.links = response.data.links;
+        },
+
+        async pushData(handle = null) {
+            if (handle === null) {
+                handle = this.handle;
+            }
+
+            this.prepareParams(handle);
+
+            const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
+            console.log('response.data.items');
+            console.log(response.data.items);
+            this.records = response.data.items;
+        },
+        prepareParams(handle) {
             this.params.handle = handle;
 
             for (let field of Object.values(this.searchFieldsInfo)) {
 
-                 if (field.value !== undefined && (field.value.length > 0 || field.value !== '')) {
-                     this.params.config.params.fields[field.handle] = field.value;
-                 }
+                if (field.value !== undefined && (field.value.length > 0 || field.value !== '')) {
+                    this.params.config.params.fields[field.handle] = field.value;
+                }
 
                 if ((field.value !== undefined && (field.value.length <= 0 || field.value === '')) || field.value === undefined) {
                     delete this.params.config.params.fields[field.handle];
                 }
             }
 
-            if (this.elements.config.params.sort !== undefined) {
+            if (this.elements.config !== undefined && this.elements.config.params.sort !== undefined) {
                 this.params.config.params.sort = this.elements.config.params.sort;
             }
-
-            const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
-
-            this.elements.items = response.data.items;
-            this.elements.links = response.data.links;
-
-
         },
         async next(params) {
             params.config.currentPage = params.config.currentPage + 1;
