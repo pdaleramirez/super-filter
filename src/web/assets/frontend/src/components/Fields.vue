@@ -29,7 +29,7 @@ export default {
   },
   async mounted() {
     const handle = inject('handle');
-    const fieldWatch = inject('fieldWatch');
+    const fieldWatchAttribute = inject('fieldWatch');
 
     const store = useEntriesStore();
     this.handle = handle;
@@ -39,6 +39,8 @@ export default {
 
     const {elements, searchFieldsInfo} = storeToRefs(store);
 
+    const fieldWatch = (fieldWatchAttribute === true || fieldWatchAttribute === 'true') || (elements.value.config !== undefined && elements.value.config.options.fieldWatch === '1');
+
     if (elements.value.config !== undefined) {
       this.fields = elements.value.config.items.items;
     }
@@ -47,7 +49,7 @@ export default {
       this.searchFieldsInfo = searchFieldsInfo;
     }
 
-    if ((fieldWatch === true || fieldWatch === 'true') || (elements.value.config !== undefined && elements.value.config.options.fieldWatch === '1')) {
+    if (fieldWatch === true) {
       if (Object.keys(searchFieldsInfo.value).length > 0) {
         for (let searchField of Object.values(searchFieldsInfo.value)) {
           watch(() => searchField.value, (newValue, oldValue) => {

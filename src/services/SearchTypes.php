@@ -140,6 +140,7 @@ class SearchTypes extends Component
 
         $items['container'] = null;
         $items['fieldWatch'] = true;
+        $items['infiniteScroll'] = false;
 
         $selectedContainer = $selected['container'] ?? null;
 

@@ -123,6 +123,15 @@
             on: options.fieldWatch ?? false,
             instructions: 'Apply filters immediately when field values change.'|t('super-filter')
         }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Infinite Scroll?'|t('super-filter'),
+            id: 'infiniteScroll',
+            name: 'options[infiniteScroll]',
+            value: 1,
+            on: options.infiniteScroll ?? false,
+            instructions: 'Enable to implement pagination through infinite scrolling.'|t('super-filter')
+        }) }}
     {% endif %}
 
     {{ forms.textField({

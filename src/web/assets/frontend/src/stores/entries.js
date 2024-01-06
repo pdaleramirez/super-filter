@@ -88,8 +88,7 @@ export const useEntriesStore = defineStore('entries', {
             this.prepareParams(handle);
 
             const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
-            console.log('response.data.items');
-            console.log(response.data.items);
+
             this.records = response.data.items;
         },
         prepareParams(handle) {
