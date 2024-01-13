@@ -19,6 +19,7 @@ export default {
   methods: {
     handleSubmitFilter() {
       const store = useEntriesStore();
+      store.params.config.currentPage = 1;
       console.log('handle submit filter')
       store.filterData(this.handle);
     },
@@ -50,6 +51,7 @@ export default {
     }
 
     if (fieldWatch === true) {
+      elements.value.params.config.currentPage = 1;
       if (Object.keys(searchFieldsInfo.value).length > 0) {
         for (let searchField of Object.values(searchFieldsInfo.value)) {
           watch(() => searchField.value, (newValue, oldValue) => {

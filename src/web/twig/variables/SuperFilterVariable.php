@@ -10,6 +10,7 @@ use craft\fields\data\MultiOptionsFieldData;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Template;
 use craft\helpers\UrlHelper;
+use craft\web\View;
 use Exception;
 use pdaleramirez\superfilter\services\SearchTypes;
 use pdaleramirez\superfilter\SuperFilter;
@@ -187,9 +188,27 @@ class SuperFilterVariable
 
     public function getFrontendAssets()
     {
-        $view = Craft::$app->getView();
-        //$view->registerAssetBundle(VueAsset::class);
-
         return SuperFilter::getInstance()->getTemplates()->getFrontendAssets();
+    }
+
+    /**
+     * @param $handle
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\Exception
+     */
+    public function render($handle): string
+    {
+        Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_CP);
+
+        $html =  Craft::$app->getView()->renderTemplate('super-filter/twig/render', [
+            'handle' => $handle
+        ]);
+
+        Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_SITE);
+
+        return Template::raw($html);
     }
 }

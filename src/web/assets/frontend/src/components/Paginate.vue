@@ -23,7 +23,7 @@ defineProps(usePaginateProps());
   <div v-if="elements.config">
     <vue-awesome-paginate
 
-        v-model="elements.config.currentPage"
+        v-model="store.params.config.currentPage"
         :total-items="elements.links.total"
         :items-per-page="elements.config.options.perPage"
         :on-click="onClickHandler"

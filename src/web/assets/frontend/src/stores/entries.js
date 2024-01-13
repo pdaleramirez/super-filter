@@ -31,25 +31,6 @@ export const useEntriesStore = defineStore('entries', {
     }),
     getters: {},
     actions: {
-        async fetchGql() {
-            const query = `{
-  entries(section: "superFilterShows" ) { title }
-}`;
-
-            const headers = {
-                'Authorization': 'Bearer BGk2lakdab3ztbEavoAXtJdSPyoohkoB',
-                'Content-Type': 'application/graphql', // Example header for specifying JSON content
-                // Add any other custom headers here
-            };
-
-            const response = await axios.post(this.url.getUrl('super-filter/fields'), query, {
-                headers: headers
-            });
-
-            this.items = response.data;
-            this.currentPage = this.elements.config.currentPage;
-            return this.items;
-        },
         async fetchData(handle) {
             this.params.handle = handle;
 
@@ -109,26 +90,6 @@ export const useEntriesStore = defineStore('entries', {
                 this.params.config.params.sort = this.elements.config.params.sort;
             }
         },
-        async next(params) {
-            params.config.currentPage = params.config.currentPage + 1;
-
-            const response = await this._getResponse(params);
-
-            this.elements = response.data;
-
-            return this.elements;
-        },
-
-        async back(params) {
-            params.config.currentPage = params.config.currentPage - 1;
-
-            const response = await this._getResponse(params);
-
-            this.elements = response.data;
-
-            return this.elements;
-        },
-
         async getTemplate(handle, filename) {
 
             const response = await axios.post(this.url.getUrl('super-filter/template'), {

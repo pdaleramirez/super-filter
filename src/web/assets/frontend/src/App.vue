@@ -3,7 +3,7 @@
   <main>
 
     <Wrapper/>
-    infinite scroll {{ infiniteScroll }}
+
     <InfiniteLoading v-if="infiniteScroll === true" @infinite="load"/>
   </main>
 
@@ -42,12 +42,7 @@ const load = async function ($state) {
     if (page !== 1) {
       await store.pushData(handle);
 
-      //if (elements.items.value) {
-      console.log('records')
-      console.log(store.records)
-
       store.elements.items.push(...store.records);
-
     }
 
 
