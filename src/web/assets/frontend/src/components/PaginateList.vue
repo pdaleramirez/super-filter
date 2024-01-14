@@ -1,6 +1,5 @@
 <script setup>
 import {useEntriesStore} from "../stores/entries";
-import template from "../composables/useTemplate";
 import {storeToRefs} from "pinia";
 import {usePaginateProps} from "../composables/usePaginateProps";
 
@@ -14,7 +13,6 @@ const onClickHandler = (page) => {
   store.params.config.currentPage = page;
   store.filterData(store.handle);
 }
-
 
 defineProps(usePaginateProps());
 </script>

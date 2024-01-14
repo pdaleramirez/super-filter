@@ -27,7 +27,8 @@ export const useEntriesStore = defineStore('entries', {
         },
         url: useUrl(),
         currentPage: 1,
-        response: {}
+        response: {},
+        isInfiniteScroll: false
     }),
     getters: {},
     actions: {

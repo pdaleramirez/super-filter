@@ -2,7 +2,7 @@
 
   <main>
 
-    <Wrapper/>
+    <SearchWrapper :is-infinite-scroll="infiniteScroll" />
 
     <InfiniteLoading v-if="infiniteScroll === true" @infinite="load"/>
   </main>
@@ -11,28 +11,30 @@
 
 <script setup>
 
-import Wrapper from "./views/Wrapper.vue";
+import SearchWrapper from "./views/SearchWrapper.vue";
 import {useEntriesStore} from "./stores/entries";
-import {onBeforeMount, inject, ref} from "vue";
+import { inject, ref, onMounted} from "vue";
 import {storeToRefs} from "pinia";
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
 
 const handle = inject('handle');
 const store = useEntriesStore();
-const infiniteScroll = ref(true);
-onBeforeMount(async () => {
+const infiniteScroll = ref(false);
+const infiniteScrollAttribute = inject('infiniteScroll');
+
+
+onMounted(async () => {
 
   await store.fetchData(handle);
-  const infiniteScrollAttribute = inject('infiniteScroll');
 
-  infiniteScroll.value = (infiniteScrollAttribute === true || infiniteScrollAttribute === 'true') || (elements.value.config !== undefined && elements.value.config.options.infiniteScroll === '1');
   store.handle = handle;
 
+  const {elements} = storeToRefs(store);
+  infiniteScroll.value = (infiniteScrollAttribute === true || infiniteScrollAttribute === 'true') ||
+      (elements.value.config !== undefined && elements.value.config.options.infiniteScroll === '1');
 
 });
-
-const {elements} = storeToRefs(store);
 
 let page = 1;
 const load = async function ($state) {

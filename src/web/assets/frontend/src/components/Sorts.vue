@@ -4,7 +4,6 @@ import {useEntriesStore} from '../stores/entries';
 import {storeToRefs} from "pinia";
 import VRuntimeTemplate from "vue3-runtime-template";
 import {inject} from "vue";
-import useFilter from "../composables/useFilter";
 import useTemplate from "../composables/useTemplate";
 
 export default {
@@ -15,13 +14,10 @@ export default {
     template: '',
     handle: '',
     loading: false,
-    params: {},
-    filter: () => {}
+    params: {}
   }),
   methods: {
-    get(params, handle) {
-      this.filter.get(params, handle);
-    }
+
   },
   components: {
     VRuntimeTemplate
@@ -37,15 +33,6 @@ export default {
 
     const { elements } = storeToRefs(store);
     this.elements = elements;
-
-    this.params = {
-      handle: handle,
-      config: {
-        currentPage: 1
-      }
-    }
-
-    this.filter = useFilter((params, method) => store.action(params, method));
   }
 };
 

@@ -13,6 +13,7 @@ elements.forEach((element) => {
     app.component("infinite-loading", InfiniteLoading);
     app.provide('handle', element.getAttribute('handle'));
     app.provide('fieldWatch', element.getAttribute('fieldWatch'));
+    app.provide('infiniteScroll', element.getAttribute('infiniteScroll'));
     app.use(createPinia())
     app.use(VueAwesomePaginate);
     app.mount(element)

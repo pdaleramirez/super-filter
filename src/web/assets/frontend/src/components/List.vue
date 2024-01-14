@@ -36,15 +36,6 @@ export default {
 
     const { elements } = storeToRefs(store);
     this.elements = elements;
-
-    this.params = {
-      handle: handle,
-      config: {
-        currentPage: 1
-      }
-    }
-
-    this.filter = useFilter((params, method) => store.action(params, method));
   }
 };
 

@@ -1,15 +1,16 @@
 <script>
 
-import { useEntriesStore } from "../stores/entries";
+import { useEntriesStore } from "@/stores/entries";
 import VRuntimeTemplate from "vue3-runtime-template";
 import List from "../components/List.vue";
 import {inject} from "vue";
 import Fields from "../components/Fields.vue";
-import Paginate from "../components/Paginate.vue";
+import Paginate from "../components/PaginateList.vue";
 import Sorts from "../components/Sorts.vue";
 import {storeToRefs} from "pinia";
 import useFilter from "../composables/useFilter";
 import useTemplate from "../composables/useTemplate";
+
 export default {
   data: () => ({
     handle: "",
@@ -17,7 +18,15 @@ export default {
     template: '',
     searchFieldsInfo: '',
     currentPage: 1,
+    page: 1,
+    store: null
   }),
+  props: {
+    isInfiniteScroll: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
 
   },
@@ -29,11 +38,11 @@ export default {
     VRuntimeTemplate
   },
   async mounted() {
-
+    const store = useEntriesStore();
     const handle = inject('handle');
     this.handle = handle;
 
-    const store = useEntriesStore();
+
     const filename = 'main';
     const template = useTemplate((handle, filename) => store.getTemplate(handle, filename));
 
@@ -41,9 +50,6 @@ export default {
 
     const { elements } = storeToRefs(store);
     this.elements = elements;
-
-
-    this.filter = useFilter((params, method) => store.action(params, method));
   }
 };
 

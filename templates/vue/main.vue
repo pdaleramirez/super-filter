@@ -7,9 +7,11 @@
     <Sorts />
 
     <List/>
-    <Paginate
+
+    <Paginate v-if="isInfiniteScroll === false"
         :maxPagesShown=1
         :show-breakpoint-buttons="false"
     />
+
   </div>
 </div>
