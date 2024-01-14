@@ -19,14 +19,8 @@ export default {
     searchFieldsInfo: '',
     currentPage: 1,
     page: 1,
-    store: null
+    isInfiniteScroll: false
   }),
-  props: {
-    isInfiniteScroll: {
-      type: Boolean,
-      default: false
-    }
-  },
   methods: {
 
   },
@@ -50,6 +44,8 @@ export default {
 
     const { elements } = storeToRefs(store);
     this.elements = elements;
+    this.isInfiniteScroll = store.isInfiniteScroll;
+
   }
 };
 
