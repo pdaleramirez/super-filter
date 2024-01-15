@@ -83,12 +83,11 @@ class GenerateController extends Controller
                 }
             }
 
-            $html = Craft::$app->getView()->renderPageTemplate('super-filter/generate/items', [
+            $html = Craft::$app->getView()->renderPageTemplate('super-filter/generate/items-vue', [
                 'items' => $items
             ]);
-            //$this->stdout(Craft::dump($items));
 
-            $itemsPath = $templateDir . '/items.twig';
+            $itemsPath = $templateDir . '/items.vue';
             FileHelper::writeToFile($itemsPath, $html);
 
             $this->stdout("File items.twig template created in $itemsPath" . PHP_EOL);

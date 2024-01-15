@@ -3,7 +3,6 @@ import {useEntriesStore} from '../stores/entries';
 import {storeToRefs} from "pinia";
 import VRuntimeTemplate from "vue3-runtime-template";
 import {inject} from "vue";
-import useFilter from "../composables/useFilter";
 import useTemplate from "../composables/useTemplate";
 
 export default {
@@ -29,7 +28,7 @@ export default {
 
     const handle = inject('handle')
     const store = useEntriesStore();
-    const filename = 'list';
+    const filename = 'items';
     const template = useTemplate((handle) => store.getTemplate(handle, filename));
 
     this.template = await template.get(handle, filename);
