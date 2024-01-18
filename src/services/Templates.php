@@ -11,12 +11,12 @@ class Templates extends Component
     {
         $assets = \Craft::getAlias('@superfilter/web/assets/frontend/dist');
 
-        $manifests = $assets . '/manifest.json';
+        $manifests = $assets . '/.vite/manifest.json';
 
         $content = Json::decodeIfJson(file_get_contents($manifests));
 
         $js = $content['index.html']['file'];
-        $css = $content['index.css']['file'];
+        $css = $content['index.html']['css'];
 
         return [
             'dist' => $assets,
