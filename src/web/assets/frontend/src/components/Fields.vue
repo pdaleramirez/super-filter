@@ -20,7 +20,7 @@ export default {
     handleSubmitFilter() {
       const store = useEntriesStore();
       store.params.config.currentPage = 1;
-      console.log('handle submit filter')
+
       store.filterData(this.handle);
     },
   },
@@ -64,6 +64,7 @@ export default {
 
     if (elements.value.config && elements.value.config.params) {
       watch(() => elements.value.config.params.sort, (newValue, oldValue) => {
+        store.params.config.currentPage = 1;
         const { get } = useFilter((handle) => store.filterData(handle));
         get(store.handle)
       });

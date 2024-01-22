@@ -13,7 +13,7 @@
 
 import SearchWrapper from "./views/SearchWrapper.vue";
 import {useEntriesStore} from "./stores/entries";
-import { inject, ref, onMounted, onBeforeMount} from "vue";
+import { inject, ref, onBeforeMount} from "vue";
 import {storeToRefs} from "pinia";
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
@@ -39,19 +39,17 @@ onBeforeMount(async () => {
   isDataLoaded.value = true;
 });
 
-let page = 1;
 const load = async function ($state) {
   try {
 
-    store.params.config.currentPage = page;
-    if (page !== 1) {
+    if (store.params.config.currentPage !== 1) {
       await store.pushData(handle);
 
       store.elements.items.push(...store.records);
     }
 
 
-    page++;
+    store.params.config.currentPage++;
 
   } catch (error) {
     $state.error();

@@ -8,7 +8,6 @@ import Fields from "../components/Fields.vue";
 import Paginate from "../components/PaginateList.vue";
 import Sorts from "../components/Sorts.vue";
 import {storeToRefs} from "pinia";
-import useFilter from "../composables/useFilter";
 import useTemplate from "../composables/useTemplate";
 
 export default {
