@@ -9,7 +9,7 @@ Demo: https://www.mamalit.com/vue-pagination
   
 ## Requirements  
   
-This plugin requires Craft CMS 3.2.0 or later.  
+This plugin requires Craft CMS 4.0 or later.  
   
 ## Installation  
   
@@ -27,20 +27,20 @@ To install the plugin, follow these instructions.
  4. Go to Super Filter -> Setting and click **Install Example Data** button  to generate example entries (Optional).
   
 ## Configuring Search Filter  
-1. Create new setup entry in Setup Search tab and click new setup
-2. Setup Config:
-- Title - to easily identify your setup.
-- Handle - needed to initialize search setup.
-- Items per page - number of entries on page content load or pagination.
-- Template Override Folder - the folder of the templates that you'll override to modify html's. 
-The items.twig must be copied to this folder to modify element attributes.
-- Base Template - if no template is found on the template override folder it will fallback to base pre built templates.
-    
-- Element - the element type of the items or entries to be displayed.
-- Container - section, group or product type for an element.
-- Sort Fields - drag fields to selected column to be displayed on sorting template for sorting elements.
-- Initial Sort - the default sort query on page load.
-- Search Fields - drag fields to selected column to be displayed on search field template for filtering elements.
+1. Create a new setup entry in the **Setup Search** tab and click on *New Setup.*
+2. **Setup Config:**
+    - **Title:** Used for easy identification of your setup.
+    - **Handle:** Necessary to initialize the search setup.
+    - **Items per page:** The number of entries on the page during content load or pagination.
+    - **Base Template:** If no template is found in the template override folder, it will fallback to pre-built base templates. There are only two options: *Plain* for traditional form reload and *Vue* for reactive form submission.
+    - **Watch Fields?:** For Vue templates, this option watches the fields and filters items automatically.
+    - **Infinite Scroll?:** For Vue templates, this option loads more items on scroll.
+    - **Template Override Folder:** The folder containing the templates to override, modifying Vue or HTML files. The `items.twig` or `items.vue` must be copied to this folder to modify element attributes.
+    - **Element:** The element type of the items or entries to be displayed.
+    - **Container:** Section, group, or product type for an element.
+    - **Sort Fields:** Drag fields to the selected column to be displayed on the sorting template for sorting elements.
+    - **Initial Sort:** The default sort query on page load.
+    - **Search Fields:** Drag fields to the selected column to be displayed on the search field template for filtering elements.
 
   
 ## Using Super Filter  

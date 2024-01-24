@@ -98,7 +98,7 @@ class GenerateController extends Controller
             $itemsPath = $templateDir . '/items' . $ext;
             FileHelper::writeToFile($itemsPath, $html);
 
-            $this->stdout("File items.twig template created in $itemsPath" . PHP_EOL);
+            $this->stdout("File items.vue template created in $itemsPath" . PHP_EOL);
         }
 
         return true;
