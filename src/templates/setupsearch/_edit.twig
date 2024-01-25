@@ -114,7 +114,7 @@
         errors: setupElement is defined ? setupElement.getErrors('baseTemplate') : null
     }) }}
 
-    {% if options.baseTemplate == 'vue' %}
+    {% if options is not empty and options.baseTemplate == 'vue' %}
         {{ forms.lightswitchField({
             label: 'Watch Fields?'|t('super-filter'),
             id: 'fieldWatch',

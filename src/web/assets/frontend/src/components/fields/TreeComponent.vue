@@ -53,6 +53,8 @@ export default {
 
     this.tree.forEach(node => {
 
+      SearchField.value.value.some(num => num === node.id) ? node.selected = true : node.selected = false;
+
       watch(() => node.selected, (newValue, oldValue) => {
 
         if (newValue) {

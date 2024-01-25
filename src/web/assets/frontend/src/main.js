@@ -12,6 +12,7 @@ elements.forEach((element) => {
     const app = createApp(App);
     app.component("infinite-loading", InfiniteLoading);
     app.provide('handle', element.getAttribute('handle'));
+    app.provide('options', element.getAttribute('options'));
     app.provide('fieldWatch', element.getAttribute('fieldWatch'));
     app.provide('infiniteScroll', element.getAttribute('infiniteScroll'));
     app.use(createPinia())

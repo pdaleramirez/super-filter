@@ -45,31 +45,7 @@ class SuperFilterVariable
             $config['params']['fields'] = $fieldParam;
         }
 
-        if (count($options) > 0) {
-        	$keys = array_keys($options);
-
-        	if (!in_array('filter', $keys) && !in_array('attributes', $keys)) {
-                $message = "Parameter options format should have filter or attribute keys
-        		E.g.
-				{
-				  filter: { superFilterImdbRating: 6 },
-				  attributes: ['title', 'superFilterGenre', 'dateCreated']
-				}
-    ";
-        		throw new \yii\base\Exception($message);
-			}
-		}
-
-		$preFilter = $options['filter'] ?? [];
-        if (count($preFilter) > 0) {
-            if (isset($config['params']['fields'])) {
-                $config['params']['fields'] = array_merge($config['params']['fields'], $preFilter);
-            } else {
-                $config['params']['fields'] = $preFilter;
-            }
-
-			$config['params']['preFilter'] = $preFilter;
-        }
+        $config = $this->getPrefilter($options, $config);
 
         $currentSite = Craft::$app->sites->getCurrentSite();
         $primarySite = Craft::$app->sites->getPrimarySite();
@@ -186,11 +162,6 @@ class SuperFilterVariable
         Craft::$app->view->setTemplatesPath($this->prevTemplate);
     }
 
-    public function getFrontendAssets()
-    {
-        return SuperFilter::getInstance()->getTemplates()->getFrontendAssets();
-    }
-
     /**
      * @param $handle
      * @return string
@@ -199,16 +170,53 @@ class SuperFilterVariable
      * @throws \Twig\Error\SyntaxError
      * @throws \yii\base\Exception
      */
-    public function render($handle): string
+    public function render($handle, array $options = [])
     {
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_CP);
 
         $html =  Craft::$app->getView()->renderTemplate('super-filter/twig/render', [
-            'handle' => $handle
+            'handle' => $handle,
+            'options' => $options
         ]);
 
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_SITE);
 
-        return Template::raw($html);
+        echo Template::raw($html);
+    }
+
+    /**
+     * @param array $options
+     * @param array $config
+     * @return array
+     * @throws \yii\base\Exception
+     */
+    public function getPrefilter(array $options, array $config): array
+    {
+        if (count($options) > 0) {
+            $keys = array_keys($options);
+
+            if (!in_array('filter', $keys) && !in_array('attributes', $keys)) {
+                $message = "Parameter options format should have filter or attribute keys
+        		E.g.
+				{
+				  filter: { superFilterImdbRating: 6 },
+				  attributes: ['title', 'superFilterGenre', 'dateCreated']
+				}
+    ";
+                throw new \yii\base\Exception($message);
+            }
+        }
+
+        $preFilter = $options['filter'] ?? [];
+        if (count($preFilter) > 0) {
+            if (isset($config['params']['fields'])) {
+                $config['params']['fields'] = array_merge($config['params']['fields'], $preFilter);
+            } else {
+                $config['params']['fields'] = $preFilter;
+            }
+
+            $config['params']['preFilter'] = $preFilter;
+        }
+        return $config;
     }
 }

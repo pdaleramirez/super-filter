@@ -19,6 +19,7 @@ import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
 
 const handle = inject('handle');
+const options = inject('options');
 const store = useEntriesStore();
 const infiniteScroll = ref(false);
 const infiniteScrollAttribute = inject('infiniteScroll');
@@ -37,8 +38,19 @@ onBeforeMount(async () => {
   store.isInfiniteScroll = infiniteScroll.value;
 
   isDataLoaded.value = true;
+
+  let optionsFilter  = JSON.parse(options).filter;
+  if (options !== undefined && JSON.parse(options).filter !== undefined ) {
+    for (let [key, field] of Object.entries(optionsFilter)) {
+      store.searchFieldsInfo[key].value = field;
+    }
+  }
 });
 
+if (options !== undefined && JSON.parse(options).filter !== undefined ) {
+  let optionsFilter  = JSON.parse(options).filter;
+  store.params.config.params.fields = optionsFilter;
+}
 const load = async function ($state) {
   try {
 
