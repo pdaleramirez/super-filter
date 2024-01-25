@@ -45,7 +45,12 @@ To install the plugin, follow these instructions.
   
 ## Using Super Filter
 
-1.
+1. To override a template or templates of the twig function from the selected base pre-built style templates. You can create the twig or vue file
+   or open the super-filter plugin folder and copy a template or templates to the site template override folder path you specified on your configuration
+
+![styles](resources/img/template-styles.jpg)
+
+2.
    
    ### Vue Base Template
    Use this twig function and pass handle. 
@@ -53,54 +58,51 @@ To install the plugin, follow these instructions.
    {{ craft.superFilter.render('handle') }}
    ```
    
+   - fields.vue - displays the search filter fields html.
+   - items.vue - displays the element entries or filtered element entries.
+   - sorts.vue - displays the sorting field dropdown html.
+   - main.vue - wrapper for fields and items.
+   - fields/* - individual form input html.
+   
    ### Plain Base Template
    Use super filter twig function to display search sections on your page. There are 5 twig function to be called
    on your page template.     
-       - `craft.superFilter.setup('handle')` - requires 1 parameter which is the handle of search set up entry. This should be 
+   
+    - `craft.superFilter.setup('handle')` - requires 1 parameter which is the handle of search set up entry. This should be 
        the first function to be added to the template or the order of declaration should be above all other super filter twig function.
-           - Template filename: `setup.twig`
-           
-       - `craft.superFilter.displaySearchFields()` - displays the search filter fields html.
-            - Template filename: `fields.twig` and individual form input html in `fields/*` folder.
-            
-       - `craft.superFilter.displaySortOptions()` - displays the sorting field dropdown html.
-           - Template filename: `sorts.twig`
-           
-       - `craft.superFilter.items()` - displays the element entries or filtered element entries.
-           - Template filename: `items.twig`
-           
-       - `craft.superFilter.getPaginateLinks()` - displays element entries pagination or the infinite scroll trigger.
-            - Template filename: `pagination.twig`
-       - `craft.superFilter.close() ` - needed to close the search page to reset templates path. So if you have included template after the super filter twig functions you will need this.
+         - Template filename: `setup.twig`
 
-2. To override a template or templates of the twig function from the selected base pre-built style templates. You can create the twig or vue file 
-or open the super-filter plugin folder and copy a template or templates to the site template override folder path you specified on your configuration
+    - `craft.superFilter.displaySearchFields()` - displays the search filter fields html.
+         - Template filename: `fields.twig` and individual form input html in `fields/*` folder.
+         
+    - `craft.superFilter.displaySortOptions()` - displays the sorting field dropdown html.
+        - Template filename: `sorts.twig`
+        
+    - `craft.superFilter.items()` - displays the element entries or filtered element entries.
+        - Template filename: `items.twig`
+        
+    - `craft.superFilter.getPaginateLinks()` - displays element entries pagination or the infinite scroll trigger.
+         - Template filename: `pagination.twig`
+    - `craft.superFilter.close() ` - needed to close the search page to reset templates path. So if you have included template after the super filter twig functions you will need this.
 
-  ![styles](resources/img/template-styles.jpg) 
-
-The page template should look like this:
-### Vue Base Template
-
-```
-{{ craft.superFilter.render('superFilterShows') }}
-```
-### Plain Base Template
-```
-<div id="search-app">
-    {{ craft.superFilter.setup('searchList') }}
-    <div class="row">
-        <div class="col-sm-2 col-md-2">
-            {{ craft.superFilter.displaySearchFields() }}
-        </div>
-        <div class="col-sm-10 col-md-10">
-            {{ craft.superFilter.displaySortOptions() }}
-            {{ craft.superFilter.items() }}
-            {{ craft.superFilter.getPaginateLinks() }}
-            {{ craft.superFilter.close() }}
-        </div>
-    </div>
-</div>
-```
+      The page template should look like this:
+      
+      ```
+      <div id="search-app">
+          {{ craft.superFilter.setup('searchList') }}
+          <div class="row">
+              <div class="col-sm-2 col-md-2">
+                  {{ craft.superFilter.displaySearchFields() }}
+              </div>
+              <div class="col-sm-10 col-md-10">
+                  {{ craft.superFilter.displaySortOptions() }}
+                  {{ craft.superFilter.items() }}
+                  {{ craft.superFilter.getPaginateLinks() }}
+                  {{ craft.superFilter.close() }}
+              </div>
+          </div>
+      </div>
+      ```
 
 ### Craft Commerce
 If you are using craft commerce and don't want to return the default `variants` attribute on search results.
