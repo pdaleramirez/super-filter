@@ -4,7 +4,7 @@ import {storeToRefs} from "pinia";
 import VRuntimeTemplate from "vue3-runtime-template";
 import {inject} from "vue";
 import useTemplate from "../composables/useTemplate";
-import moment from "moment";
+import dayjs from 'dayjs';
 export default {
   data: () => ({
     elements: {},
@@ -20,8 +20,8 @@ export default {
     get(params, handle) {
       this.filter.get(params, handle);
     },
-    moment(date) {
-      return moment(date);
+    dayjs(date) {
+      return dayjs(date);
     },
   },
   components: {
