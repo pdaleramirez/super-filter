@@ -4,15 +4,16 @@ namespace pdaleramirez\superfilter\fields;
 
 use Craft;
 use craft\elements\db\ElementQuery;
-use craft\fields\PlainText as PlainTextCraft;
+use pdaleramirez\superfilter\base\PlainSearchTrait;
 use pdaleramirez\superfilter\base\SearchField;
 use pdaleramirez\superfilter\SuperFilter;
-use phpDocumentor\Reflection\Types\Static_;
 use stdClass;
 use yii\db\QueryInterface;
 
 class Title extends SearchField
 {
+    use PlainSearchTrait;
+
     public $initValue = '';
     public $object;
     public $custom = true;
@@ -59,5 +60,17 @@ class Title extends SearchField
             [
                'field' => $this
             ]);
+    }
+
+    public function getSearchFieldsInfo(): array
+    {
+        return [
+            'value' => "",
+        ];
+    }
+
+    public function getShortName(): string
+    {
+        return "PlainText";
     }
 }

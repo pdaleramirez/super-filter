@@ -54,7 +54,7 @@
 {% block details %}
     <div class="meta read-only">
         <div class="field">
-            <p>To generate initial `items.twig` template:</p>
+            <p>To generate initial `items.vue` template:</p>
             <ol>
                 <li>SSH to your server and run craft console command.</li>
                 <li>Run the command <strong><code>php craft super-filter/generate/templates</code></strong></li>
@@ -95,21 +95,6 @@
     }) }}
 
 
-{#    <div class="field">#}
-{#        <div class="heading">#}
-{#            <label>Items per page</label>#}
-{#        </div>#}
-{#        <div class="input {{ setupElement.getErrors('options.perPage') ? 'errors' : '' }}">#}
-{#            <input class="text" type="number" name="options[perPage]" placeholder="25"#}
-{#                   value="{{ options.perPage is defined ? options.perPage : ''  }}" />#}
-{#            {% if setupElement.getErrors('options.perPage') is not empty %}#}
-{#                <ul class="errors">#}
-{#                    <li> {{ setupElement.getErrors('options.perPage')[0] }}</li>#}
-{#                </ul>#}
-{#            {% endif %}#}
-{#        </div>#}
-{#    </div>#}
-
     {{ forms.textField({
         label: "Items per page"|t('super-filter'),
         id: 'perPage',
@@ -128,6 +113,26 @@
         value: options.baseTemplate is defined ? options.baseTemplate : null,
         errors: setupElement is defined ? setupElement.getErrors('baseTemplate') : null
     }) }}
+
+    {% if options is not empty and options.baseTemplate == 'vue' %}
+        {{ forms.lightswitchField({
+            label: 'Watch Fields?'|t('super-filter'),
+            id: 'fieldWatch',
+            name: 'options[fieldWatch]',
+            value: 1,
+            on: options.fieldWatch ?? false,
+            instructions: 'Apply filters immediately when field values change.'|t('super-filter')
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Infinite Scroll?'|t('super-filter'),
+            id: 'infiniteScroll',
+            name: 'options[infiniteScroll]',
+            value: 1,
+            on: options.infiniteScroll ?? false,
+            instructions: 'Enable to implement pagination through infinite scrolling.'|t('super-filter')
+        }) }}
+    {% endif %}
 
     {{ forms.textField({
         label: "Template Override Folder"|t('super-filter'),

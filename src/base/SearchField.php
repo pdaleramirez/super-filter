@@ -83,4 +83,14 @@ abstract class SearchField
     {
         return $element->value;
     }
+
+    public function getSearchFieldsInfo(): array
+    {
+        return [];
+    }
+
+    public function getShortName(): string
+    {
+        return (new \ReflectionClass($this->object))->getShortName();
+    }
 }

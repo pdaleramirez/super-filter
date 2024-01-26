@@ -5,25 +5,32 @@ namespace pdaleramirez\superfilter\controllers;
 use craft\db\Paginator;
 use craft\elements\Entry;
 use craft\helpers\Json;
+use craft\helpers\Template;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
+use Doctrine\Inflector\Rules\French\Inflectible;
+use pdaleramirez\superfilter\elements\SetupSearch;
+use pdaleramirez\superfilter\fields\Categories;
+use pdaleramirez\superfilter\fields\Dropdown;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\SuperFilter;
 
 class ElementsController extends Controller
 {
-    protected array|bool|int $allowAnonymous = ['get-fields', 'filter'];
+    protected array|bool|int $allowAnonymous = ['get-fields', 'filter', 'entries', 'get-template-content', 'get-search-fields-info'];
 
     public function actionGetFields()
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
-		$this->setItemAttributes();
+
+        $this->setItemAttributes();
         $searchSetupService = SuperFilter::$app->searchTypes;
 
         $config = $searchSetupService->getConfigById($handle);
 
         $requestParams = Craft::$app->getRequest()->getBodyParam('config.params');
+        $config['currentPage'] = Craft::$app->getRequest()->getBodyParam('config.currentPage');
 
         if ($requestParams) {
             $config['params'] = $requestParams;
@@ -33,7 +40,7 @@ class ElementsController extends Controller
 
         $config = $searchSetupService->getConfig();
 
-        $config['params']['fields'] =  $searchSetupService->getInitFields($config);
+        $config['params']['fields'] = $searchSetupService->getInitFields($config);
 
         return Json::encode([
             'config' => $config,
@@ -43,24 +50,24 @@ class ElementsController extends Controller
         ]);
     }
 
-	private function setItemAttributes()
-	{
-		$searchSetupService = SuperFilter::$app->searchTypes;
-		$itemAttributes = Craft::$app->getRequest()->getBodyParam('itemAttributes');
+    private function setItemAttributes()
+    {
+        $searchSetupService = SuperFilter::$app->searchTypes;
+        $itemAttributes = Craft::$app->getRequest()->getBodyParam('itemAttributes');
 
-		if ($itemAttributes !== null) {
-			$itemAttributes = Json::decode($itemAttributes);
+        if ($itemAttributes !== null) {
+            $itemAttributes = Json::decodeIfJson($itemAttributes);
 
-			if ($itemAttributes) {
-				$searchSetupService->setItemAttributes($itemAttributes);
-			}
-		}
-	}
+            if ($itemAttributes) {
+                $searchSetupService->setItemAttributes($itemAttributes);
+            }
+        }
+    }
 
     public function actionFilter()
     {
         $handle = Craft::$app->getRequest()->getBodyParam('handle');
-		$this->setItemAttributes();
+        $this->setItemAttributes();
         $searchSetupService = SuperFilter::$app->searchTypes;
 
         $config = $searchSetupService->getConfigById($handle);
@@ -119,5 +126,61 @@ class ElementsController extends Controller
             'links' => $searchSetupService->getLinks(),
             'query' => $query
         ]);
+    }
+
+    public function actionEntries()
+    {
+        $data = [];
+        $data[] = 'test';
+        $data[] = 'test2';
+        $data[] = 'test3';
+
+        return $this->asJson($data);
+    }
+
+    public function actionGetTemplateContent()
+    {
+        $handle = Craft::$app->getRequest()->getBodyParam('handle');
+        $filename = Craft::$app->getRequest()->getBodyParam('filename');
+
+        $config = SuperFilter::$app->searchTypes->getConfigById($handle);
+
+        $searchSetupService = SuperFilter::$app->searchTypes->setSearchSetup($config);
+
+        $searchSetupService->getTemplate($filename . '.vue');
+
+        $path = $searchSetupService->getTemplatePath();
+        $html = file_get_contents($path);
+
+        return Template::raw($html);
+    }
+
+    public function actionGetSearchFieldsInfo()
+    {
+        $handle = Craft::$app->getRequest()->getBodyParam('handle');
+
+        $searchSetup = SetupSearch::find()->where(['handle' => $handle])->one();
+
+        $items = $searchSetup->items()['items'] ?? null;
+
+        $fields = [];
+
+        if ($items !== null) {
+
+            foreach ($items as $key => $item) {
+
+                $searchField = SuperFilter::$app->searchTypes->getSearchFieldObjectById($item['id']);
+
+                $object = $searchField->getObject();
+                $searchFieldInfo['name'] = $object->name;
+                $searchFieldInfo['handle'] = $object->handle;
+                $searchFieldInfo['type'] = $searchField->getShortName();
+
+                $fieldInfo = array_merge($searchFieldInfo, $searchField->getSearchFieldsInfo());
+                $fields[$object->handle] = $fieldInfo;
+            }
+        }
+
+        return $this->asJson($fields);
     }
 }

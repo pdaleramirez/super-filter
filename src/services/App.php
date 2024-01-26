@@ -43,7 +43,6 @@ class App extends Component
     {
         return [
             'vue' => Craft::t('super-filter', 'Vue'),
-            'vue-scroll' => Craft::t('super-filter', 'Vue Infinite Scroll'),
             'plain' => Craft::t('super-filter', 'Plain')
         ];
     }

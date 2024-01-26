@@ -215,7 +215,11 @@ class SetupSearch extends Element
 
     public function options()
     {
-        return Json::decodeIfJson($this->options);
+        $options = Json::decodeIfJson($this->options);
+
+        $options['perPage'] = (int) $options['perPage'] ?? 10;
+
+        return $options;
     }
 
     public function items()

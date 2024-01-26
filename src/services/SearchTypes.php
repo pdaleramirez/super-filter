@@ -8,6 +8,7 @@ use craft\base\Element;
 use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\base\Serializable;
+use craft\db\Connection;
 use craft\db\Paginator;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Json;
@@ -47,6 +48,8 @@ class SearchTypes extends Component
      */
     protected $searchType;
 	protected $itemAttributes = [];
+
+    private string $templatePath = "";
     /**
      * @return array|SearchType[]
      */
@@ -136,6 +139,8 @@ class SearchTypes extends Component
         $items['handle'] = $className::refHandle();
 
         $items['container'] = null;
+        $items['fieldWatch'] = true;
+        $items['infiniteScroll'] = false;
 
         $selectedContainer = $selected['container'] ?? null;
 
@@ -248,39 +253,33 @@ class SearchTypes extends Component
         $sortOptions = [];
         $count = 0;
         foreach ($elementSortOptions as $key => $sortOption) {
+
             if (is_string($key)) {
                 $defaultSortOptions[$count]['name'] = $sortOption;
                 $defaultSortOptions[$count]['attribute'] = $key;
                 $defaultSortOptions[$count]['orderBy']   = $key;
             } else {
-                if (in_array($sortOption['orderBy'], ['elements.dateCreated', 'elements.dateUpdated'])) {
-                    $defaultSortOptions[$count]['name'] = $sortOption['label'];
-                    $defaultSortOptions[$count]['attribute'] = $sortOption['attribute'];
-                    $defaultSortOptions[$count]['orderBy'] = $sortOption['orderBy'];
-                }
-
                 $orderBy = $sortOption['orderBy'];
 
-                if (is_callable($orderBy)) {
-                    $attribute = function($dir) use ($orderBy) {
-                        $var = $orderBy($dir);
+                if (in_array($sortOption['orderBy'], ['dateCreated', 'dateUpdated'])) {
+                    $defaultSortOptions[$count]['name'] = $sortOption['label'];
+                    $defaultSortOptions[$count]['attribute'] = $sortOption['orderBy'];
+                    $defaultSortOptions[$count]['orderBy'] = $sortOption['orderBy'];
+                } elseif (is_callable($orderBy)) {
+                    $attribute = function(int $dir, Connection $db) use ($orderBy) {
+                        $var = $orderBy($dir, $db);
 
                         if (is_array($var)) {
                             return str_replace('field_', '', $var);
                         }
 
-                        // yii/db/ExpressionInterface
                         return $var;
                     };
-                }
-                else if (is_string($orderBy)) {
-                    $attribute = str_replace('field_', '', $orderBy);
-                }
-                else {
-                    $attribute = null;
+
+                    $sortOptions[] = $attribute(SORT_ASC, $db = Craft::$app->getDb());
                 }
 
-                $sortOptions[] = $attribute;
+
             }
 
             $count++;
@@ -433,7 +432,7 @@ class SearchTypes extends Component
 		}
 
         $paginator = new Paginator($elementQuery, [
-            'currentPage' => $config['currentPage'],
+            'currentPage' => (int) $config['currentPage'],
             'pageSize'    => $config['options']['perPage'] != '' ? $config['options']['perPage'] : static::PAGE_SIZE
         ]);
 
@@ -601,8 +600,6 @@ class SearchTypes extends Component
      */
     public function getSearchFieldObjectById($id, $handle = false)
     {
-        $fieldObj = null;
-
         if (($customField = SuperFilter::$app->searchTypes->getCustomSearchFieldType($id))) {
             $this->setSearchFieldAttributes($customField, $id);
 
@@ -711,7 +708,10 @@ class SearchTypes extends Component
 
             Craft::$app->getView()->setTemplatesPath($siteTemplatesPath);
 
-            $siteTemplate = $template . '/' . $filename;
+            $siteTemplate = $template . DIRECTORY_SEPARATOR . $filename;
+
+            $this->templatePath = $siteTemplatesPath . DIRECTORY_SEPARATOR . $siteTemplate;
+
             if (Craft::$app->getView()->doesTemplateExist($siteTemplate)) {
                 return $siteTemplate;
             }
@@ -721,7 +721,16 @@ class SearchTypes extends Component
 
         Craft::$app->getView()->setTemplatesPath($builtin);
 
-        return $baseTemplate . '/' . $filename;
+        $template  = $baseTemplate . DIRECTORY_SEPARATOR . $filename;
+
+        $this->templatePath = $builtin . DIRECTORY_SEPARATOR . $template;
+
+        return $template;
+    }
+
+    public function getTemplatePath()
+    {
+        return $this->templatePath;
     }
 
     /**

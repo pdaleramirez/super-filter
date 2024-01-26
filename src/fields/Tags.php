@@ -21,4 +21,14 @@ class Tags extends ElementSearchField
     {
         return Tag::class;
     }
+
+    public function getSearchFieldsInfo(): array
+    {
+        $options = $this->getOptions();
+
+        return [
+            'options' => $options,
+            'value' => [],
+        ];
+    }
 }

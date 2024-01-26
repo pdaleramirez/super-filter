@@ -95,6 +95,38 @@ class Categories extends ElementSearchField
         ]);
     }
 
+    public function getTree(array $categories, &$tree = [])
+    {
+        foreach ($categories as $key => $category) {
+            $selected = false;
+
+            if (is_array($this->value)) {
+                if (in_array($category->id, $this->value)) {
+                    $selected = true;
+                }
+            } elseif ($this->value === $category->id) {
+                $selected = true;
+            }
+
+            $node = [
+                'id' => $category->id,
+                'title' => $category->title,
+                'selected' => $selected,
+                'level' => $category->level
+            ];
+
+            $children = $category->getChildren()->all();
+
+            if (count($children) > 0) {
+                $node['children'] = $this->getTree($children);
+            }
+
+            $tree[] = $node;
+        }
+
+        return $tree;
+    }
+
     /**
      * @param Category[]|ElementInterface[] $categories
      * @param $html
@@ -140,4 +172,23 @@ class Categories extends ElementSearchField
 
 		return array_merge([$operator], $elements);
 	}
+
+    public function getSearchFieldsInfo(): array
+    {
+        $categories = $this->getElementQuery()->level(1)->all();
+        $tree = [];
+
+        if ($this->object->branchLimit === 1) {
+            $options = $this->getOptions();
+        } else {
+            $options = $this->getTree($categories, $tree);
+        }
+
+        return [
+            'options' => $options,
+            'selectionLabel' => $this->object->selectionLabel,
+            'value' => $this->object->branchLimit === 1 ? "" : [],
+            'limit' => $this->object->branchLimit
+        ];
+    }
 }

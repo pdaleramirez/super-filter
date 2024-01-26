@@ -30,11 +30,13 @@ use pdaleramirez\superfilter\fields\RadioButtons;
 use pdaleramirez\superfilter\fields\Tags;
 use pdaleramirez\superfilter\fields\Title;
 use pdaleramirez\superfilter\models\Settings;
+use pdaleramirez\superfilter\plugin\Services;
 use pdaleramirez\superfilter\searchtypes\CategorySearchType;
 use pdaleramirez\superfilter\searchtypes\EntrySearchType;
 use pdaleramirez\superfilter\searchtypes\ProductSearchType;
 use pdaleramirez\superfilter\services\App;
 use pdaleramirez\superfilter\services\SearchTypes;
+use pdaleramirez\superfilter\services\Templates;
 use pdaleramirez\superfilter\web\twig\variables\SuperFilterVariable;
 use yii\base\Event;
 use craft\web\UrlManager;
@@ -50,6 +52,7 @@ use craft\events\RegisterUrlRulesEvent;
  */
 class SuperFilter extends Plugin
 {
+    use Services;
     // Static Properties
     // =========================================================================
 
@@ -116,9 +119,11 @@ class SuperFilter extends Plugin
 
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function (RegisterUrlRulesEvent $event) {
-            $event->rules["super-filter/show-list"] = 'super-filter/elements/get-elements';
             $event->rules['super-filter/filter']    = 'super-filter/elements/filter';
             $event->rules['super-filter/fields']    = 'super-filter/elements/get-fields';
+            $event->rules['super-filter/entries']    = 'super-filter/elements/entries';
+            $event->rules['super-filter/template']    = 'super-filter/elements/get-template-content';
+            $event->rules['super-filter/search-fields-info']    = 'super-filter/elements/get-search-fields-info';
         });
 
         Event::on(SearchTypes::class, SearchTypes::EVENT_REGISTER_SEARCH_TYPES, function (RegisterSearchTypeEvent $event) {
@@ -175,5 +180,14 @@ class SuperFilter extends Plugin
     protected function createSettingsModel(): ?Model
     {
         return new Settings();
+    }
+
+    public static function config(): array
+    {
+        return [
+            'components' => [
+                'templates' => ['class' => Templates::class]
+            ]
+        ];
     }
 }

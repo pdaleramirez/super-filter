@@ -1,7 +1,0 @@
-{% for option in options %}
-    <div class="field">
-        <input v-model="config.params.fields.{{ field.object.handle }}" type="radio" {{ option.selected ? 'checked' : '' }}
-               value="{{ option.value }}"
-               name="{{ craft.superFilter.settings.prefixParam }}[{{ field.object.handle }}]" /> {{ option.label }}
-    </div>
-{% endfor %}

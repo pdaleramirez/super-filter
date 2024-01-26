@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-md-12 offset-lg-2"></div>
                 <div class="col-md-12 col-lg-5 text-right">
-                    {% set image  = item.getFieldStatus('superFilterAssets') != null ? item.superFilterAssets.first() : null %}
+                    {% set image  = item.superFilterAssets != null ? item.superFilterAssets.one() : null %}
                     {# Display the thumbnail list #}
 
                     {% if image %}
