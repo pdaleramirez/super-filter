@@ -160,11 +160,11 @@ twig function second parameter e.g.
     }
 }) }}
 ```
-- Formatting Date attributes - The plugin supports  https://www.npmjs.com/package/vue-moment so you can easily format your date.
+- Formatting Date attributes - The plugin supports  https://day.js.org/ so you can easily format your date.
 In your `items.vue` you can call the date attribute like this:
 
 ```
-{{ moment(item.dateCreated).format("dddd, MMMM Do YYYY")  }}
+{{ dayjs(item.dateCreated).format('dddd MMMM D, YYYY') }}
 ```
 
 - Item results modification - Call item event hook that allows you to modify the search and item results from an ajax results.
