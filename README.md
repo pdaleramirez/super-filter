@@ -114,6 +114,24 @@ return [
 
 ```
 
+## Recommendation
+
+### Vue Base Template
+- It is recommended to initialize the calling of attributes and field attributes for your items or elements
+  to optimize loading performance. Add the attributes or field handles on the second parameter of the setup twig variable
+  E.g.
+```
+{{ craft.superFilter.render('superFilterShows', {
+   attributes: ["title","superFilterGenre","dateCreated"]
+}) }}
+```
+in your items.vue only the initialized attributes and field values are displayed. It will be called like this
+```
+{{ item.title }}
+{{ item.superFilterGenre }}
+{{ item.dateCreated }}
+```
+
 ## Customization
 - Pre-filter - If you want your items to load with pre defined filters you can pass a json key value pair in the `craft.superFilter.setup`
 twig function second parameter e.g.
@@ -143,10 +161,10 @@ twig function second parameter e.g.
 }) }}
 ```
 - Formatting Date attributes - The plugin supports  https://www.npmjs.com/package/vue-moment so you can easily format your date.
-In your `items.twig` you can call the date attribute like this:
+In your `items.vue` you can call the date attribute like this:
 
 ```
-{{ item.dateCreated | moment("dddd, MMMM Do YYYY")  }}
+{{ moment(item.dateCreated).format("dddd, MMMM Do YYYY")  }}
 ```
 
 - Item results modification - Call item event hook that allows you to modify the search and item results from an ajax results.

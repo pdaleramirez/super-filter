@@ -56,7 +56,7 @@ class ElementsController extends Controller
         $itemAttributes = Craft::$app->getRequest()->getBodyParam('itemAttributes');
 
         if ($itemAttributes !== null) {
-            $itemAttributes = Json::decode($itemAttributes);
+            $itemAttributes = Json::decodeIfJson($itemAttributes);
 
             if ($itemAttributes) {
                 $searchSetupService->setItemAttributes($itemAttributes);

@@ -28,6 +28,12 @@ const isDataLoaded = ref(false);
 
 onBeforeMount(async () => {
 
+  let parseOptions  = JSON.parse(options);
+
+  if (parseOptions.attributes !== undefined) {
+    store.params.itemAttributes = parseOptions.attributes;
+  }
+
   await store.fetchData(handle);
   store.handle = handle;
 
@@ -39,17 +45,25 @@ onBeforeMount(async () => {
 
   isDataLoaded.value = true;
 
-  let optionsFilter  = JSON.parse(options).filter;
-  if (options !== undefined && JSON.parse(options).filter !== undefined ) {
-    for (let [key, field] of Object.entries(optionsFilter)) {
-      store.searchFieldsInfo[key].value = field;
+
+  if (options !== undefined && parseOptions.filter !== undefined ) {
+
+    if (parseOptions.filter !== undefined) {
+      store.params.config.params.fields = parseOptions.filter;
+      for (let [key, field] of Object.entries(parseOptions.filter)) {
+        store.searchFieldsInfo[key].value = field;
+      }
     }
+
   }
 });
+let parseOptions  = JSON.parse(options);
+if ( options !== undefined ) {
+  if (parseOptions.filter !== undefined) {
+    store.params.config.params.fields = parseOptions.filter;
+  }
 
-if (options !== undefined && JSON.parse(options).filter !== undefined ) {
-  let optionsFilter  = JSON.parse(options).filter;
-  store.params.config.params.fields = optionsFilter;
+
 }
 const load = async function ($state) {
   try {

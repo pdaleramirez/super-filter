@@ -9,7 +9,10 @@
   </head>
   <body>
 
-  <div class="searchApp" handle="superFilterShows" options='{"filter":{"superFilterImdbRating":7,"superFilterGenre":[4]}}'></div>
+  <div class="searchApp" handle="superFilterShows" options='{
+  "filter":{"superFilterImdbRating":7,"superFilterGenre":[4]},
+  "attributes":["title","superFilterImdbRating","superFilterGenre", "dateCreated", "superFilterReleaseDate","superFilterShowTypes","superFilterShowTags","superFilterDescription","superFilterAssets"]
+  }'></div>
 
   <script type="module" src="/src/main.js"></script>
   </body>

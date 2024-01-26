@@ -28,7 +28,8 @@ export const useEntriesStore = defineStore('entries', {
         url: useUrl(),
         currentPage: 1,
         response: {},
-        isInfiniteScroll: false
+        isInfiniteScroll: false,
+        itemAttributes: {}
     }),
     getters: {},
     actions: {
