@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.11 - 2024-03-16
+- Updated demo link
+
 ## 2.0.1 - 2024-03-16
 ### Fixed
 - Fixed a bug where csrf token is not being passed on the search setup form.
