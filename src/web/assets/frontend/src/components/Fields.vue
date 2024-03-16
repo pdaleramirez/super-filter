@@ -23,6 +23,42 @@ export default {
 
       store.filterData(this.handle);
     },
+    handleClearFilter() {
+      const store = useEntriesStore();
+
+      store.params.config.currentPage = 1;
+
+      let fields = store.searchFieldsInfo;
+
+
+      for (let key in fields) {
+
+
+        if (fields[key].value !== undefined && fields[key].value !== null && fields[key].type === 'Categories') {
+
+          for (let option of fields[key].options) {
+            option.selected = false;
+          }
+        } else {
+          if (fields[key].value !== undefined && fields[key].value !== null && typeof fields[key].value === 'string' ) {
+            store.searchFieldsInfo[key].value = "";
+          } else if (fields[key].value !== undefined && fields[key].value !== null && typeof fields[key].value === 'number') {
+            store.searchFieldsInfo[key].value = 0;
+          } else if (fields[key].value !== undefined && fields[key].value !== null && typeof fields[key].value === 'boolean') {
+            store.searchFieldsInfo[key].value = false;
+          } else if (fields[key].value !== undefined && fields[key].value !== null && Array.isArray(fields[key].value)) {
+            store.searchFieldsInfo[key].value = [];
+          } else if (fields[key].value !== undefined && fields[key].value !== null && typeof fields[key].value === 'object') {
+            store.searchFieldsInfo[key].value = {};
+          }
+        }
+      }
+
+      store.params.config.params.fields = {};
+      console.log(store.params.config.params.fields);
+      store.filterData(this.handle);
+      store.params.config.params.fields = {};
+    },
   },
   components: {
     SearchField,
