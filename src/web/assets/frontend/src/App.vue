@@ -30,6 +30,10 @@ onBeforeMount(async () => {
 
   let parseOptions  = JSON.parse(options);
 
+  if (parseOptions.csrfName !== undefined) {
+    store.csrfName = parseOptions.csrfName;
+    store.csrfToken = parseOptions.csrfToken;
+  }
   if (parseOptions.attributes !== undefined) {
     store.params.itemAttributes = parseOptions.attributes;
   }

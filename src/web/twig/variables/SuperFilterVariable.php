@@ -174,6 +174,11 @@ class SuperFilterVariable
     {
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_CP);
 
+        $csrfName = Craft::$app->config->getGeneral()->csrfTokenName;
+        $csrfToken = Craft::$app->getRequest()->csrfToken;
+
+        $options['csrfName'] = $csrfName;
+        $options['csrfToken'] = $csrfToken;
         $html =  Craft::$app->getView()->renderTemplate('super-filter/twig/render', [
             'handle' => $handle,
             'options' => $options

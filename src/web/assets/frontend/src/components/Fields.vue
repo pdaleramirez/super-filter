@@ -50,8 +50,8 @@ export default {
       this.searchFieldsInfo = searchFieldsInfo;
     }
 
-    if (fieldWatch === true) {
-      elements.value.params.config.currentPage = 1;
+    if (fieldWatch === true && elements.value.config.params) {
+      elements.value.config.params.currentPage = 1;
       if (Object.keys(searchFieldsInfo.value).length > 0) {
         for (let searchField of Object.values(searchFieldsInfo.value)) {
           watch(() => searchField.value, (newValue, oldValue) => {
