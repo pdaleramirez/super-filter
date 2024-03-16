@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.0.2 - 2024-03-16
+## 2.0.21 - 2024-03-16
 - Added clear filter button on the search setup form.
 
 ## 2.0.11 - 2024-03-16
