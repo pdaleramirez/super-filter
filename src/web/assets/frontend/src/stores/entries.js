@@ -29,15 +29,17 @@ export const useEntriesStore = defineStore('entries', {
         currentPage: 1,
         response: {},
         isInfiniteScroll: false,
-        itemAttributes: {}
+        itemAttributes: {},
+        csrfName: '',
+        csrfToken: '',
     }),
     getters: {},
     actions: {
         async fetchData(handle) {
             this.params.handle = handle;
 
-            const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
-            const searchFieldsInfoResponse = await axios.post(this.url.getUrl('super-filter/search-fields-info'), this.params);
+            const response = await this.fetchDataWithCsrf('super-filter/fields');
+            const searchFieldsInfoResponse = await this.fetchDataWithCsrf('super-filter/search-fields-info');
 
             this.elements = response.data;
             this.searchFieldsInfo = searchFieldsInfoResponse.data;
@@ -45,9 +47,16 @@ export const useEntriesStore = defineStore('entries', {
             this.currentPage = this.elements.config.currentPage;
             return this.elements;
         },
+        fetchDataWithCsrf(url) {
+            let csrf = {};
+            csrf[this.csrfName] = this.csrfToken;
+
+            return axios.post(this.url.getUrl(url), {...csrf, ...this.params});
+        },
         async fetchFields(handle) {
             this.params.handle = handle;
-            const searchFieldsInfoResponse = await axios.post(this.url.getUrl('super-filter/search-fields-info'), this.params);
+
+            const searchFieldsInfoResponse = await this.fetchDataWithCsrf('super-filter/search-fields-info')
             this.searchFieldsInfo = searchFieldsInfoResponse.data;
         },
         async filterData(handle = null) {
@@ -57,7 +66,7 @@ export const useEntriesStore = defineStore('entries', {
 
            this.prepareParams(handle);
 
-            const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
+            const response = await this.fetchDataWithCsrf('super-filter/fields')
 
             this.elements.items = response.data.items;
             this.elements.links = response.data.links;
@@ -70,7 +79,7 @@ export const useEntriesStore = defineStore('entries', {
 
             this.prepareParams(handle);
 
-            const response = await axios.post(this.url.getUrl('super-filter/fields'), this.params);
+            const response = await this.fetchDataWithCsrf('super-filter/fields')
 
             this.records = response.data.items;
         },
@@ -93,18 +102,14 @@ export const useEntriesStore = defineStore('entries', {
             }
         },
         async getTemplate(handle, filename) {
+            let csrf = {};
+            csrf[this.csrfName] = this.csrfToken;
 
-            const response = await axios.post(this.url.getUrl('super-filter/template'), {
-                handle: handle,
-                filename: filename
-            });
+            let data = {...csrf, handle: handle, filename: filename};
+            const response = await axios.post(this.url.getUrl('super-filter/template'), data);
             this.templates[filename] = response.data;
 
             return response.data;
-        },
-
-        _getResponse(params) {
-            return axios.post(this.url.getUrl('super-filter/filter'), params);
         }
     }
 })

@@ -9,10 +9,7 @@
   </head>
   <body>
 
-  <div class="searchApp" handle="superFilterShows" options='{
-  "filter":{"superFilterImdbRating":7,"superFilterGenre":[4]},
-  "attributes":["title","superFilterImdbRating","superFilterGenre", "dateCreated", "superFilterReleaseDate","superFilterShowTypes","superFilterShowTags","superFilterDescription","superFilterAssets"]
-  }'></div>
+  <div class="searchApp" handle="superFilterShows" options='{"csrfName": "CSRF_TOKEN", "csrfToken": "1234567890"}'></div>
 
   <script type="module" src="/src/main.js"></script>
   </body>

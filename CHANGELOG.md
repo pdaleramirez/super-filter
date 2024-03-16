@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.1 - 2024-03-16
+### Fixed
+- Fixed a bug where csrf token is not being passed on the search setup form.
+- Fixed a bug where watch field is not working on the search setup form.
+
 ## 2.0.0 - 2024-01-25
 ### Changed
 - Refactor how Vue templates are rendered by using Vue file components. Check the documentation for more information.
