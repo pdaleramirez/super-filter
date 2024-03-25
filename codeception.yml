@@ -5,6 +5,7 @@ paths:
   data: tests/_data
   support: tests/_support
   envs: tests/_envs
+  output: tests/_output  # Add this line
 bootstrap: _bootstrap.php
 coverage:
   enabled: true
