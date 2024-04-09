@@ -4,7 +4,7 @@ Build your search page with search filters from your element fields and filter e
 Easily setup your search page by using twig variable functions, back-end coding not needed.
 Supports Vue.js with pre-built styles. 
 
-Demo: https://pdaleramirez.com/super-filter-page
+Demo: super-filter-page
 ![Screenshot](resources/img/super-filter-quick-demo.gif)  
   
 ## Requirements  
