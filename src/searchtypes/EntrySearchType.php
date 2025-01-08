@@ -25,7 +25,8 @@ class EntrySearchType extends SearchType
      */
     public function getContainer(): array
     {
-        $sections = Craft::$app->getSections()->getAllSections();
+
+        $sections = Craft::$app->getEntries()->getAllSections();
 
         $containers = [];
 
@@ -111,7 +112,7 @@ class EntrySearchType extends SearchType
      */
     private function getFieldObjects()
     {
-        $sections = Craft::$app->getSections()->getAllSections();
+        $sections = Craft::$app->getEntries()->getAllSections();
 
         if (!empty($sections)) {
 

@@ -71,7 +71,7 @@ class GenerateController extends Controller
             }
 
             $containerHandle = $configItems['container'] ?? null;
-            $section = Craft::$app->getSections()->getSectionByHandle($containerHandle);
+            $section = Craft::$app->getEntries()->getSectionByHandle($containerHandle);
 
             $entryTypes = $section->getEntryTypes();
 

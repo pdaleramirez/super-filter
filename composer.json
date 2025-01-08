@@ -1,6 +1,6 @@
 {
     "name": "pdaleramirez/super-filter",
-    "description": "A Craft CMS 4 plugin that lets you build your search page with search filters from your element fields and filter element entries by categories, tags, element relations and other fields.",
+    "description": "A Craft CMS 5 plugin that lets you build your search page with search filters from your element fields and filter element entries by categories, tags, element relations and other fields.",
     "type": "craft-plugin",
     "keywords": [
         "craft",
@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^4.0"
+        "craftcms/cms": "^5.0"
     },
     "autoload": {
         "psr-4": {
@@ -48,7 +48,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "8.1"
+            "php": "8.2"
         },
         "allow-plugins": {
             "yiisoft/yii2-composer": true,

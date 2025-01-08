@@ -7,7 +7,9 @@ use Craft;
 use craft\base\Element;
 use craft\elements\Category;
 use craft\elements\Entry;
+use craft\enums\PropagationMethod;
 use craft\fieldlayoutelements\CustomField;
+use craft\fieldlayoutelements\entries\EntryTitleField;
 use craft\fields\Categories;
 use craft\fields\Checkboxes;
 use craft\fields\Dropdown;
@@ -20,7 +22,6 @@ use craft\helpers\UrlHelper;
 use craft\models\CategoryGroup;
 use craft\models\CategoryGroup_SiteSettings;
 use craft\models\EntryType;
-use craft\models\FieldGroup;
 use craft\models\Section;
 use craft\models\Section_SiteSettings;
 use craft\models\TagGroup;
@@ -33,7 +34,7 @@ class SampleData extends Component
 {
     const PREFIX = 'superFilter';
     const DEFAULT_FOLDER = 'super-filter-search';
-    private $fieldGroupId;
+
     private $categoryGroupId;
     private $categoryGroupUid;
     private $entryTypeId;
@@ -227,7 +228,9 @@ class SampleData extends Component
         $fieldLayout->type = Entry::class;
         $entryType->setFieldLayout($fieldLayout);
 
-        if (!Craft::$app->getSections()->saveEntryType($entryType)) {
+        $fieldLayout->prependElements([new EntryTitleField()]);
+
+        if (!Craft::$app->getEntries()->saveEntryType($entryType)) {
             return false;
         }
 
@@ -263,16 +266,23 @@ class SampleData extends Component
     {
         $handle = static::PREFIX . 'Shows';
 
-        $section = Craft::$app->getSections()->getSectionByHandle($handle);
+        $section = Craft::$app->getEntries()->getSectionByHandle($handle);
         if (!$section) {
             $section = new Section();
             $section->name = "Shows";
             $section->handle = $handle;
             $section->type = "channel";
             $section->enableVersioning = true;
-            $section->propagationMethod = Section::PROPAGATION_METHOD_ALL;
+            $section->propagationMethod = PropagationMethod::All;
             $section->previewTargets = [];
 
+            // Create entry type
+            $entryType = new EntryType();
+            $entryType->name = 'Shows';
+            $entryType->handle = 'shows';
+            $entryType->hasTitleField = true;
+            Craft::$app->getEntries()->saveEntryType($entryType);
+            $section->setEntryTypes([$entryType]);
             $sites = Craft::$app->getSites()->getAllSiteIds();
 
             $siteSettings = [];
@@ -291,7 +301,7 @@ class SampleData extends Component
 
             $section->setSiteSettings($siteSettings);
 
-            if (!Craft::$app->getSections()->saveSection($section)) {
+            if (!Craft::$app->getEntries()->saveSection($section)) {
                 return false;
             }
         }
@@ -308,10 +318,6 @@ class SampleData extends Component
      */
     private function createFields()
     {
-        $fieldGroup = $this->getFieldGroup();
-
-        $this->fieldGroupId = $fieldGroup->id;
-
         $fields = [];
 
         $fields[] = $this->getFieldDescription();
@@ -322,29 +328,6 @@ class SampleData extends Component
         $fields[] = $this->getFieldImdbRating();
 
         return $fields;
-    }
-
-    private function getFieldGroup()
-    {
-        $name = 'Super Filter';
-
-        $group = new FieldGroup();
-
-        $record = \craft\records\FieldGroup::find()->where([
-            'name' => $name
-        ])->one();
-
-        if ($record) {
-            $group->setAttributes($record->getAttributes(), false);
-
-            return $group;
-        }
-
-        $group->name = $name;
-
-        Craft::$app->getFields()->saveGroup($group);
-
-        return $group;
     }
 
     /**
@@ -689,7 +672,6 @@ class SampleData extends Component
         $config = [
             'type' => PlainText::class,
             "id" => $fieldByHandle->id ?? null,
-            "groupId" => $this->fieldGroupId,
             'name' => 'Description',
             'handle' => $handle,
             'multiline' => true,
@@ -710,7 +692,6 @@ class SampleData extends Component
         $config = [
             "type" => Categories::class,
             "id" => $fieldByHandle->id ?? null,
-            "groupId" => $this->fieldGroupId,
             "source" => 'group:' . $this->categoryGroupUid,
             "name" => "Genre",
             "handle" => $handle
@@ -728,7 +709,6 @@ class SampleData extends Component
         $config = [
             "type" => Tags::class,
             "id" => $fieldByHandle->id ?? null,
-            "groupId" => $this->fieldGroupId,
             "source" => 'taggroup:' . $this->tagGroupUid,
             "name" => "Show Tags",
             "handle" => $handle
@@ -748,7 +728,6 @@ class SampleData extends Component
             "id" => $fieldByHandle->id ?? null,
             "name" => "Show Types",
             "handle" => $handle,
-            "groupId" => $this->fieldGroupId,
             'optgroups' => true,
             "searchable" => true,
             'settings' => [
@@ -800,7 +779,6 @@ class SampleData extends Component
             "id" => $fieldByHandle->id ?? null,
             "name" => "Release Date",
             "handle" => $handle,
-            "groupId" => $this->fieldGroupId,
             'settings' => ['options' => $options],
             "searchable" => true
         ];
@@ -828,7 +806,6 @@ class SampleData extends Component
             "id" => $fieldByHandle->id ?? null,
             "name" => "Imdb Rating",
             "handle" => $handle,
-            "groupId" => $this->fieldGroupId,
             'settings' => ['options' => $options],
             "searchable" => true
         ];
