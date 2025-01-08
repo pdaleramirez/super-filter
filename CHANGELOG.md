@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.0.0 - 2025-01-08
+- Added Craft cms 5 support.
+
 ## 2.0.21 - 2024-03-16
 - Added clear filter button on the search setup form.
 
